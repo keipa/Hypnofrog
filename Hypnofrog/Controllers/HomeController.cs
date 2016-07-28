@@ -20,6 +20,12 @@ namespace Hypnofrog.Controllers
             return View();
         }
 
+        public ActionResult UserProfile()
+        {
+
+            return View();
+        }
+
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

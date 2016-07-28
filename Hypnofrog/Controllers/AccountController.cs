@@ -77,7 +77,7 @@ namespace Hypnofrog.Controllers
                     if (user.EmailConfirmed == true)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("Wall", "Home", new { user_id = user.Id });
+                        return RedirectToAction("UserProfile", "Home", new { user_id = user.Id });
                     }
                     else
                     {
