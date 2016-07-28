@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Hypnofrog.Models.ApplicationUser>
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "AllUsers";
+}
+
+<h2>AllUsers</h2>
+<table>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            @if ((bool)ViewBag.IsAdmin ^ User.Identity.GetUserId() == item.Id)
+            {
+                <td>
+                    <span>@Html.ActionLink("Удалить", "Delete", new { id = item.Id }) </span>
+                    @if ((bool)ViewBag.IsAdmin)
+                    {
+                        <span>| @Html.ActionLink("Повысить до админа", "UpInRole", new { id = item.Id })</span>
+                    }
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+        </tr>
+    }
+
+</table>

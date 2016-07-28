@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Hypnofrog.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +17,39 @@ namespace Hypnofrog.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        public ActionResult Admin()
+        {
+            return RedirectToAction("AllUsers");
+        }
+
+        public ActionResult Users()
+        {
+            return RedirectToAction("AllUsers");
+        }
+
+        public ActionResult AllUsers()
+        {
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+            List<ApplicationUser> list_of_users;
+            using(var db = new ApplicationDbContext())
+            {
+                 list_of_users = db.Users.ToList();
+            }
+            return View(list_of_users);
+        }
+
+        public ActionResult Delete(string id = "")
+        {
+            if (id == "") return RedirectToAction("AllUsers");
+            using(var db = new ApplicationDbContext())
+            {
+                var user = db.Users.Where(x => x.Id == id).FirstOrDefault();
+                db.Users.Remove(user);
+                db.SaveChanges();
+            }
+            return RedirectToAction("AllUsers");
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
