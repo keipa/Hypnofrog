@@ -77,7 +77,7 @@ namespace Hypnofrog.Controllers
                     if (user.EmailConfirmed == true)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("Wall", "Home", new { user_id = user.Id });
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
@@ -94,30 +94,11 @@ namespace Hypnofrog.Controllers
                 ModelState.AddModelError("", "Введите логин и пароль.");
             }
             return View(model);
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            /*var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);*/
         }
-
-        //
-        // GET: /Account/VerifyCode
+        
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
-            // Require that the user has already logged in via username/password or external login
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
@@ -176,13 +157,12 @@ namespace Hypnofrog.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await UserManager.AddToRoleAsync(user.Id, "User");
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackURL = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение Email", "Для завершения регистрации перейдите по адресу:" +
                         "<a href=\"" + callbackURL + "\">Подвердить Email</a>");
                     return View("DisplayConfirmMessage");
-                    //return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
