@@ -1,0 +1,21 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="modal-body">
+    <div class="confirm">
+        <h3>Confirm your action</h3>
+        <p>Are you really <em>really</em> <strong>really</strong> sure that you want to exit this awesome application?</p>
+        <button id="approve-btn">Cancel</button>
+        <button>Confirm</button>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#approve-btn').click(function () {
+            $('#modal-container').modal('hide');
+        });
+    });
+</script>
+
