@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+<style>
+    .profile_wrap {
+        width: 90%;
+        margin-left: 15px;
+        height: auto;
+        background: #f0f1eb;
+        border-radius: 3px;
+        text-align: left;
+        font-family: Tahoma, Arial;
+        font-size: 12px;
+        margin-top: 15px;
+        color: #606060;
+    }
+
+
+   .btn-success{
+       margin-left:15px;
+       margin-top: 15px;
+       width: 90%;
+   }
+
+    div {
+        display: block;
+    }
+
+    table {
+        display: table;
+        border-collapse: separate;
+        border-spacing: 2px;
+        border-color: grey;
+    }
+
+    .b-user-profile__value {
+        color: #606050;
+        vertical-align: middle;
+        line-height: 15px;
+    }
+
+    .b-user-profile__label {
+        color: #a0a0a0;
+        vertical-align: middle;
+        line-height: 15px;
+    }
+
+    .profile_info_avatar {
+        width: 92px;
+        ma
+        margin-bottom: 7px;
+    }
+    .otherinfo{
+        margin-left: 10px;
+    }
+</style>
+
+
+
+
+<div class="profile_wrap b-user-profile">
+    <table>
+        <tr>
+            <td>
+                <div>
+                    <img class="profile_info_avatar" src="http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png"><br />
+                </div>
+            </td>
+            <td>
+                <div class="otherinfo">
+                    <span> @User.Identity.Name</span>
+                    <br>
+                    <span class="b-user-profile__label">Рейтинг</span>
+                    <span class="b-user-profile__value">-59</span>
+                    <br>
+                    <span class="b-user-profile__label">Комментариев</span>
+                    <span class="b-user-profile__value">2</span>
+                    <br>
+                    <span class="b-user-profile__label">Добавил сайтов</span>
+                    <span class="b-user-profile__value">4</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <a href="@Url.Action("Index", "Manage")" type="button" class="btn btn-info">Edit</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+</div>
+
+
+<a type="button" href="" class="btn btn-success">Добавить сайт</a>
+
+
+
+
+
