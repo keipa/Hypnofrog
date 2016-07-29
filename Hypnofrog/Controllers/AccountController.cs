@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Hypnofrog.Models;
 using Hypnofrog;
+using Hypnofrog.DBModels;
 
 namespace Hypnofrog.Controllers
 {
@@ -154,6 +155,14 @@ namespace Hypnofrog.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                using (var db = new Context())
+                {
+                    db.Avatars.Add(new Avatar() { UserId = model.Email, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
+                    db.SaveChanges();
+                }
+
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -340,6 +349,8 @@ namespace Hypnofrog.Controllers
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+
+
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
@@ -351,6 +362,12 @@ namespace Hypnofrog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
+            using (var db = new Context())
+            {
+                db.Avatars.Add(new Avatar() { UserId = model.Email, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
+                db.SaveChanges();
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Manage");

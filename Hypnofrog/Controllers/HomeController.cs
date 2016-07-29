@@ -1,4 +1,5 @@
-﻿using Hypnofrog.Models;
+﻿using Hypnofrog.DBModels;
+using Hypnofrog.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -21,6 +22,9 @@ namespace Hypnofrog.Controllers
         {
             return RedirectToAction("AllUsers");
         }
+
+
+
 
         public ActionResult Users()
         {
@@ -57,9 +61,17 @@ namespace Hypnofrog.Controllers
             return View();
         }
 
-        public ActionResult UserProfile()
+        public ActionResult UserProfile(string userid = "")
         {
-
+            using (var db = new Context())
+            {
+                if (userid == "")
+                {
+                    userid = User.Identity.Name;
+                }
+                var avatar = db.Avatars.Where(x => x.UserId == userid).FirstOrDefault();
+                ViewBag.avatarpath = avatar.Path;
+            }
             return View();
         }
 
