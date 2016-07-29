@@ -140,8 +140,6 @@ namespace Hypnofrog.Controllers
 
         public ActionResult UserProfile(string userid = "")
         {
-
-            
             using (var db = new Context())
             {
                 if (userid == "")
@@ -165,7 +163,7 @@ namespace Hypnofrog.Controllers
 
                 }
                 var avatar = db.Avatars.Where(x => x.UserId == userid).FirstOrDefault();
-                ViewBag.avatarpath = avatar.Path;
+                ViewBag.avatarpath = avatar != null? avatar.Path : "";
             }
             return View();
         }
