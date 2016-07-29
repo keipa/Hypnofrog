@@ -14,11 +14,16 @@ namespace Hypnofrog
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/popup").Include(
-                        "~/Scripts/PopUp.js"));
+                        "~/Scripts/PopUp.js",
+                        "~/Scripts/customcontrols.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                         "~/Scripts/jquery-ui-1.12.0.js",
                         "~/Scripts/jquery-ui-1.12.0.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                        "~/Scripts/jquery.unobtrusive*",
+                        "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
@@ -30,7 +35,8 @@ namespace Hypnofrog
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/Site.css",
-                      "~/Content/popupwindows.css"));
+                      "~/Content/popupwindows.css",
+                      "~/Content/customstyles.css"));
         }
     }
 }

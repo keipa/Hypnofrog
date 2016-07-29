@@ -1,12 +1,81 @@
-﻿
+﻿@model Hypnofrog.ViewModels.SettingsModel
 @{
     Layout = null;
 }
 
 <div class="modal-body">
     <div class="confirm">
-        <h3>Confirm your action</h3>
-        <p>Are you really <em>really</em> <strong>really</strong> sure that you want to exit this awesome application?</p>
+        <h3>Настройки вашего сайта</h3>
+        <p>
+            Здесь вы можете настроить свой сайт и его первую страницу.
+            <em>Последующие страницы будут создаваться по мере необходимости.</em>
+        </p>
+        @using(Ajax.BeginForm("ChangeTemplate", "Home", new AjaxOptions() { UpdateTargetId = "tutu" }, new { id="aform", style = "margin-bottom:40px;" })){
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="row">
+                        <label class="control-label col-md-10 col-sm-offset-2" for="Template">Цветовая гамма:</label>
+                    </div>
+                    <div class="row">
+                        <div class="btn-group col-md-12 col-sm-offset-1" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                @Html.RadioButtonFor(x => x.Color, "dark") Темный
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Color, "white") Светлый
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Color, "orange") Рыжий
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label col-md-10 col-sm-offset-2" for="Template">Положение меню:</label>
+                    </div>
+                    <div class="row">
+                        <div class="btn-group col-md-12 col-sm-offset-1" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                @Html.RadioButtonFor(x => x.Menu, "without") Без меню
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Menu, "horizontal") Горизонтальное
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Menu, "vertical") Вертикальное
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label col-md-10 col-sm-offset-2" for="Template">Положение колонок:</label>
+                    </div>
+                    <div class="row">
+                        <div class="btn-group col-md-12 col-sm-offset-1" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                @Html.RadioButtonFor(x => x.Template, "solid") Одна сплошная
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Template, "dsolid") Две сплошных
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Template, "mixed") Смешанное
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="btn-group col-md-12 col-sm-offset-1 checkbox">
+                            <label>@Html.CheckBoxFor(x => x.CommentsAvailable) Добавить комментарии?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div id="tutu" class="preview col-md-12">
+                        @{ Html.RenderPartial("_ColorTemplate", Model.Url);}
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
         <button id="approve-btn">Cancel</button>
         <button>Confirm</button>
     </div>
@@ -18,4 +87,14 @@
         });
     });
 </script>
-
+<script>
+    $('input[name=Color]').change(function () {
+        $('#aform').submit();
+    });
+    $('input[name=Menu]').change(function () {
+        $('#aform').submit();
+    });
+    $('input[name=Template]').change(function () {
+        $('#aform').submit();
+    });
+</script>
