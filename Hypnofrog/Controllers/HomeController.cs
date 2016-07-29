@@ -1,9 +1,12 @@
-﻿using Hypnofrog.DBModels;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Hypnofrog.DBModels;
 using Hypnofrog.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -59,6 +62,68 @@ namespace Hypnofrog.Controllers
             return PartialView("_ViewConfig");
         }
 
+        public ActionResult SaveUploadedFile()
+        {
+            bool isSavedSuccessfully = true;
+            string fName = "";
+            try
+            {
+                foreach (string fileName in Request.Files)
+                {
+                    HttpPostedFileBase file = Request.Files[fileName];
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        fName = file.FileName;
+                        var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\WallImages", Server.MapPath(@"\")));
+                        string pathString = Path.Combine(originalDirectory.ToString(), "imagepath");
+                        var fileName1 = Path.GetFileName(file.FileName);
+                        bool isExists = Directory.Exists(pathString);
+                        if (!isExists)
+                            Directory.CreateDirectory(pathString);
+                        var path = string.Format("{0}\\{1}", pathString, file.FileName);
+                        file.SaveAs(path);
+                        Cloudinary cloudinary = new Cloudinary(new Account("dldmfb5fo", "568721824454478", "ZO4nwcMQwcT88lUNUK5KHJmy_fU"));
+                        var param = new ImageUploadParams()
+                        {
+                            File = new FileDescription(path)
+                        };
+                        var result = cloudinary.Upload(param);
+                        using (var db = new Context())
+                        {
+                            var useravatar = db.Avatars.Where(x => x.UserId == User.Identity.Name).FirstOrDefault();
+                            useravatar.Path = result.Uri.AbsoluteUri;
+                            db.SaveChanges();
+
+
+                            //db.Tables.Add(new Table() { UserId = (string)Session["CurrentUserId"], Path = result.Uri.AbsolutePath });
+                            //db.SaveChanges();
+                        }
+                        return RedirectToAction("UserProfile");
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                isSavedSuccessfully = false;
+            }
+            if (isSavedSuccessfully)
+            {
+                return Json(new { Message = fName });
+            }
+            else
+            {
+                return Json(new { Message = "Error in saving file" });
+            }
+        }
+
+
+        public ActionResult UpdatePhotoDialog(string userid= "")
+        {
+            return PartialView("_UpdatePhotoViewConfig");
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -68,11 +133,29 @@ namespace Hypnofrog.Controllers
 
         public ActionResult UserProfile(string userid = "")
         {
+
+            
             using (var db = new Context())
             {
                 if (userid == "")
                 {
+                    ViewBag.IsMyProfile = true;
+
                     userid = User.Identity.Name;
+                }
+                else
+                {
+                    if (userid == User.Identity.Name)
+                    {
+                        ViewBag.IsMyProfile = true;
+
+                    }
+                    else
+                    {
+                        ViewBag.IsMyProfile = false;
+
+                    }
+
                 }
                 var avatar = db.Avatars.Where(x => x.UserId == userid).FirstOrDefault();
                 ViewBag.avatarpath = avatar.Path;

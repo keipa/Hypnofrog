@@ -18,11 +18,11 @@
     }
 
 
-   .btn-success{
-       margin-left:15px;
-       margin-top: 15px;
-       width: 90%;
-   }
+    .btn-success {
+        margin-left: 15px;
+        margin-top: 15px;
+        width: 90%;
+    }
 
     div {
         display: block;
@@ -49,10 +49,10 @@
 
     .profile_info_avatar {
         width: 92px;
-        ma
         margin-bottom: 7px;
     }
-    .otherinfo{
+
+    .otherinfo {
         margin-left: 10px;
     }
 </style>
@@ -65,9 +65,21 @@
         <tr>
             <td>
                 <div>
-                    <img class="profile_info_avatar" src="@ViewBag.avatarpath"><br />
-                </div>
-            </td>
+                    
+                       @{ if (ViewBag.IsMyProfile)
+                           {
+                            @Html.Raw(@Html.ActionLink("{test}", "UpdatePhotoDialog", "Home", new { userid = User.Identity.Name }, new { @class = "profile_info_avatar modal-link" }).ToHtmlString().Replace("{test}", "<img  src=" + @ViewBag.avatarpath + "><br />"))
+
+                            }
+                            else
+                            {
+                            <img class="profile_info_avatar" src=@ViewBag.avatarpath>
+                           }
+
+                    }
+
+            </div>
+        </td>
             <td>
                 <div class="otherinfo">
                     <span> @User.Identity.Name</span>

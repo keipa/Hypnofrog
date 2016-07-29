@@ -31,6 +31,14 @@ namespace Hypnofrog
                       "~/Content/bootstrap.css",
                       "~/Content/Site.css",
                       "~/Content/popupwindows.css"));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
+                     "~/Scripts/dropzone/dropzone.js"));
+
+            bundles.Add(new StyleBundle("~/bundles/dropzonescss").Include(
+                     "~/Scripts/dropzone/basic.css",
+                     "~/Scripts/dropzone/dropzone.css"));
         }
     }
 }

@@ -11,7 +11,7 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.Id })
+                @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.Email })
             </td>
             @if ((bool)ViewBag.IsAdmin ^ User.Identity.GetUserId() == item.Id)
             {
