@@ -6,7 +6,7 @@
 }
 
 <h2>AllUsers</h2>
-<table>
+@*<table>
     @foreach (var item in Model)
     {
         <tr>
@@ -30,4 +30,52 @@
         </tr>
     }
 
-</table>
+</table>*@
+
+
+<table class="table">
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Удалить
+            </th>
+            @if ((bool)ViewBag.IsAdmin )
+                {
+                <th>
+                    Повысить
+                </th>
+            }
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+
+
+                <td>
+                    @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.Email })
+                </td>
+                <td>
+                    @if (User.Identity.Name == item.Email)
+                    {
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                    }
+                </td>
+                <td>
+                    @if ((bool)ViewBag.IsAdmin)
+                        {
+                        @Html.ActionLink("Повысить до админа", "UpInRole", new { id = item.Id })
+                }
+                </td>
+            </tr>
+    }
+
+    </table>
