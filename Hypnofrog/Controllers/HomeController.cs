@@ -54,6 +54,11 @@ namespace Hypnofrog.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        public ActionResult Creating()
+        {
+            return PartialView("_ViewConfig");
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
