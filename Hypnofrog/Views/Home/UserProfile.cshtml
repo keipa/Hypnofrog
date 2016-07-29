@@ -1,4 +1,5 @@
 ﻿
+
 @{
     ViewBag.Title = "UserProfile";
 }
@@ -55,6 +56,143 @@
     .otherinfo {
         margin-left: 10px;
     }
+
+
+    .white-box {
+  background: #fff;
+  box-shadow: 0px 1px 2px 1px rgba(204, 204, 204, 0.6);
+}
+html {
+  font-family: 'Source Sans Pro';
+  background: whitesmoke;
+}
+.courses {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.courses.cards .course {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 330px;
+}
+.courses.cards .course .asset img {
+  width: 100%;
+}
+.courses.cards .course .details {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.courses.cards .course .details > *:not(:last-child) {
+  margin-bottom: 15px;
+}
+.courses.cards .course .details .actions {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.courses.cards .course .details .actions > * {
+  -webkit-box-align: middle;
+  -webkit-align-items: middle;
+      -ms-flex-align: middle;
+          align-items: middle;
+  text-align: center;
+}
+.courses.list {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.courses.list .course {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  height: 85px;
+  width: 865px;
+}
+.courses.list .course .asset img {
+  width: 130px;
+  height: 100%;
+}
+.courses.list .course .details {
+  width: 100%;
+}
+.courses.list .course .details > *:not(:last-child) {
+  margin-right: 15px;
+}
+.courses.cards{
+    margin-top: 15px;
+}
+.courses.list .course .details .actions {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.courses.list .course .details .actions > * {
+  -webkit-box-align: middle;
+  -webkit-align-items: middle;
+      -ms-flex-align: middle;
+          align-items: middle;
+  text-align: center;
+}
+.courses .course {
+  margin-left: 15px;
+  margin-bottom: 15px;
+  background: #fff;
+  box-shadow: 0px 1px 2px 1px rgba(204, 204, 204, 0.6);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.courses .course .details {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 20px;
+}
+.courses .course .details > div span {
+  display: block;
+}
+.courses .course .details > div span:first-child {
+  color: #4a4f51;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.courses .course .details > div span:last-child {
+  font-weight: 600;
+}
+.courses .course .details .actions {
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+}
+
+
 </style>
 
 
@@ -107,4 +245,190 @@
 
 
 
+<div class='courses cards'>
+    <div class='course'>
+        <div class='asset'>
+            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+        </div>
+        <div class='details'>
+            <div class='title'>
+                <span>Course Title</span>
+                <span>WHIMIS Online Training Course</span>
+            </div>
+            <div class='description'>
+                <span>Description</span>
+                <span>Danatec Safety Training Inc.</span>
+            </div>
+            <div class='language'>
+                <span>Language</span>
+                <span>English</span>
+            </div>
+            <span class='actions'>
+                <a>
+                    <i class='fa fa-eye'></i>
+                </a>
+                <a>
+                    <i class='fa fa-pencil'></i>
+                </a>
+                <a>
+                    <i class='fa fa-trash'></i>
+                </a>
+            </span>
+        </div>
+    </div>
+    <div class='course'>
+        <div class='asset'>
+            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+        </div>
+        <div class='details'>
+            <div class='title'>
+                <span>Course Title</span>
+                <span>WHIMIS Online Training Course</span>
+            </div>
+            <div class='description'>
+                <span>Description</span>
+                <span>Danatec Safety Training Inc.</span>
+            </div>
+            <div class='language'>
+                <span>Language</span>
+                <span>English</span>
+            </div>
+            <span class='actions'>
+                <a>
+                    <i class='fa fa-eye'></i>
+                </a>
+                <a>
+                    <i class='fa fa-pencil'></i>
+                </a>
+                <a>
+                    <i class='fa fa-trash'></i>
+                </a>
+            </span>
+        </div>
+    </div>
+    <div class='course'>
+        <div class='asset'>
+            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+        </div>
+        <div class='details'>
+            <div class='title'>
+                <span>Course Title</span>
+                <span>WHIMIS Online Training Course</span>
+            </div>
+            <div class='description'>
+                <span>Description</span>
+                <span>Danatec Safety Training Inc.</span>
+            </div>
+            <div class='language'>
+                <span>Language</span>
+                <span>English</span>
+            </div>
+            <span class='actions'>
+                <a>
+                    <i class='fa fa-eye'></i>
+                </a>
+                <a>
+                    <i class='fa fa-pencil'></i>
+                </a>
+                <a>
+                    <i class='fa fa-trash'></i>
+                </a>
+            </span>
+        </div>
+    </div>
 
+</div>
+
+
+<div class='courses cards'>
+    <div class='course'>
+        <div class='asset'>
+            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+        </div>
+        <div class='details'>
+            <div class='title'>
+                <span>Course Title</span>
+                <span>WHIMIS Online Training Course</span>
+            </div>
+            <div class='description'>
+                <span>Description</span>
+                <span>Danatec Safety Training Inc.</span>
+            </div>
+            <div class='language'>
+                <span>Language</span>
+                <span>English</span>
+            </div>
+            <span class='actions'>
+                <a>
+                    <i class='fa fa-eye'></i>
+                </a>
+                <a>
+                    <i class='fa fa-pencil'></i>
+                </a>
+                <a>
+                    <i class='fa fa-trash'></i>
+                </a>
+            </span>
+        </div>
+    </div>
+    <div class='course'>
+        <div class='asset'>
+            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+        </div>
+        <div class='details'>
+            <div class='title'>
+                <span>Course Title</span>
+                <span>WHIMIS Online Training Course</span>
+            </div>
+            <div class='description'>
+                <span>Description</span>
+                <span>Danatec Safety Training Inc.</span>
+            </div>
+            <div class='language'>
+                <span>Language</span>
+                <span>English</span>
+            </div>
+            <span class='actions'>
+                <a>
+                    <i class='fa fa-eye'></i>
+                </a>
+                <a>
+                    <i class='fa fa-pencil'></i>
+                </a>
+                <a>
+                    <i class='fa fa-trash'></i>
+                </a>
+            </span>
+        </div>
+    </div>
+    <div class='course'>
+        <div class='asset'>
+            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+        </div>
+        <div class='details'>
+            <div class='title'>
+                <span>Course Title</span>
+                <span>WHIMIS Online Training Course</span>
+            </div>
+            <div class='description'>
+                <span>Description</span>
+                <span>Danatec Safety Training Inc.</span>
+            </div>
+            <div class='language'>
+                <span>Language</span>
+                <span>English</span>
+            </div>
+            <span class='actions'>
+                <a>
+                    <i class='fa fa-eye'></i>
+                </a>
+                <a>
+                    <i class='fa fa-pencil'></i>
+                </a>
+                <a>
+                    <i class='fa fa-trash'></i>
+                </a>
+            </span>
+        </div>
+    </div>
+</div>
