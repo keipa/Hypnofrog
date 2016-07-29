@@ -65,18 +65,13 @@
         <tr>
             <td>
                 <div>
-                    
-                       @{ if (ViewBag.IsMyProfile)
-                           {
-                            @Html.Raw(@Html.ActionLink("{test}", "UpdatePhotoDialog", "Home", new { userid = User.Identity.Name }, new { @class = "profile_info_avatar modal-link" }).ToHtmlString().Replace("{test}", "<img  src=" + @ViewBag.avatarpath + "><br />"))
 
-                            }
-                            else
-                            {
+
+
                             <img class="profile_info_avatar" src=@ViewBag.avatarpath>
-                           }
+                           
 
-                    }
+                   
 
             </div>
         </td>

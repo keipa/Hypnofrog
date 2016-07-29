@@ -305,7 +305,6 @@
     <Content Include="Views\Home\UserProfile.cshtml" />
     <Content Include="Views\Home\AllUsers.cshtml" />
     <Content Include="Views\Home\_ViewConfig.cshtml" />
-    <Content Include="Views\Home\_UpdatePhotoViewConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

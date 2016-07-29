@@ -94,9 +94,6 @@ namespace Hypnofrog.Controllers
                             useravatar.Path = result.Uri.AbsoluteUri;
                             db.SaveChanges();
 
-
-                            //db.Tables.Add(new Table() { UserId = (string)Session["CurrentUserId"], Path = result.Uri.AbsolutePath });
-                            //db.SaveChanges();
                         }
                         return RedirectToAction("UserProfile");
                     }
@@ -116,12 +113,6 @@ namespace Hypnofrog.Controllers
             {
                 return Json(new { Message = "Error in saving file" });
             }
-        }
-
-
-        public ActionResult UpdatePhotoDialog(string userid= "")
-        {
-            return PartialView("_UpdatePhotoViewConfig");
         }
 
         public ActionResult About()
