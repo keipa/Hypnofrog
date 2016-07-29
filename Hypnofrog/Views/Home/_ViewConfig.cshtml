@@ -5,14 +5,12 @@
 
 <div class="modal-body">
     <div class="confirm">
-        @using (Html.BeginForm("CreateSite", "Home", FormMethod.Post))
-        {
             <h3>Настройки вашего сайта</h3>
             <p>
                 Здесь вы можете настроить свой сайт и его первую страницу.
                 <em>Последующие страницы будут создаваться по мере необходимости.</em>
             </p>
-            using (Ajax.BeginForm("ChangeTemplate", "Home", new AjaxOptions() { UpdateTargetId = "tutu" }, new { id = "aform", style = "margin-bottom:40px;" }))
+            @using (Ajax.BeginForm("ChangeTemplate", "Home", new AjaxOptions() { UpdateTargetId = "tutu" }, new { id = "aform", style = "margin-bottom:40px;" }))
             {
                 <div class="form-group">
                     <div class="row">
@@ -78,7 +76,6 @@
                         </div>
                     </div>
                 </div>
-            }
             <button id="approve-btn">Cancel</button>
             <button>Confirm</button>
        }
