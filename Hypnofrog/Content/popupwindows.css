@@ -5,7 +5,7 @@
   transform: translate(-50%, -50%);
   width: 80%;
   min-width: 280px;
-  max-width: 500px;
+  max-width: 660px;
   height: auto;
   background: #E2E2E2;
   border-radius: 10px;
@@ -19,7 +19,7 @@
 }
 .confirm p {
   text-align: center;
-  margin: 0 2rem 4.5rem;
+  margin: 5px 20px;
 }
 .confirm button {
   background: transparent;
@@ -49,4 +49,11 @@
 }
 .confirm button:active {
   background: #D6D6D6;
+}
+
+
+.confimage{
+    width:200px;
+    height:200px;
+    border:dotted;
 }

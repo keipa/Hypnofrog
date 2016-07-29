@@ -2,6 +2,7 @@
 using CloudinaryDotNet.Actions;
 using Hypnofrog.DBModels;
 using Hypnofrog.Models;
+using Hypnofrog.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -59,7 +60,22 @@ namespace Hypnofrog.Controllers
 
         public ActionResult Creating()
         {
-            return PartialView("_ViewConfig");
+
+            return PartialView("_ViewConfig", new SettingsModel()
+            {
+                UserId = User.Identity.GetUserId(),
+                isActive = false,
+                Color = "dark",
+                Menu = "without",
+                Template = "solid",
+                CommentsAvailable = false,
+                Url = SettingsModel.CreatePhoto("dark", "without", "solid")
+            });
+        }
+
+        public PartialViewResult ChangeTemplate(SettingsModel model)
+        {
+            return PartialView("_ColorTemplate", SettingsModel.CreatePhoto(model.Color, model.Menu, model.Template));
         }
 
         public ActionResult SaveUploadedFile()
