@@ -151,10 +151,14 @@ namespace Hypnofrog.Controllers
         {
             using (var db = new Context())
             {
+                //db.Sites.Add(new Site() { CreationTime = DateTime.Now, Description = "kek", Iscomplited = false, MenuId = 1488, MenuType ="topkek", SiteId= 34567, Title= "pizda",UserId="pohui" });
+                //db.Pages.Add(new Page() { UserId = "ejje", Title = "wej", Color = "dfklj", HasComments = false,PageId = "kek",TemplateType = "kek" });
+                //db.SaveChanges();
+
                 if (userid == "")
                 {
                     ViewBag.IsMyProfile = true;
-
+          
                     userid = User.Identity.Name;
                 }
                 else
