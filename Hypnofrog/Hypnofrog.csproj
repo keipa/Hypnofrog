@@ -195,6 +195,34 @@
     <Compile Include="Migrations\201608011012213_site and page.Designer.cs">
       <DependentUpon>201608011012213_site and page.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608011232302_url to site.cs" />
+    <Compile Include="Migrations\201608011232302_url to site.Designer.cs">
+      <DependentUpon>201608011232302_url to site.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608011245588_in pages changed field name from UserId to SiteId.cs" />
+    <Compile Include="Migrations\201608011245588_in pages changed field name from UserId to SiteId.Designer.cs">
+      <DependentUpon>201608011245588_in pages changed field name from UserId to SiteId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608011249212_field type changed to int in Pages pageid and siteid.cs" />
+    <Compile Include="Migrations\201608011249212_field type changed to int in Pages pageid and siteid.Designer.cs">
+      <DependentUpon>201608011249212_field type changed to int in Pages pageid and siteid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608011338082_identity 11 try.cs" />
+    <Compile Include="Migrations\201608011338082_identity 11 try.Designer.cs">
+      <DependentUpon>201608011338082_identity 11 try.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608011354269_pageid resolving.cs" />
+    <Compile Include="Migrations\201608011354269_pageid resolving.Designer.cs">
+      <DependentUpon>201608011354269_pageid resolving.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608011412574_page context deleted.cs" />
+    <Compile Include="Migrations\201608011412574_page context deleted.Designer.cs">
+      <DependentUpon>201608011412574_page context deleted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608011414423_page returned.cs" />
+    <Compile Include="Migrations\201608011414423_page returned.Designer.cs">
+      <DependentUpon>201608011414423_page returned.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -344,6 +372,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608011012213_site and page.resx">
       <DependentUpon>201608011012213_site and page.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011232302_url to site.resx">
+      <DependentUpon>201608011232302_url to site.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011245588_in pages changed field name from UserId to SiteId.resx">
+      <DependentUpon>201608011245588_in pages changed field name from UserId to SiteId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011249212_field type changed to int in Pages pageid and siteid.resx">
+      <DependentUpon>201608011249212_field type changed to int in Pages pageid and siteid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011338082_identity 11 try.resx">
+      <DependentUpon>201608011338082_identity 11 try.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011354269_pageid resolving.resx">
+      <DependentUpon>201608011354269_pageid resolving.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011412574_page context deleted.resx">
+      <DependentUpon>201608011412574_page context deleted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011414423_page returned.resx">
+      <DependentUpon>201608011414423_page returned.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

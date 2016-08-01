@@ -1,34 +1,16 @@
-﻿
+﻿@model IEnumerable<Hypnofrog.DBModels.Site>
 
 @{
     ViewBag.Title = "UserProfile";
 }
 
- <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
-
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
 
 <style>
-
-    .profile_wrap {
-        width: 90%;
-        margin-left: 15px;
-        height: auto;
-        background: #f0f1eb;
-        border-radius: 3px;
-        text-align: left;
-        font-family: Tahoma, Arial;
-        font-size: 12px;
-        margin-top: 15px;
-        color: #606060;
-    }
-
-
+    
     .btn-success {
-        margin-left: 15px;
-        margin-top: 15px;
-        width: 90%;
+        width: 100%;
     }
-
     div {
         display: block;
     }
@@ -79,10 +61,10 @@
         display: flex;
     }
 
-    .courses a{
-        text-decoration:none;
-        color:black;
-    }
+        .courses a {
+            text-decoration: none;
+            color: black;
+        }
 
         .courses.cards .course {
             -webkit-box-orient: vertical;
@@ -90,7 +72,7 @@
             -webkit-flex-direction: column;
             -ms-flex-direction: column;
             flex-direction: column;
-            width: 330px;
+            width: 350px;
         }
 
             .courses.cards .course .asset img {
@@ -179,8 +161,13 @@
                 text-align: center;
             }
 
+            .avatar{
+                height:180px;
+                width:180px;
+            }
         .courses .course {
             margin-left: 15px;
+            margin-right:15px;
             margin-bottom: 15px;
             background: #fff;
             box-shadow: 0px 1px 2px 1px rgba(204, 204, 204, 0.6);
@@ -225,243 +212,108 @@
 </style>
 
 
+<br>
+<div class="container-fluid well span6">
+    <div class="row-fluid">
+        <div class="row">
+            <div class="span2 col-lg-2 col-md-3 col-sm-4 col-xs-4">
+                <img src="@ViewBag.avatarpath" class="img-circle avatar">
+            </div>
 
+            <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                <h3>@ViewBag.Email</h3>
+                <h6>Рейтинг: -52</h6>
+                <h6>Комментариев: Colombia</h6>
+                <h6>Сайтов добавил: @Model.Count()</h6>
 
-<div class="profile_wrap b-user-profile">
-    <table>
-        <tr>
-            <td>
-                <div>
+            </div>
 
-
-
-                    <img class="profile_info_avatar" src=@ViewBag.avatarpath>
-
-
-
-
+            @if (ViewBag.Email == User.Identity.Name)
+            {
+                <div class="span2 col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+                            
+                            <span class="icon-cog icon-white"></span><span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Index", "Manage")"><span class="fa fa-cog fa-3 "></span> Настройки аккаунта</a></li>
+                            <li><a href="#"><span class="fa fa-trash fa-3"></span> Удалить аккаунт</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </td>
-            <td>
-                <div class="otherinfo">
-                    <span> @User.Identity.Name</span>
-                    <br>
-                    <span class="b-user-profile__label">Рейтинг</span>
-                    <span class="b-user-profile__value">-59</span>
-                    <br>
-                    <span class="b-user-profile__label">Комментариев</span>
-                    <span class="b-user-profile__value">2</span>
-                    <br>
-                    <span class="b-user-profile__label">Добавил сайтов</span>
-                    <span class="b-user-profile__value">4</span>
-                </div>
-            </td>
-            <td>
-                <div>
-                    <a href="@Url.Action("Index", "Manage")" type="button" class="btn btn-info">Edit</a>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-
-
+            }
+        </div>
+    </div>
 </div>
 
+@if (ViewBag.Email == User.Identity.Name)
+{
+    <a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">Добавить сайт</a>
+}
 
-<a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">Добавить сайт</a>
+@if (Model.Count() > 0)
+{
+    for (int i = 0; i < Model.Count(); i += 3)
+    {
+        <div class='courses cards'>
+            @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
+            {
+                <div class='course'>
+                    <div class='asset'>
+                        <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+                    </div>
+                    <div class='details'>
+                        <div class='title'>
+                            <span>Название</span>
+                            <span>@Model.ElementAt(j).Title</span>
+                        </div>
+                        <div class='description'>
+                            <span>Описание</span>
+                            <span>@Model.ElementAt(j).Description</span>
+                        </div>
+                        <div class='language'>
+                            <span>Готовность</span>
+                            @if (Model.ElementAt(j).Iscomplited)
+                            {
+                                <span>
+                                    Опубликовано
+                                </span>
+                            }
+                            else
+                            {
+                                <span style="color:red"> В разработке</span>
+                            }
+
+                        </div>
+                        @if (ViewBag.Email == User.Identity.Name)
+                        {
+                            /**/
+
+                        <span class='actions'>
+
+                            <a  href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                                <i class='fa fa-eye'></i>
+                            </a>
+
+                            <a  href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                                <i class='fa fa-pencil'></i>
+                            </a>
+
+                            <a href="@Url.Action("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId })">
+                                <i class='fa fa-trash'></i>
+                            </a>
+                        </span>
+                        }
+                    </div>
+                </div>
+
+            }
 
 
-
-
-<div class='courses cards'>
-    <div class='course'>
-        <div class='asset'>
-            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
         </div>
-        <div class='details'>
-            <div class='title'>
-                <span>Название</span>
-                <span>WHIMIS Online Training Course</span>
-            </div>
-            <div class='description'>
-                <span>Описание</span>
-                <span>Danatec Safety Training Inc.</span>
-            </div>
-            <div class='language'>
-                <span>Готовность</span>
-                <span>В разработке</span>
-            </div>
-            <span class='actions'>
-                <a>
-                    <i class='fa fa-eye'></i>
-                </a>
-                <a>
-                    <i class='fa fa-pencil'></i>
-                </a>
-                <a>
-                    <i class='fa fa-trash'></i>
-                </a>
-            </span>
-        </div>
-    </div>
-    <div class='course'>
-        <div class='asset'>
-            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
-        </div>
-        <div class='details'>
-            <div class='title'>
-                <span>Название</span>
-                <span>WHIMIS Online Training Course</span>
-            </div>
-            <div class='description'>
-                <span>Описание</span>
-                <span>Danatec Safety Training Inc.</span>
-            </div>
-            <div class='language'>
-                <span>Готовность</span>
-                <span>В разработке</span>
-            </div>
-            <span class='actions'>
-                <a>
-                    <i class='fa fa-eye'></i>
-                </a>
-                <a>
-                    <i class='fa fa-pencil'></i>
-                </a>
-                <a>
-                    <i class='fa fa-trash'></i>
-                </a>
-            </span>
-        </div>
-    </div>
-    <div class='course'>
-        <div class='asset'>
-            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
-        </div>
-        <div class='details'>
-            <div class='title'>
-                <span>Название</span>
-                <span>WHIMIS Online Training Course</span>
-            </div>
-            <div class='description'>
-                <span>Описание</span>
-                <span>Danatec Safety Training Inc.</span>
-            </div>
-            <div class='language'>
-                <span>Готовность</span>
-                <span>В разработке</span>
-            </div>
-            <span class='actions'>
-                <a>
-                    <i class='fa fa-eye'></i>
-                </a>
-                <a>
-                    <i class='fa fa-pencil'></i>
-                </a>
-                <a>
-                    <i class='fa fa-trash'></i>
-                </a>
-            </span>
-        </div>
-    </div>
-
-</div>
-
-<div class='courses cards'>
-    <div class='course'>
-        <div class='asset'>
-            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
-        </div>
-        <div class='details'>
-            <div class='title'>
-                <span>Название</span>
-                <span>WHIMIS Online Training Course</span>
-            </div>
-            <div class='description'>
-                <span>Описание</span>
-                <span>Danatec Safety Training Inc.</span>
-            </div>
-            <div class='language'>
-                <span>Готовность</span>
-                <span>В разработке</span>
-            </div>
-            <span class='actions'>
-                <a>
-                    <i class='fa fa-eye'></i>
-                </a>
-                <a>
-                    <i class='fa fa-pencil'></i>
-                </a>
-                <a>
-                    <i class='fa fa-trash'></i>
-                </a>
-            </span>
-        </div>
-    </div>
-    <div class='course'>
-        <div class='asset'>
-            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
-        </div>
-        <div class='details'>
-            <div class='title'>
-                <span>Название</span>
-                <span>WHIMIS Online Training Course</span>
-            </div>
-            <div class='description'>
-                <span>Описание</span>
-                <span>Danatec Safety Training Inc.</span>
-            </div>
-            <div class='language'>
-                <span>Готовность</span>
-                <span>В разработке</span>
-            </div>
-            <span class='actions'>
-                <a>
-                    <i class='fa fa-eye'></i>
-                </a>
-                <a>
-                    <i class='fa fa-pencil'></i>
-                </a>
-                <a>
-                    <i class='fa fa-trash'></i>
-                </a>
-            </span>
-        </div>
-    </div>
-    <div class='course'>
-        <div class='asset'>
-            <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
-        </div>
-        <div class='details'>
-            <div class='title'>
-                <span>Название</span>
-                <span>WHIMIS Online Training Course</span>
-            </div>
-            <div class='description'>
-                <span>Описание</span>
-                <span>Danatec Safety Training Inc.</span>
-            </div>
-            <div class='language'>
-                <span>Готовность</span>
-                <span>В разработке</span>
-            </div>
-            <span class='actions'>
-                <a>
-                    <i class='fa fa-eye'></i>
-                </a>
-                <a>
-                    <i class='fa fa-pencil'></i>
-                </a>
-                <a>
-                    <i class='fa fa-trash'></i>
-                </a>
-            </span>
-        </div>
-    </div>
-
-</div>
-
+    }
+}
 
 <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>

@@ -5,80 +5,90 @@
 
 <div class="modal-body">
     <div class="confirm">
-            <h3>Настройки вашего сайта</h3>
-            <p>
-                Здесь вы можете настроить свой сайт и его первую страницу.
-                <em>Последующие страницы будут создаваться по мере необходимости.</em>
-            </p>
-            @using (Ajax.BeginForm("ChangeTemplate", "Home", new AjaxOptions() { UpdateTargetId = "tutu" }, new { id = "aform", style = "margin-bottom:40px;" }))
+        <h3>Настройки вашего сайта</h3>
+        <p>
+            Здесь вы можете настроить свой сайт и его первую страницу.
+            <em>Последующие страницы будут создаваться по мере необходимости.</em>
+        </p>
+        @using (Ajax.BeginForm("ChangeTemplate", "Home", new AjaxOptions() { UpdateTargetId = "tutu" }, new { id = "aform", style = "margin: 25px 10px 40px 30px" }))
             {
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <div class="row">
-                                <label class="control-label col-md-10 col-sm-offset-2" for="Template">Цветовая гамма:</label>
-                            </div>
-                            <div class="row">
-                                <div class="btn-group col-md-12 col-sm-offset-1" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        @Html.RadioButtonFor(x => x.Color, "dark") Темный
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        @Html.RadioButtonFor(x => x.Color, "white") Светлый
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        @Html.RadioButtonFor(x => x.Color, "orange") Рыжий
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label class="control-label col-md-10 col-sm-offset-2" for="Template">Положение меню:</label>
-                            </div>
-                            <div class="row">
-                                <div class="btn-group col-md-12 col-sm-offset-1" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        @Html.RadioButtonFor(x => x.Menu, "without") Без меню
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        @Html.RadioButtonFor(x => x.Menu, "horizontal") Горизонтальное
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        @Html.RadioButtonFor(x => x.Menu, "vertical") Вертикальное
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label class="control-label col-md-10 col-sm-offset-2" for="Template">Положение колонок:</label>
-                            </div>
-                            <div class="row">
-                                <div class="btn-group col-md-12 col-sm-offset-1" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        @Html.RadioButtonFor(x => x.Template, "solid") Одна сплошная
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        @Html.RadioButtonFor(x => x.Template, "dsolid") Две сплошных
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        @Html.RadioButtonFor(x => x.Template, "mixed") Смешанное
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="btn-group col-md-12 col-sm-offset-1 checkbox">
-                                    <label>@Html.CheckBoxFor(x => x.CommentsAvailable) Добавить комментарии?</label>
-                                </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" placeholder="Название" id="sitename">
+                        <br />
+                        <input type="text" class="form-control " placeholder="Описание" id="sitedescription">
+                        <br />
+                        <div class="row">
+                            <label class="control-label col-md-10" for="Template">Цветовая гамма:</label>
+                        </div>
+                        <div class="row">
+                            <div class="btn-group col-md-12" data-toggle="buttons">
+                                <label class="btn btn-primary active">
+                                    @Html.RadioButtonFor(x => x.Color, "dark") Темный
+                                </label>
+                                <label class="btn btn-primary">
+                                    @Html.RadioButtonFor(x => x.Color, "white") Светлый
+                                </label>
+                                <label class="btn btn-primary">
+                                    @Html.RadioButtonFor(x => x.Color, "orange") Рыжий
+                                </label>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div id="tutu" class="preview col-md-12">
-                                @{ Html.RenderPartial("_ColorTemplate", Model.Url);}
+                        <div class="row">
+                            <label class="control-label col-md-10 " for="Template">Положение меню:</label>
+                        </div>
+                        <div class="row">
+                            <div class="btn-group col-md-12" data-toggle="buttons">
+                                <label class="btn btn-primary active">
+                                    @Html.RadioButtonFor(x => x.Menu, "without") Без меню
+                                </label>
+                                <label class="btn btn-primary">
+                                    @Html.RadioButtonFor(x => x.Menu, "horizontal") Горизонтальное
+                                </label>
+                                <label class="btn btn-primary">
+                                    @Html.RadioButtonFor(x => x.Menu, "vertical") Вертикальное
+                                </label>
                             </div>
+                        </div>
+                        <div class="row">
+                            <label class="control-label col-md-10 " for="Template">Колонки:</label>
+                        </div>
+                        <div class="row">
+                            <div class="btn-group col-md-12" data-toggle="buttons">
+                                <label class="btn btn-primary active">
+                                    @Html.RadioButtonFor(x => x.Template, "solid") Одна
+                                </label>
+                                <label class="btn btn-primary">
+                                    @Html.RadioButtonFor(x => x.Template, "dsolid") Две
+                                </label>
+                                <label class="btn btn-primary">
+                                    @Html.RadioButtonFor(x => x.Template, "mixed") Смешанное
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="btn-group col-md-12 checkbox col-lg-offset-1">
+                                <label>@Html.CheckBoxFor(x => x.CommentsAvailable, new { @id = "chbox" }) Добавить комментарии?</label>
+                            </div>
+                        </div>
+                        <label for="basic-url">URL для доступа к сайту</label>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon3">/users/username/</span>
+                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div id="tutu" class="preview col-md-12">
+                            @{ Html.RenderPartial("_ColorTemplate", Model.Url);}
                         </div>
                     </div>
                 </div>
-            }
+            </div>
+                                }
         @using (Html.BeginForm("CreateSite", "Home", FormMethod.Post, new { id = "bform", style = "margin-bottom:40px;" }))
         {
+            Html.AntiForgeryToken();
             <input type="hidden" id="inputData" name="inputData" />
             <button id="approve-btn">Cancel</button>
             <button id="confirm-btn" type="submit">Confirm</button>
@@ -104,6 +114,10 @@
     });
     $('#confirm-btn').click(function () {
         var colors = document.getElementsByClassName('active');
+        document.getElementById('inputData').value += document.getElementById("sitename").value+ ";";
+        document.getElementById('inputData').value += document.getElementById("sitedescription").value + ";";
+        document.getElementById('inputData').value += document.getElementById("basic-url").value + ";";
+        document.getElementById('inputData').value += document.getElementById("chbox").checked + ";";
         for (i = 0; i < colors.length; i++) {
             document.getElementById('inputData').value += colors[i].getElementsByTagName('input')[0].value + ';';
         }

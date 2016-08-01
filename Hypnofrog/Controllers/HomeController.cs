@@ -80,11 +80,25 @@ namespace Hypnofrog.Controllers
 
         [HttpPost]
         public ActionResult CreateSite(string inputData)
+
         {
             //CREATING SITE
-            //inputData - строка в которой идут свойства через ';' т.е. "dark;vertical;mixed;"
+            //inputData - строка в которой идут свойства через ';' т.е. ""Name;Desk;url;comments;white;horizontal;mixed;""
             //после их сплита можно в бд кидать
-            return View();
+            string[] param = inputData.Split(';');
+
+            var dbsite = new Site {};
+
+            using (var db = new Context())
+            {
+                var site = new Site { CreationTime = DateTime.Now, Title = param[0], Description = param[1], Url = param[2], Iscomplited = false, MenuId = 0, MenuType = param[5], UserId = User.Identity.GetUserId(), SiteId = db.Sites.Count() + 1 };
+                dbsite = site;
+                db.Sites.Add(site);
+                var page = new Page { PageId = db.Pages.Count() + 1, Site = site.SiteId, Color = param[4], HasComments = param[3] == "true" ? true : false, TemplateType = param[6], Title = "Page Title" };
+                db.Pages.Add(page);
+                db.SaveChanges();
+            }
+                return RedirectToAction("UserProfile", new {userid = User.Identity.Name });
         }
 
         public ActionResult SaveUploadedFile()
@@ -120,7 +134,7 @@ namespace Hypnofrog.Controllers
                             db.SaveChanges();
 
                         }
-                        return RedirectToAction("UserProfile");
+                        return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
                     }
 
                 }
@@ -147,38 +161,50 @@ namespace Hypnofrog.Controllers
             return View();
         }
 
-        public ActionResult UserProfile(string userid = "")
+        public ActionResult DeleteSite(int siteid)
         {
             using (var db = new Context())
             {
-                //db.Sites.Add(new Site() { CreationTime = DateTime.Now, Description = "kek", Iscomplited = false, MenuId = 1488, MenuType ="topkek", SiteId= 34567, Title= "pizda",UserId="pohui" });
-                //db.Pages.Add(new Page() { UserId = "ejje", Title = "wej", Color = "dfklj", HasComments = false,PageId = "kek",TemplateType = "kek" });
-                //db.SaveChanges();
-
-                if (userid == "")
+                var pages = db.Pages.Where(l => l.Site == siteid);
+                foreach (var item in pages)
                 {
-                    ViewBag.IsMyProfile = true;
-          
-                    userid = User.Identity.Name;
+                    db.Pages.Remove(item);
                 }
-                else
-                {
-                    if (userid == User.Identity.Name)
-                    {
-                        ViewBag.IsMyProfile = true;
+                var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+                db.Sites.Remove(site);
+                db.SaveChanges(); 
 
-                    }
-                    else
-                    {
-                        ViewBag.IsMyProfile = false;
+               
+            }
+            return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
+        }
 
-                    }
-
-                }
+        public ActionResult UserProfile(string userid)
+        {  
+            using (var db = new Context())
+            {               
                 var avatar = db.Avatars.Where(x => x.UserId == userid).FirstOrDefault();
+                ViewBag.Email = userid;
                 ViewBag.avatarpath = avatar != null? avatar.Path : "";
             }
-            return View();
+            return View(GetProfilerSites(userid));
+        }
+
+
+
+        private List<Site> GetProfilerSites (string userid)
+        {
+            List<Site> sites = new List<Site>();
+
+            using (var db = new Context())
+            {
+                using (var udb = new ApplicationDbContext())
+                {
+                    var id = udb.Users.Where(y => y.Email == userid).FirstOrDefault().Id;
+                    sites = db.Sites.Where(x => x.UserId == id).ToList();
+            }
+            }
+            return sites;
         }
 
         public ActionResult Contact()
