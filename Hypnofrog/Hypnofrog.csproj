@@ -182,9 +182,20 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DBModels\Avatar.cs" />
     <Compile Include="DBModels\Context.cs" />
+    <Compile Include="DBModels\Page.cs" />
+    <Compile Include="DBModels\Site.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607281938480_InitialCreate.cs" />
+    <Compile Include="Migrations\201607281938480_InitialCreate.Designer.cs">
+      <DependentUpon>201607281938480_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608011012213_site and page.cs" />
+    <Compile Include="Migrations\201608011012213_site and page.Designer.cs">
+      <DependentUpon>201608011012213_site and page.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -322,6 +333,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201607281938480_InitialCreate.resx">
+      <DependentUpon>201607281938480_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011012213_site and page.resx">
+      <DependentUpon>201608011012213_site and page.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

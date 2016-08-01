@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace Hypnofrog.DBModels
+{
+    public class Site
+    {
+        public int SiteId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public bool Iscomplited { get; set; }
+        public string MenuType { get; set; }
+        public int MenuId { get; set; }
+
+        public DateTime CreationTime { get; set; }
+        public string UserId { get; set; }
+    }
+}
