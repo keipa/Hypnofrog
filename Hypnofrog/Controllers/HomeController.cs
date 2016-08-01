@@ -78,6 +78,15 @@ namespace Hypnofrog.Controllers
             return PartialView("_ColorTemplate", SettingsModel.CreatePhoto(model.Color, model.Menu, model.Template));
         }
 
+        [HttpPost]
+        public ActionResult CreateSite(string inputData)
+        {
+            //CREATING SITE
+            //inputData - строка в которой идут свойства через ';' т.е. "dark;vertical;mixed;"
+            //после их сплита можно в бд кидать
+            return View();
+        }
+
         public ActionResult SaveUploadedFile()
         {
             bool isSavedSuccessfully = true;

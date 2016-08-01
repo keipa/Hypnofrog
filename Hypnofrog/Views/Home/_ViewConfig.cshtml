@@ -76,9 +76,13 @@
                         </div>
                     </div>
                 </div>
+            }
+        @using (Html.BeginForm("CreateSite", "Home", FormMethod.Post, new { id = "bform", style = "margin-bottom:40px;" }))
+        {
+            <input type="hidden" id="inputData" name="inputData" />
             <button id="approve-btn">Cancel</button>
-            <button>Confirm</button>
-       }
+            <button id="confirm-btn" type="submit">Confirm</button>
+        }
     </div>
 </div>
 <script type="text/javascript">
@@ -97,5 +101,11 @@
     });
     $('input[name=Template]').change(function () {
         $('#aform').submit();
+    });
+    $('#confirm-btn').click(function () {
+        var colors = document.getElementsByClassName('active');
+        for (i = 0; i < colors.length; i++) {
+            document.getElementById('inputData').value += colors[i].getElementsByTagName('input')[0].value + ';';
+        }
     });
 </script>

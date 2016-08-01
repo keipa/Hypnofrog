@@ -237,6 +237,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\verticalmenu.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -269,6 +270,7 @@
     <Content Include="Scripts\PopUp.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\verticalmenuj.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -309,6 +311,8 @@
     <Content Include="Views\Home\AllUsers.cshtml" />
     <Content Include="Views\Home\_ViewConfig.cshtml" />
     <Content Include="Views\Home\_ColorTemplate.cshtml" />
+    <Content Include="Views\Shared\_LayoutWM.cshtml" />
+    <Content Include="Views\Shared\_LayoutVM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

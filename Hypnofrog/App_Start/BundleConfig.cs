@@ -37,6 +37,11 @@ namespace Hypnofrog
                       "~/Content/Site.css",
                       "~/Content/popupwindows.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/vertical").Include(
+                     "~/Scripts/verticalmenuj.js"));
+
+            bundles.Add(new StyleBundle("~/bundles/verticalstyle").Include(
+                     "~/Content/verticalmenu.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
                      "~/Scripts/dropzone/dropzone.js"));
