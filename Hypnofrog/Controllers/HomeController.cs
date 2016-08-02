@@ -101,6 +101,17 @@ namespace Hypnofrog.Controllers
                 return RedirectToAction("UserProfile", new {userid = User.Identity.Name });
         }
 
+        public ActionResult Wysiwyg()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Wysiwyg(HTMLContextClass obj)
+        {
+            return View();
+        }
+
         public ActionResult SaveUploadedFile()
         {
             bool isSavedSuccessfully = true;
