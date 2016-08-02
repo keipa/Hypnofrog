@@ -78,7 +78,7 @@ namespace Hypnofrog.Controllers
                     if (user.EmailConfirmed == true)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("UserProfile", "Home", new { user_id = user.Id });
+                        return RedirectToAction("UserProfile", "Home", new { userid = user.Email });
                     }
                     else
                     {
@@ -169,6 +169,8 @@ namespace Hypnofrog.Controllers
                     await UserManager.AddToRoleAsync(user.Id, "User");
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackURL = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    ViewBag.CallBack = callbackURL;
+                    ViewBag.uid = user.Id;
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение Email", "Для завершения регистрации перейдите по адресу:" +
                         "<a href=\"" + callbackURL + "\">Подвердить Email</a>");
                     return View("DisplayConfirmMessage");
@@ -177,7 +179,12 @@ namespace Hypnofrog.Controllers
             }
             return View(model);
         }
-
+        public  async Task<ActionResult> ResendEmail(string callbackURL, string uid)
+        {
+            await UserManager.SendEmailAsync(uid, "Подтверждение Email", "Для завершения регистрации перейдите по адресу:" +
+                        "<a href=\"" + callbackURL + "\">Подвердить Email</a>");
+            return View("DisplayConfirmMessage");
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -215,12 +222,7 @@ namespace Hypnofrog.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
             }
 
             // If we got this far, something failed, redisplay form
@@ -233,6 +235,17 @@ namespace Hypnofrog.Controllers
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
+        }
+
+        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
+        {
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account",
+               new { userId = userID, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(userID, subject,
+               "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+            return callbackUrl;
         }
 
         //

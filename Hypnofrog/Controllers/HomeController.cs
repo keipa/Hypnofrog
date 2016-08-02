@@ -78,6 +78,14 @@ namespace Hypnofrog.Controllers
             return PartialView("_ColorTemplate", SettingsModel.CreatePhoto(model.Color, model.Menu, model.Template));
         }
 
+
+        //public async void ResendEmail(string callbackURL, string uid)
+        //{
+        //    await UserManager.SendEmailAsync(uid, "Подтверждение Email", "Для завершения регистрации перейдите по адресу:" +
+        //                "<a href=\"" + callbackURL + "\">Подвердить Email</a>");
+        //    //return View("DisplayConfirmMessage");
+        //}
+
         [HttpPost]
         public ActionResult CreateSite(string inputData)
 
@@ -153,14 +161,12 @@ namespace Hypnofrog.Controllers
                 return Json(new { Message = "Error in saving file" });
             }
         }
-
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
             return View();
         }
-
         public ActionResult DeleteSite(int siteid)
         {
             using (var db = new Context())
@@ -172,13 +178,10 @@ namespace Hypnofrog.Controllers
                 }
                 var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
                 db.Sites.Remove(site);
-                db.SaveChanges(); 
-
-               
+                db.SaveChanges();       
             }
             return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
         }
-
         public ActionResult UserProfile(string userid)
         {  
             using (var db = new Context())
@@ -189,8 +192,6 @@ namespace Hypnofrog.Controllers
             }
             return View(GetProfilerSites(userid));
         }
-
-
 
         private List<Site> GetProfilerSites (string userid)
         {
@@ -206,11 +207,9 @@ namespace Hypnofrog.Controllers
             }
             return sites;
         }
-
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
