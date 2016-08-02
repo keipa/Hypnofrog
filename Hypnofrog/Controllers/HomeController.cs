@@ -87,6 +87,17 @@ namespace Hypnofrog.Controllers
             return View();
         }
 
+        public ActionResult Wysiwyg()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Wysiwyg(HTMLContextClass obj)
+        {
+            return View();
+        }
+
         public ActionResult SaveUploadedFile()
         {
             bool isSavedSuccessfully = true;
