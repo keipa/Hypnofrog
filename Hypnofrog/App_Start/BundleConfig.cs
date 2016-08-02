@@ -69,7 +69,10 @@ namespace Hypnofrog
                     "~/Scripts/froala/css/plugins/quick_insert.min.css",
                     "~/Scripts/froala/css/plugins/table.min.css",
                     "~/Scripts/froala/css/plugins/video.min.css",
-                    "~/Scripts/froala/css/plugins/char_counter.min.css"));
+                    "~/Scripts/froala/css/plugins/char_counter.min.css",
+                    "~/Scripts/froala/css/themes/dark.min.css",
+                    "~/Scripts/froala/css/themes/gray.min.css",
+                    "~/Scripts/froala/css/themes/red.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/froala-plugins-js").Include(
                     "~/Scripts/froala/js/froala_editor.min.js",

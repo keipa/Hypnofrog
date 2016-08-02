@@ -19,20 +19,39 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Hypnofrog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @if (ViewBag.RedactorEnable == true)
+                {
+                    @Html.ActionLink("Hypnofrog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                else
+                {
+                    @Html.ActionLink((string)ViewBag.Title, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                }
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    @if (User.IsInRole("Admin"))
+                    @if (ViewBag.RedactorEnable == true)
                     {
-                        <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
+                        foreach (var elem in (IEnumerable<string>)ViewBag.PageTitles)
+                        {
+                            <li>@Html.ActionLink(elem, "Index", "Home")</li>
+                        }
+                        <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
+
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
+                        }
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

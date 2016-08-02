@@ -1,0 +1,18 @@
+﻿@model Hypnofrog.DBModels.Page
+
+@using (Ajax.BeginForm("SavePage", new { pageid = Model.PageId }, new AjaxOptions() { UpdateTargetId = "page-redactor", OnSuccess = "alert(\"Сохранение прошло успешно.\");" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-5 col-xs-5 col-sm-5">
+            @Html.TextAreaFor(model => model.Contents.First().HtmlContent, new { @id = "edit1" })
+        </div>
+        <div class="col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-2 col-xs-5 col-xs-offset-2">
+            @Html.TextAreaFor(model => model.Contents.First().HtmlContent, new { @id = "edit2" })
+        </div>
+    </div>
+    <div class="row">
+        <input type="submit" class="btn btn-success col-md-8 col-md-offset-2" value="Сохранить" />
+    </div>
+}

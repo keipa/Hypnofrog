@@ -7,17 +7,29 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
-    @Styles.Render("~/bundles/verticalstyle")
+    @Styles.Render("~/bundles/froalacss")
+    @Styles.Render("~/bundles/froala-plugins-css")
+    <link href="~/Content/verticalmenu.css" rel="stylesheet" />
 </head>
 <body>
     <div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
-        
         <ul class="nav nav-stacked" id="menu-bar">
+            @if (ViewBag.RedactorEnable == true)
+            {
+                <li>@Html.ActionLink((string)ViewBag.Title, "Index", "Home", new { @style = "font-size: 18px;" })</li>
+                foreach (var elem in (IEnumerable<string>)ViewBag.PageTitles)
+                {
+                    <li>@Html.ActionLink(elem, "Index", "Home")</li>
+                }
+                <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
+            }
+            else
+            {
                 <li>@Html.ActionLink("Hypnofrog", "Index", "Home", new { @style = "font-size: 18px;" })</li>
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
                 <li>@Html.ActionLink("About", "About", "Home")</li>
                 <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                @if (User.IsInRole("Admin"))
+                if (User.IsInRole("Admin"))
                 {
                     <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
                 }
@@ -25,8 +37,9 @@
                 {
                     <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
                 }
+            }
         </ul>
-        @Html.Partial("_LoginPartial")
+        @Html.Partial("_LoginVMPartial")
     </div>
     <div class="clearfix"></div>
     <div class="content">
@@ -39,19 +52,20 @@
         </div>
     </div>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jqueryval")
-        @Scripts.Render("~/bundles/jquery-ui")
-        @Scripts.Render("~/bundles/popup")
-        @Scripts.Render("~/bundles/vertical")
-        @Scripts.Render("~/bundles/tinymcescripts")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderSection("scripts", required: false)
-        @Scripts.Render("~/bundles/dropzonescripts")
-        <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
-            <div id="modal-content">
-            </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/popup")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/froalajs")
+    @Scripts.Render("~/bundles/froala-plugins-js")
+    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/dropzonescripts")
+    <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
+        <div id="modal-content">
         </div>
+    </div>
 </body>
 </html>
 

@@ -11,6 +11,7 @@ namespace Hypnofrog.DBModels
         public DbSet<Avatar> Avatars { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Page> Pages { get; set; }
+        public DbSet<Content> Contents { get; set; }
         public Context() : base("DefaultConnection") { }
     }
 }

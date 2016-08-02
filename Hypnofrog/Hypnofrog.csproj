@@ -181,6 +181,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DBModels\Avatar.cs" />
+    <Compile Include="DBModels\Content.cs" />
     <Compile Include="DBModels\Context.cs" />
     <Compile Include="DBModels\Page.cs" />
     <Compile Include="DBModels\Site.cs" />
@@ -222,6 +223,18 @@
     <Compile Include="Migrations\201608011414423_page returned.cs" />
     <Compile Include="Migrations\201608011414423_page returned.Designer.cs">
       <DependentUpon>201608011414423_page returned.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608021035554_Add Content.cs" />
+    <Compile Include="Migrations\201608021035554_Add Content.Designer.cs">
+      <DependentUpon>201608021035554_Add Content.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608021101187_One To Many.cs" />
+    <Compile Include="Migrations\201608021101187_One To Many.Designer.cs">
+      <DependentUpon>201608021101187_One To Many.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608021126432_Content and Pages.cs" />
+    <Compile Include="Migrations\201608021126432_Content and Pages.Designer.cs">
+      <DependentUpon>201608021126432_Content and Pages.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -462,6 +475,11 @@
     <Content Include="Views\Shared\_LayoutWM.cshtml" />
     <Content Include="Views\Shared\_LayoutVM.cshtml" />
     <Content Include="Views\Home\Wysiwyg.cshtml" />
+    <Content Include="Views\Home\EditSite.cshtml" />
+    <Content Include="Views\Home\_RedactPagemixed.cshtml" />
+    <Content Include="Views\Home\_RedactPagesolid.cshtml" />
+    <Content Include="Views\Home\_RedactPagedsolid.cshtml" />
+    <Content Include="Views\Shared\_LoginVMPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -500,6 +518,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608011414423_page returned.resx">
       <DependentUpon>201608011414423_page returned.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608021035554_Add Content.resx">
+      <DependentUpon>201608021035554_Add Content.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608021101187_One To Many.resx">
+      <DependentUpon>201608021101187_One To Many.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608021126432_Content and Pages.resx">
+      <DependentUpon>201608021126432_Content and Pages.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

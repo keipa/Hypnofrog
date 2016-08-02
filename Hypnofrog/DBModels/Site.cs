@@ -12,9 +12,14 @@ namespace Hypnofrog.DBModels
         public string Description { get; set; }
         public bool Iscomplited { get; set; }
         public string MenuType { get; set; }
-        public int MenuId { get; set; }
         public string Url { get; set; }
         public DateTime CreationTime { get; set; }
         public string UserId { get; set; }
+        public virtual ICollection<Page> Pages { get; set; }
+
+        public Site()
+        {
+            Pages = new List<Page>();
+        }
     }
 }

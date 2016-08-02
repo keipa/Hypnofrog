@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -80,25 +81,45 @@ namespace Hypnofrog.Controllers
 
         [HttpPost]
         public ActionResult CreateSite(string inputData)
-
         {
-            //CREATING SITE
-            //inputData - строка в которой идут свойства через ';' т.е. ""Name;Desk;url;comments;white;horizontal;mixed;""
-            //после их сплита можно в бд кидать
             string[] param = inputData.Split(';');
-
-            var dbsite = new Site {};
-
+            var dbsite = new Site { };
+            var page = new Page();
             using (var db = new Context())
             {
-                var site = new Site { CreationTime = DateTime.Now, Title = param[0], Description = param[1], Url = param[2], Iscomplited = false, MenuId = 0, MenuType = param[5], UserId = User.Identity.GetUserId(), SiteId = db.Sites.Count() + 1 };
-                dbsite = site;
+                var site = new Site { CreationTime = DateTime.Now, Title = param[0], Description = param[1], Url = param[2], Iscomplited = false, MenuType = param[5], UserId = User.Identity.GetUserId()};
                 db.Sites.Add(site);
-                var page = new Page { PageId = db.Pages.Count() + 1, Site = site.SiteId, Color = param[4], HasComments = param[3] == "true" ? true : false, TemplateType = param[6], Title = "Page Title" };
+                dbsite = site;
+                page = new Page { SiteId = site.SiteId, Color = param[4], HasComments = param[3] == "true" ? true : false, TemplateType = param[6], Title = "Page Title"};
                 db.Pages.Add(page);
                 db.SaveChanges();
             }
-                return RedirectToAction("UserProfile", new {userid = User.Identity.Name });
+            CreatePageContent(page.PageId, param[6]);
+            return RedirectToAction("EditSite", new { siteid = dbsite.SiteId});
+        }
+
+        public ActionResult EditSite(int siteid = 0)
+        {
+            if (siteid == 0) return View("Error");
+            Site model = null;
+            using (var db = new Context())
+            {
+                model = db.Sites.Where(x => x.SiteId == siteid).Include(x=>x.Pages).FirstOrDefault();
+                var pages = db.Pages.Where(x => x.SiteId == siteid).Include(x => x.Contents).ToList();
+                model.Pages = pages;
+            }
+            return View(model);
+        }
+
+        private void CreatePageContent(int pageid, string type)
+        {
+            int count = type == "mixed" ? 3 : type == "solid" ? 1 : 2;
+            using(var db = new Context())
+            {
+                for (int i = 0; i < count; i++)
+                    db.Contents.Add(new Content() { HtmlContent = "", PageId = pageid });
+                db.SaveChanges();
+            }
         }
 
         public ActionResult Wysiwyg()
@@ -176,16 +197,19 @@ namespace Hypnofrog.Controllers
         {
             using (var db = new Context())
             {
-                var pages = db.Pages.Where(l => l.Site == siteid);
+                var pages = db.Pages.Where(l => l.SiteId == siteid);
                 foreach (var item in pages)
                 {
+                    var contents = db.Contents.Where(x => x.PageId == item.PageId);
+                    foreach(var elem in contents)
+                    {
+                        db.Contents.Remove(elem);
+                    }
                     db.Pages.Remove(item);
                 }
                 var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
                 db.Sites.Remove(site);
                 db.SaveChanges(); 
-
-               
             }
             return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
         }

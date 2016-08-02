@@ -86,12 +86,12 @@
                 </div>
             </div>
                                 }
+        <button id="approve-btn">Cancel</button>
+        <button id="confirm-btn" type="submit">Confirm</button>
         @using (Html.BeginForm("CreateSite", "Home", FormMethod.Post, new { id = "bform", style = "margin-bottom:40px;" }))
         {
             Html.AntiForgeryToken();
             <input type="hidden" id="inputData" name="inputData" />
-            <button id="approve-btn">Cancel</button>
-            <button id="confirm-btn" type="submit">Confirm</button>
         }
     </div>
 </div>
@@ -121,5 +121,6 @@
         for (i = 0; i < colors.length; i++) {
             document.getElementById('inputData').value += colors[i].getElementsByTagName('input')[0].value + ';';
         }
+        $('#bform').submit();
     });
 </script>
