@@ -225,9 +225,13 @@ namespace Hypnofrog.Controllers
                         using (var db = new Context())
                         {
                             var useravatar = db.Avatars.Where(x => x.UserId == User.Identity.Name).FirstOrDefault();
+                            if (useravatar == null)
+                            {
+                                useravatar = new Avatar() { UserId = User.Identity.GetUserName() };
+                                db.Avatars.Add(useravatar);
+                            }
                             useravatar.Path = result.Uri.AbsoluteUri;
                             db.SaveChanges();
-
                         }
                         return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
                     }
@@ -255,30 +259,35 @@ namespace Hypnofrog.Controllers
             return View();
         }
 
-        public ActionResult DeleteSite(int siteid)
+        public PartialViewResult DeleteSite(int siteid)
         {
+            string userid = "";
             using (var db = new Context())
             {
-                var pages = db.Pages.Where(l => l.SiteId == siteid);
+                var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
                 foreach (var item in pages)
                 {
-                    var contents = db.Contents.Where(x => x.PageId == item.PageId);
-                    foreach(var elem in contents)
+                    var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
+                    foreach(var elem in content)
                     {
                         db.Contents.Remove(elem);
                     }
                     db.Pages.Remove(item);
                 }
                 var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+                userid = (string)Session["useremail"];
                 db.Sites.Remove(site);
                 db.SaveChanges(); 
             }
-            return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
+            return PartialView("_SiteTable", GetProfilerSites(userid != ""? userid: User.Identity.GetUserName()));
         }
+
+
         public ActionResult UserProfile(string userid)
-        {  
+        {
+            Session["useremail"] = userid;
             using (var db = new Context())
-            {               
+            {
                 var avatar = db.Avatars.Where(x => x.UserId == userid).FirstOrDefault();
                 ViewBag.Email = userid;
                 ViewBag.avatarpath = avatar != null? avatar.Path : "";

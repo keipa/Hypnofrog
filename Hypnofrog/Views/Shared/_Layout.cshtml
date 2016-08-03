@@ -7,12 +7,10 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
-    @Scripts.Render("~/bundles/wordcloud")
+@*    @Scripts.Render("~/bundles/wordcloud")  *@
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jquery-ui")
-
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jquery-ui")
     @Styles.Render("~/bundles/froalacss")
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
@@ -73,8 +71,9 @@
     </div>
 
 
-    @Scripts.Render("~/bundles/popup")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/popup")
     @Scripts.Render("~/bundles/froalajs")
     @Scripts.Render("~/bundles/froala-plugins-js")
     @RenderSection("scripts", required: false)
