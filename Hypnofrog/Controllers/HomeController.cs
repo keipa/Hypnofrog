@@ -29,9 +29,6 @@ namespace Hypnofrog.Controllers
             return RedirectToAction("AllUsers");
         }
 
-
-
-
         public ActionResult Users()
         {
             return RedirectToAction("AllUsers");
@@ -83,13 +80,46 @@ namespace Hypnofrog.Controllers
         public PartialViewResult UpdateRating(string userid, string siteid, string value)
         {
             string firstRate = "Спасибо за вашу оценку";
-            string updateRate = "Обновлено. Предыдущая оценка: "+ value;
+            string sameRate = "Обновлено";
+            using (var db = new Context())
+            {
+                var rate = db.RateLog.Where(x => x.User == userid).Where(x=>x.Site == siteid).FirstOrDefault();
+                if (rate == null)
+                {
+                    rate = new Rate() { Value = Convert.ToInt32(value), Site = siteid, User = userid };
+                    ViewBag.Answer = firstRate;
+                    db.RateLog.Add(rate);
+                }
+                else
+                {
+                    if (rate.Value == Convert.ToInt32(value))
+                    {
+                        ViewBag.Answer = sameRate;
+                        return PartialView("_UpdateRatingResult");
+                    }
+                    else
+                    {
+                        string updateRate = "Обновлено. Предыдущая оценка: " + rate.Value;
 
-
-            ViewBag.Answer = firstRate;
+                        rate.Value = Convert.ToInt32(value);
+                        ViewBag.Answer = updateRate;
+                    }
+                }
+                db.SaveChanges();
+                var sites = db.RateLog.Where(x => x.Site == siteid).ToList();
+                double average = 0.0;
+                foreach (var item in sites)
+                {
+                    average += (double)item.Value;
+                }
+                average = average / (double)sites.Count();
+                int siteidd = Convert.ToInt32(siteid);
+                var site = db.Sites.Where(x => x.SiteId ==siteidd).FirstOrDefault();
+                site.Rate = average;
+                db.SaveChanges();
+            }
             return PartialView("_UpdateRatingResult");
         }
-
 
         [HttpPost]
         public ActionResult CreateSite(string inputData)

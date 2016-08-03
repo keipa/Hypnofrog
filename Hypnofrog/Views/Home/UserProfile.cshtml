@@ -58,14 +58,19 @@
                         <div class="imageratingcontainer" style="position: relative; z-index: 1000">
                             @if (User.Identity.IsAuthenticated && ViewBag.Email != User.Identity.Name)
                             {
-                            <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="1" data-min="0" data-max="5" data-step="1" data-size="xs" />
+                                <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
+                            }
+                            else
+                            {
+                                <input id="input-@j" class="rating rating-loading" data-readonly="true" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
                             }
                             <div id="results-@j" style="text-align: center;color: white;background-color: cornflowerblue;"></div>
                             <div class='blur asset'>
-                                <script  type="text/javascript">
+                                <script type="text/javascript">
+
                                     $('#input-@j').on('rating.change', function (event, value, caption) {
                                         console.log(value);
-                                        $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" +"&value=" + value);
+                                        $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
                                     });
                                 </script>
                                 <img src='//unsplash.it/400/150?image=@Model.ElementAt(j).SiteId'>
