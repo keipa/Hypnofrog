@@ -1,215 +1,10 @@
 ﻿@model IEnumerable<Hypnofrog.DBModels.Site>
-
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "UserProfile";
 }
-
 <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
-
-<style>
-    
-    .btn-success {
-        width: 100%;
-    }
-    div {
-        display: block;
-    }
-
-    table {
-        display: table;
-        border-collapse: separate;
-        border-spacing: 2px;
-        border-color: grey;
-    }
-
-    .b-user-profile__value {
-        color: #606050;
-        vertical-align: middle;
-        line-height: 15px;
-    }
-
-    .b-user-profile__label {
-        color: #a0a0a0;
-        vertical-align: middle;
-        line-height: 15px;
-    }
-
-    .profile_info_avatar {
-        width: 92px;
-        margin-bottom: 7px;
-    }
-
-    .otherinfo {
-        margin-left: 10px;
-    }
-
-
-    .white-box {
-        background: #fff;
-        box-shadow: 0px 1px 2px 1px rgba(204, 204, 204, 0.6);
-    }
-
-    html {
-        font-family: 'Source Sans Pro';
-        background: whitesmoke;
-    }
-
-    .courses {
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex;
-    }
-
-        .courses a {
-            text-decoration: none;
-            color: black;
-        }
-
-        .courses.cards .course {
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-            -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-            flex-direction: column;
-            width: 350px;
-        }
-
-            .courses.cards .course .asset img {
-                width: 100%;
-            }
-
-            .courses.cards .course .details {
-                -webkit-box-orient: vertical;
-                -webkit-box-direction: normal;
-                -webkit-flex-direction: column;
-                -ms-flex-direction: column;
-                flex-direction: column;
-            }
-
-                .courses.cards .course .details > *:not(:last-child) {
-                    margin-bottom: 15px;
-                }
-
-                .courses.cards .course .details .actions {
-                    display: -webkit-box;
-                    display: -webkit-flex;
-                    display: -ms-flexbox;
-                    display: flex;
-                }
-
-                    .courses.cards .course .details .actions > * {
-                        -webkit-box-align: middle;
-                        -webkit-align-items: middle;
-                        -ms-flex-align: middle;
-                        align-items: middle;
-                        text-align: center;
-                    }
-
-        .courses.list {
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-            -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-            flex-direction: column;
-        }
-
-            .courses.list .course {
-                -webkit-box-orient: horizontal;
-                -webkit-box-direction: normal;
-                -webkit-flex-direction: row;
-                -ms-flex-direction: row;
-                flex-direction: row;
-                height: 85px;
-                width: 865px;
-            }
-
-                .courses.list .course .asset img {
-                    width: 130px;
-                    height: 100%;
-                }
-
-                .courses.list .course .details {
-                    width: 100%;
-                }
-
-                    .courses.list .course .details > *:not(:last-child) {
-                        margin-right: 15px;
-                    }
-
-        .courses.cards {
-            margin-top: 15px;
-        }
-
-        .courses.list .course .details .actions {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-            -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-            flex-direction: column;
-        }
-
-            .courses.list .course .details .actions > * {
-                -webkit-box-align: middle;
-                -webkit-align-items: middle;
-                -ms-flex-align: middle;
-                align-items: middle;
-                text-align: center;
-            }
-
-            .avatar{
-                height:180px;
-                width:180px;
-            }
-        .courses .course {
-            margin-left: 15px;
-            margin-right:15px;
-            margin-bottom: 15px;
-            background: #fff;
-            box-shadow: 0px 1px 2px 1px rgba(204, 204, 204, 0.6);
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-        }
-
-            .courses .course .details {
-                display: -webkit-box;
-                display: -webkit-flex;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-box-pack: justify;
-                -webkit-justify-content: space-between;
-                -ms-flex-pack: justify;
-                justify-content: space-between;
-                padding: 20px;
-            }
-
-                .courses .course .details > div span {
-                    display: block;
-                }
-
-                    .courses .course .details > div span:first-child {
-                        color: #4a4f51;
-                        text-transform: uppercase;
-                        font-size: 12px;
-                        margin-bottom: 5px;
-                    }
-
-                    .courses .course .details > div span:last-child {
-                        font-weight: 600;
-                    }
-
-                .courses .course .details .actions {
-                    -webkit-justify-content: space-around;
-                    -ms-flex-pack: distribute;
-                    justify-content: space-around;
-                }
-</style>
+@Styles.Render("~/Content/userprofile")
 
 
 <br>
@@ -219,26 +14,22 @@
             <div class="span2 col-lg-2 col-md-3 col-sm-4 col-xs-4">
                 <img src="@ViewBag.avatarpath" class="img-circle avatar">
             </div>
-
             <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
                 <h3>@ViewBag.Email</h3>
                 <h6>Рейтинг: -52</h6>
                 <h6>Комментариев: Colombia</h6>
                 <h6>Сайтов добавил: @Model.Count()</h6>
-
             </div>
-
             @if (ViewBag.Email == User.Identity.Name)
             {
                 <div class="span2 col-lg-2 col-md-2 col-sm-2 col-xs-2">
                     <div class="btn-group">
                         <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-                            
                             <span class="icon-cog icon-white"></span><span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="@Url.Action("Index", "Manage")"><span class="fa fa-cog fa-3 "></span> Настройки аккаунта</a></li>
-                            <li><a href="#"><span class="fa fa-trash fa-3"></span> Удалить аккаунт</a></li>
+                            <li><a href="@Url.Action("Delete", new {id = User.Identity.GetUserId() })"><span class="fa fa-trash fa-3"></span> Удалить аккаунт</a></li>
                         </ul>
                     </div>
                 </div>
@@ -247,7 +38,7 @@
     </div>
 </div>
 
-@if (ViewBag.Email == User.Identity.Name)
+@if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
 {
     <a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">Добавить сайт</a>
 }
@@ -260,8 +51,8 @@
             @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
             {
                 <div class='course'>
-                    <div class='asset'>
-                        <img src='//s3-us-west-2.amazonaws.com/s.cdpn.io/14179/image.png'>
+                    <div class='blur asset'>
+                        <img src='//unsplash.it/400/250?image=@Model.ElementAt(j).SiteId'>
                     </div>
                     <div class='details'>
                         <div class='title'>
@@ -284,33 +75,24 @@
                             {
                                 <span style="color:red"> В разработке</span>
                             }
-
                         </div>
-                        @if (ViewBag.Email == User.Identity.Name)
+                        @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
                         {
-                            /**/
-
-                        <span class='actions'>
-
-                            <a  href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
-                                <i class='fa fa-eye'></i>
-                            </a>
-
-                            <a  href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
-                                <i class='fa fa-pencil'></i>
-                            </a>
-
-                            <a href="@Url.Action("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId })">
-                                <i class='fa fa-trash'></i>
-                            </a>
-                        </span>
+                            <span class='actions'>
+                                <a href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                                    <i class='fa fa-eye'></i>
+                                </a>
+                                <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                                    <i class='fa fa-pencil'></i>
+                                </a>
+                                <a href="@Url.Action("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId })">
+                                    <i class='fa fa-trash'></i>
+                                </a>
+                            </span>
                         }
                     </div>
                 </div>
-
             }
-
-
         </div>
     }
 }

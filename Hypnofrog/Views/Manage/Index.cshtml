@@ -3,41 +3,75 @@
     ViewBag.Title = "Manage";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>Управление</h2>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<head>
+    <script>
+
+        var button_beg = '<button id="button" class="btn btn-primary" onclick="showhide()">', button_end = '</button>';
+    var show_button = 'Загрузить аватар', hide_button = 'Назад';
+    function showhide() {
+        var div = document.getElementById("content");
+        var showhide = document.getElementById( "showhide" );
+        if ( div.style.display !== "none" ) {
+            div.style.display = "none";
+            button = show_button;
+            showhide.innerHTML = button_beg + button + button_end;
+        } else {
+            div.style.display = "block";
+            button = hide_button;
+            showhide.innerHTML = button_beg + button + button_end;
+        }
+    }
+    function setup_button( status ) {
+        if ( status == 'show' ) {
+            button = hide_button;
+        } else {
+            button = show_button;
+        }
+        var showhide = document.getElementById( "showhide" );
+        showhide.innerHTML = button_beg + button + button_end;
+    }
+    window.onload = function () {
+        setup_button( 'hide' );
+        showhide(); // if setup_button is set to 'show' comment this line
+    }
+    </script>
+</head>
 
 
 
-<style>
-
-
-
-</style>
-
-<p class="text-success">@ViewBag.StatusMessage</p>
+<p class="text-success"></p>
 <div>
 
 
-    <h4>Change your account settings</h4>
+    <h4>Изменение настроек аккаунта</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
             Сменить аватар
         </dt>
         <dd>
-            <div class="jumbotron" id="content" style="border:dotted; border-color:black">
-                <form action="~/Home/SaveUploadedFile" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm" style="border:dotted; background: none; border: none;">
+            <div id="showhide"></div>
+            <br />
+            <div class="jumbotron" id="content" style="border:dotted; border-color:black; width:50%;">
+                <form action="~/Home/SaveUploadedFile" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm" style="border:dotted;  background: none; border: none;">
                     <div class="fallback">
                         <input name="file" type="file" multiple />
                         <input type="submit" value="Upload" />
                     </div>
                 </form>
-            </div></dd>
-        <dt>Password:</dt>
+            </div>
+           
+            
+            </dd>
+        <dt>Пароль:</dt>
         <dd>
             [
             @if (Model.HasPassword)
             {
-                @Html.ActionLink("Change your password", "ChangePassword")
+                @Html.ActionLink("Сменить пароль", "ChangePassword")
             }
             else
             {
@@ -45,20 +79,13 @@
             }
             ]
         </dd>
-        <dt>External Logins:</dt>
+        <dt>Дополнительная авторизация:</dt>
         <dd>
             @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
+            @Html.ActionLink("Добавить", "ManageLogins") ]
         </dd>
    
-        <dt>Two-Factor Authentication:</dt>
-        <dd>
-            <p>
-                There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication.
-            </p>
-          
-        </dd>
+        
     </dl>
 </div>
 
@@ -86,6 +113,13 @@
             });
         }
     };
+
+    $(document).ready(function () {
+        $('#showhide').live('click', function (event) {
+            $('#content').toggle('show');
+        });
+    });
+    
 
 
 </script>

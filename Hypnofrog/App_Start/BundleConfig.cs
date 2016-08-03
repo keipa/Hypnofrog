@@ -32,6 +32,9 @@ namespace Hypnofrog
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new StyleBundle("~/Content/userprofile").Include(
+                 "~/Content/userprofilestyle.css"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/Site.css",
@@ -42,6 +45,10 @@ namespace Hypnofrog
 
             bundles.Add(new ScriptBundle("~/bundles/froalajs").Include(
                      "~/Scripts/froala/js/froala_editor.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/wordcloud").Include(
+         "~/Scripts/wordcloud2.js"));
+
 
             bundles.Add(new StyleBundle("~/bundles/verticalstyle").Include(
                      "~/Content/verticalmenu.css"));

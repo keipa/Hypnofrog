@@ -1,7 +1,9 @@
 ﻿@{
-    ViewBag.Title = "DisplayConfirmMessage";
-}
+    }
+@Scripts.Render("~/bundles/bootstrap")
+
 
 <h3>@ViewBag.Title</h3>
 <p>На данный вами адрес было выслано электронное письмо с дальнейшими инструкциями по завершению решистрации.</p>
 
+<a type="button" href="@Url.Action("Register", "Account")" class="btn btn-success">Выслать email повторно</a>

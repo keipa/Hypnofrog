@@ -185,7 +185,6 @@ namespace Hypnofrog.Controllers
                 return Json(new { Message = "Error in saving file" });
             }
         }
-
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -213,7 +212,6 @@ namespace Hypnofrog.Controllers
             }
             return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
         }
-
         public ActionResult UserProfile(string userid)
         {  
             using (var db = new Context())
@@ -224,8 +222,6 @@ namespace Hypnofrog.Controllers
             }
             return View(GetProfilerSites(userid));
         }
-
-
 
         private List<Site> GetProfilerSites (string userid)
         {
@@ -241,11 +237,9 @@ namespace Hypnofrog.Controllers
             }
             return sites;
         }
-
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
