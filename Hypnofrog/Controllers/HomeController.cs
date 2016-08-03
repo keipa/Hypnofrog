@@ -305,7 +305,7 @@ namespace Hypnofrog.Controllers
                     db.Pages.Remove(item);
                 }
                 var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
-                userid = (string)Session["useremail"];
+                ViewBag.Email = userid = (string)Session["useremail"];
                 db.Sites.Remove(site);
                 db.SaveChanges(); 
             }

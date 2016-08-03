@@ -1,5 +1,12 @@
 ﻿@model IEnumerable<Hypnofrog.DBModels.Site>
 @using Microsoft.AspNet.Identity
+<link href="~/Content/star-rating.css" rel="stylesheet" />
+<link href="~/Content/star-rating.min.css" rel="stylesheet" />
+<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+<script src="~/Scripts/star-rating.js"></script>
+<script src="~/Scripts/star-rating.min.js"></script>
+<script src="~/Content/themes/krajee-svg/theme.js"></script>
 
 @if (Model.Count() > 0)
 {
@@ -21,9 +28,7 @@
                         <div id="results-@j" style="text-align: center;color: white;background-color: cornflowerblue;"></div>
                         <div class='blur asset'>
                             <script type="text/javascript">
-
                                 $('#input-@j').on('rating.change', function (event, value, caption) {
-                                    console.log(value);
                                     $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
                                 });
                             </script>
@@ -63,10 +68,17 @@
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>
                                 </a>
-                                using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del" }))
+                                using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del-" + j }))
                                 {
-                                    <a id="deletebutton" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
+                                    <a id="deletebutton-@j" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
                                 }
+                                <script>
+                                    $(function () {
+                                        $('#deletebutton-@j').click(function () {
+                                            $('#ajax-del-@j').submit();
+                                        });
+                                    });
+                                </script>
 
                             }
                         </span>
@@ -76,10 +88,3 @@
         </div>
     }
 }
-<script type="text/javascript">
-    $(function () {
-        $('#deletebutton').click(function () {
-            $('#ajax-del').submit();
-        });
-    });
-</script>
