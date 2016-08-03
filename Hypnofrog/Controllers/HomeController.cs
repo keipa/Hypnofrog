@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -119,7 +120,19 @@ namespace Hypnofrog.Controllers
                 var pages = db.Pages.Where(x => x.SiteId == siteid).Include(x => x.Contents).ToList();
                 model.Pages = pages;
             }
+            ViewBag.PageTitles = FromPageTitles(model);
             return View(model);
+        }
+
+        private List<string> FromPageTitles(Site model)
+        {
+            var obj = model.Pages.Select(x => x.Title);
+            List<string> titles = new List<string>();
+            foreach (var elem in obj)
+            {
+                titles.Add(Regex.Replace(elem, "<[^>]+>", string.Empty));
+            }
+            return titles;
         }
 
         private void CreatePageContent(int pageid, string type)
@@ -131,6 +144,45 @@ namespace Hypnofrog.Controllers
                     db.Contents.Add(new Content() { HtmlContent = "", PageId = pageid });
                 db.SaveChanges();
             }
+        }
+        
+
+        [ValidateInput(false)]
+        public PartialViewResult SavePage(Page model, List<string> HtmlContent)
+        {
+            SavePageToDB(model, (int)Session["PageId"]);
+            SavePageContentToDB((int)Session["PageId"], HtmlContent);
+            Page page = GetPageFromId((int)Session["PageId"]);
+            return PartialView(String.Format("_RedactPage{0}", page.TemplateType), page);
+        }
+
+        private void SavePageContentToDB(int pageid, List<string> htmlContent)
+        {
+            using(var db = new Context())
+            {
+                var contents = db.Contents.Where(x => x.PageId == pageid).ToList();
+                for (int i = 0; i < contents.Count; i++)
+                    contents[i].HtmlContent = htmlContent[i];
+                db.SaveChanges();
+            }
+        }
+
+        private void SavePageToDB(Page model, int pageid)
+        {
+            using(var db = new Context())
+            {
+                Page page = db.Pages.Where(x => x.PageId == pageid).FirstOrDefault();
+                page.Title = model.Title;
+                db.SaveChanges();
+            }
+        }
+
+        private Page GetPageFromId(int pageid)
+        {
+            Page page;
+            using (var db = new Context())
+                page = db.Pages.Where(x => x.PageId == pageid).Include(x=>x.Contents).FirstOrDefault();
+            return page;
         }
 
         public ActionResult Wysiwyg()

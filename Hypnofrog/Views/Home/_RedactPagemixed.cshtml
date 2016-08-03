@@ -1,23 +1,60 @@
 ﻿@model Hypnofrog.DBModels.Page
+@{
+    Session["PageId"] = Model.PageId;
 
-@using (Ajax.BeginForm("SavePage",new { pageid = Model.PageId}, new AjaxOptions() { UpdateTargetId = "page-redactor", OnSuccess = "alert(\"Сохранение прошло успешно.\");"}))
-{
-    @Html.AntiForgeryToken()
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            @Html.TextAreaFor(model => model.Contents.First().HtmlContent, new { @id = "edit1" })
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-5 col-xs-5 col-sm-5">
-            @Html.TextAreaFor(model => model.Contents.First().HtmlContent, new { @id = "edit2" })
-        </div>
-        <div class="col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-2 col-xs-5 col-xs-offset-2">
-            @Html.TextAreaFor(model => model.Contents.First().HtmlContent, new { @id = "edit3" })
-        </div>
-    </div>
-    <div class="row">
-        <input type="submit" class="btn btn-success col-md-8 col-md-offset-2" value="Сохранить"/>
-    </div>
 }
+
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-6 col-md-offset-3 col-sm-offset-3 col-xs-offset-3">
+        @Html.TextAreaFor(model => model.Title, new { @id = "title" })
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @Html.TextArea("HtmlContent[0]", Model.Contents.ElementAt(0).HtmlContent.ToString(), new { @id = "edit1" })
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-xs-6 col-sm-6">
+        @Html.TextArea("HtmlContent[1]", Model.Contents.ElementAt(1).HtmlContent.ToString(), new { @id = "edit2" })
+    </div>
+    <div class="col-md-6  col-sm-6 col-xs-6">
+        @Html.TextArea("HtmlContent[2]", Model.Contents.ElementAt(2).HtmlContent.ToString(), new { @id = "edit3" })
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#title').froalaEditor({
+            dragInline: false,
+            toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
+            pluginsEnabled: null,
+            theme: "gray",
+            heightMin: 100,
+            heightMax: 250
+        });
+        $('#edit1').froalaEditor({
+            dragInline: false,
+            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
+            pluginsEnabled: null,
+            theme: "gray",
+            heightMin: 200
+        });
+        $('#edit2').froalaEditor({
+            dragInline: false,
+            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
+            pluginsEnabled: null,
+            theme: "gray",
+            heightMin: 200
+        });
+        $('#edit3').froalaEditor({
+            dragInline: false,
+            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
+            pluginsEnabled: null,
+            theme: "gray",
+            heightMin: 200
+        });
+    });
+</script>

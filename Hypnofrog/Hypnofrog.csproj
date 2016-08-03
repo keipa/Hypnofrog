@@ -236,6 +236,14 @@
     <Compile Include="Migrations\201608021126432_Content and Pages.Designer.cs">
       <DependentUpon>201608021126432_Content and Pages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608031207060_Remove Content.cs" />
+    <Compile Include="Migrations\201608031207060_Remove Content.Designer.cs">
+      <DependentUpon>201608031207060_Remove Content.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608031226542_Return Content.cs" />
+    <Compile Include="Migrations\201608031226542_Return Content.Designer.cs">
+      <DependentUpon>201608031226542_Return Content.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HTMLContextClass.cs" />
@@ -559,6 +567,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608021126432_Content and Pages.resx">
       <DependentUpon>201608021126432_Content and Pages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608031207060_Remove Content.resx">
+      <DependentUpon>201608031207060_Remove Content.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608031226542_Return Content.resx">
+      <DependentUpon>201608031226542_Return Content.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

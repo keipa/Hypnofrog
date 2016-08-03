@@ -2,7 +2,6 @@
 @{
     ViewBag.RedactorEnable = true;
     ViewBag.Title = Model.Title;
-    ViewBag.PageTitles = Model.Pages.Select(x => x.Title);
     ViewBag.SiteId = Model.SiteId;
     Layout = Model.MenuType == "without" ? "~/Views/Shared/_LayoutWM.cshtml" :
         Model.MenuType == "vertical" ? "~/Views/Shared/_LayoutVM.cshtml" : "~/Views/Shared/_Layout.cshtml";
@@ -10,9 +9,18 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
 
-<div id="page-redactor" class="fr-view">
-    @{Html.RenderPartial(String.Format("_RedactPage{0}", Model.Pages.FirstOrDefault().TemplateType), Model.Pages.FirstOrDefault());}
-</div>
+
+@using (Ajax.BeginForm("SavePage", "Home", new AjaxOptions() { UpdateTargetId = "page-redactor", OnSuccess = "alert(\"Сохранение прошло успешно.\");" }))
+{
+    @Html.AntiForgeryToken()
+    <div id="page-redactor" class="fr-view">
+        @{Html.RenderPartial(String.Format("_RedactPage{0}", Model.Pages.FirstOrDefault().TemplateType), Model.Pages.FirstOrDefault());}
+    </div>
+
+    <div class="row">
+        <input type="submit" class="btn btn-success col-md-8 col-md-offset-2" id="Savebtn" value="Сохранить" />
+    </div>
+}
 
 @section scripts{
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
@@ -21,7 +29,7 @@
         $(function () {
             $('#title').froalaEditor({
                 dragInline: false,
-                toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', '|', 'undo', 'redo'],
+                toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
                 pluginsEnabled: null,
                 theme: "gray",
                 heightMin: 100,
@@ -31,21 +39,24 @@
                 dragInline: false,
                 toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
                 pluginsEnabled: null,
-                theme: "gray"
+                theme: "gray",
+                heightMin: 200
             });
             $('#edit2').froalaEditor({
                 dragInline: false,
                 toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
                 pluginsEnabled: null,
-                theme: "gray"
+                theme: "gray",
+                heightMin: 200
             });
             $('#edit3').froalaEditor({
                 dragInline: false,
                 toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
                 pluginsEnabled: null,
-                theme: "gray"
+                theme: "gray",
+                heightMin: 200
             });
         });
-    </script>
+</script>
 }
 
