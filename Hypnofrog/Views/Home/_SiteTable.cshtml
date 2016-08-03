@@ -7,20 +7,25 @@
     {
         <div class='courses cards'>
             @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
-                    {
+            {
                 <div class='course'>
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
                         @if (User.Identity.IsAuthenticated && ViewBag.Email != User.Identity.Name)
                         {
-                            <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="1" data-min="0" data-max="5" data-step="1" data-size="xs" />
+                            <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
+                        }
+                        else
+                        {
+                            <input id="input-@j" class="rating rating-loading" data-readonly="true" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
                         }
                         <div id="results-@j" style="text-align: center;color: white;background-color: cornflowerblue;"></div>
                         <div class='blur asset'>
                             <script type="text/javascript">
-                                        $('#input-@j').on('rating.change', function (event, value, caption) {
-                                            console.log(value);
-                                            $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
-                                        });
+
+                                $('#input-@j').on('rating.change', function (event, value, caption) {
+                                    console.log(value);
+                                    $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
+                                });
                             </script>
                             <img src='//unsplash.it/400/150?image=@Model.ElementAt(j).SiteId'>
                         </div>
@@ -48,21 +53,23 @@
                                 <span style="color:red"> В разработке</span>
                             }
                         </div>
-                        @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
-                        {
-                            <span class='actions'>
-                                <a href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
-                                    <i class='fa fa-eye'></i>
-                                </a>
+
+                        <span class='actions'>
+                            <a href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                                <i class='fa fa-eye'></i>
+                            </a>
+                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
+                            {
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>
                                 </a>
-                                @using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id="ajax-del"}))
+                                using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del" }))
                                 {
                                     <a id="deletebutton" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
                                 }
-                            </span>
-                        }
+
+                            }
+                        </span>
                     </div>
                 </div>
             }
