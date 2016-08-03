@@ -145,7 +145,6 @@ namespace Hypnofrog.Controllers
                 db.SaveChanges();
             }
         }
-        
 
         [ValidateInput(false)]
         public PartialViewResult SavePage(Page model, List<string> HtmlContent)
@@ -276,6 +275,7 @@ namespace Hypnofrog.Controllers
             }
             return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
         }
+
         public ActionResult UserProfile(string userid)
         {  
             using (var db = new Context())
@@ -301,6 +301,7 @@ namespace Hypnofrog.Controllers
             }
             return sites;
         }
+
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
