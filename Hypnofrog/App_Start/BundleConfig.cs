@@ -13,6 +13,17 @@ namespace Hypnofrog
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
+
+            bundles.Add(new StyleBundle("~/Content/starratingcss").Include(
+            "~/Content/star-rating.css",
+            "~/Content/themes/krajee-svg/theme.css",
+             "~/Content/star-rating.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/starrating").Include(
+            "~/Scripts/star-rating.js",
+            "~/Content/themes/krajee-svg/theme.js",
+            "~/Scripts/star-rating.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/popup").Include(
                         "~/Scripts/PopUp.js",
                         "~/Scripts/customcontrols.js"));
@@ -47,7 +58,7 @@ namespace Hypnofrog
                      "~/Scripts/froala/js/froala_editor.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/wordcloud").Include(
-         "~/Scripts/wordcloud2.js"));
+                     "~/Scripts/wordcloud2.js"));
 
 
             bundles.Add(new StyleBundle("~/bundles/verticalstyle").Include(

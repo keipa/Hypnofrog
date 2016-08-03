@@ -4,8 +4,9 @@
     ViewBag.Title = "UserProfile";
 }
 <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
-@Styles.Render("~/Content/userprofile")
-
+<link href="~/Content/star-rating.css" rel="stylesheet" />
+<link href="~/Content/star-rating.min.css" rel="stylesheet" />
+<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
 
 <br>
 <div class="container-fluid well span6">
@@ -42,6 +43,8 @@
 {
     <a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">Добавить сайт</a>
 }
+@*<input id="input-id" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="1" data-min="0" data-max="5" data-step="1" data-size="xs">*@<hr />
+
 
 @if (Model.Count() > 0)
 {
@@ -51,9 +54,14 @@
             @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
             {
                 <div class='course'>
-                    <div class='blur asset'>
-                        <img src='//unsplash.it/400/250?image=@Model.ElementAt(j).SiteId'>
+                    <div class="imageratingcontainer" style="position: relative; z-index: 1000">
+                        <input id="input-id" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="1" data-min="0" data-max="5" data-step="1" data-size="xs" />
+                        <div class='blur asset'>
+
+                            <img src='//unsplash.it/400/150?image=@Model.ElementAt(j).SiteId'>
+                        </div>
                     </div>
+
                     <div class='details'>
                         <div class='title'>
                             <span>Название</span>
@@ -97,5 +105,16 @@
     }
 }
 
-<script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+        @*<script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
+            <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>*@
+        @section scripts{
+            <script src="~/Scripts/star-rating.js"></script>
+            <script src="~/Scripts/star-rating.min.js"></script>
+            <script src="~/Content/themes/krajee-svg/theme.js"></script>
+            <script>
+            $('#input-id').on('rating.change', function(event, value, caption) {
+    console.log(value);
+            });
+
+</script>
+        }
