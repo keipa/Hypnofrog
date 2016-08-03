@@ -184,6 +184,7 @@
     <Compile Include="DBModels\Content.cs" />
     <Compile Include="DBModels\Context.cs" />
     <Compile Include="DBModels\Page.cs" />
+    <Compile Include="DBModels\Rate.cs" />
     <Compile Include="DBModels\Site.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -243,6 +244,10 @@
     <Compile Include="Migrations\201608031226542_Return Content.cs" />
     <Compile Include="Migrations\201608031226542_Return Content.Designer.cs">
       <DependentUpon>201608031226542_Return Content.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608031545058_Rating fields.cs" />
+    <Compile Include="Migrations\201608031545058_Rating fields.Designer.cs">
+      <DependentUpon>201608031545058_Rating fields.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -574,6 +579,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608031226542_Return Content.resx">
       <DependentUpon>201608031226542_Return Content.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608031545058_Rating fields.resx">
+      <DependentUpon>201608031545058_Rating fields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
