@@ -32,9 +32,9 @@
                 <ul class="nav navbar-nav">
                     @if (ViewBag.RedactorEnable == true)
                     {
-                        foreach (var elem in (IEnumerable<string>)ViewBag.PageTitles)
+                        foreach (var elem in (List<string>)ViewBag.PageTitles)
                         {
-                            <li>@Html.ActionLink(elem, "Index", "Home")</li>
+                            <li>@Html.ActionLink(Html.Raw(elem).ToString(), "Index", "Home")</li>
                         }
                         <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
 
@@ -58,7 +58,7 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" id="rendbody">
         @RenderBody()
         <hr />
         <footer>
