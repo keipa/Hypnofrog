@@ -125,6 +125,8 @@ namespace Hypnofrog.Controllers
         public ActionResult CreateSite(string inputData)
         {
             string[] param = inputData.Split(';');
+            param[0] = param[0] == "" ? "Мой сайт" : param[0];
+            param[1] = param[1] == "" ? "Описание сайта" : param[1];
             var dbsite = new Site { };
             var page = new Page();
             using (var db = new Context())
