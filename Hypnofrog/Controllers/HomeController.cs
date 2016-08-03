@@ -230,14 +230,14 @@ namespace Hypnofrog.Controllers
         private List<Site> GetProfilerSites (string userid)
         {
             List<Site> sites = new List<Site>();
-
+            if (userid == null) userid = User.Identity.GetUserId();
             using (var db = new Context())
             {
                 using (var udb = new ApplicationDbContext())
                 {
                     var id = udb.Users.Where(y => y.Email == userid).FirstOrDefault().Id;
                     sites = db.Sites.Where(x => x.UserId == id).ToList();
-            }
+                }
             }
             return sites;
         }
