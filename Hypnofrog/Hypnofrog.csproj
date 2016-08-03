@@ -511,6 +511,7 @@
     <Content Include="Views\Home\_RedactPagesolid.cshtml" />
     <Content Include="Views\Home\_RedactPagedsolid.cshtml" />
     <Content Include="Views\Shared\_LoginVMPartial.cshtml" />
+    <Content Include="Views\Home\_UpdateRatingResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

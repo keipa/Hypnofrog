@@ -79,6 +79,17 @@ namespace Hypnofrog.Controllers
             return PartialView("_ColorTemplate", SettingsModel.CreatePhoto(model.Color, model.Menu, model.Template));
         }
 
+        public PartialViewResult UpdateRating(string userid, string siteid, string value)
+        {
+            string firstRate = "Спасибо за вашу оценку";
+            string updateRate = "Обновлено. Предыдущая оценка: "+ value;
+
+
+            ViewBag.Answer = firstRate;
+            return PartialView("_UpdateRatingResult");
+        }
+
+
         [HttpPost]
         public ActionResult CreateSite(string inputData)
         {
@@ -226,7 +237,7 @@ namespace Hypnofrog.Controllers
         private List<Site> GetProfilerSites (string userid)
         {
             List<Site> sites = new List<Site>();
-            if (userid == null) userid = User.Identity.GetUserId();
+            if (userid == null) { throw new HttpException(404, "Item Not Found"); }
             using (var db = new Context())
             {
                 using (var udb = new ApplicationDbContext())
