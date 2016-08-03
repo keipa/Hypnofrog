@@ -12,6 +12,7 @@ namespace Hypnofrog.DBModels
         public DbSet<Site> Sites { get; set; }
         public DbSet<Page> Pages { get; set; }
         public DbSet<Content> Contents { get; set; }
+        public DbSet<Rate> RateLog { get; set; }
         public Context() : base("DefaultConnection") { }
     }
 }

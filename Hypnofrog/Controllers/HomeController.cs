@@ -248,6 +248,7 @@ namespace Hypnofrog.Controllers
                 return Json(new { Message = "Error in saving file" });
             }
         }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
