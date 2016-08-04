@@ -264,7 +264,10 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dark-theme.css" />
+    <Content Include="Content\gray-theme.css" />
     <Content Include="Content\popupwindows.css" />
+    <Content Include="Content\red-theme.css" />
     <Content Include="Content\star-rating.css" />
     <Content Include="Content\star-rating.min.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -456,6 +459,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\loader.js" />
     <Content Include="Scripts\locales\ar.js" />
     <Content Include="Scripts\locales\de.js" />
     <Content Include="Scripts\locales\es.js" />

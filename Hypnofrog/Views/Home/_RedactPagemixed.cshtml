@@ -1,11 +1,18 @@
 ﻿@model Hypnofrog.DBModels.Page
 @{
     Session["PageId"] = Model.PageId;
-    ViewBag.Style = Model.Color == "dark" ? "dark" : Model.Color == "orange" ? "orange" : "gray";
+    ViewBag.Style = Model.Color == "dark" ? "dark" : Model.Color == "orange" ? "red" : "gray";
 }
+<link href="~/Content/@ViewBag.Style-theme.css" rel="stylesheet" />
 
 <div class="row">
-    <div class="col-md-6 col-sm-6 col-xs-6 col-md-offset-3 col-sm-offset-3 col-xs-offset-3">
+    <div class="col-md-2 col-sm-2 col-xs-2">
+        <a href="@Url.Action("PreviewSite", "Home") " class="icons">
+            <i class="fa fa-eye"></i>
+        </a>
+        <i class="fa fa-floppy-o icons" id="Savebtn" onclick="dosmth();"></i>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-6 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
         @Html.TextAreaFor(model => model.Title, new { @id = "title" })
     </div>
 </div>
@@ -25,36 +32,52 @@
     </div>
 </div>
 
+<script src="~/Scripts/loader.js"></script>
+<script>
+    $('#Savebtn').click(function () {
+        $('#ajaxform').submit();
+    });
+</script>
 <script>
     $(function () {
         $('#title').froalaEditor({
+            toolbarInline: true,
             dragInline: false,
             toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
-            pluginsEnabled: null,
+            toolbarButtonsSM: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize','-', 'color', 'align', '|', 'undo', 'redo'],
+            toolbarButtonsMD: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
+            toolbarButtonsXS: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', '-', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
             theme: "@ViewBag.Style",
             heightMin: 100,
-            heightMax: 250
+            charCounterMax: 50,
+            toolbarVisibleWithoutSelection: true
         });
         $('#edit1').froalaEditor({
+            toolbarInline: true,
             dragInline: false,
             toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
             pluginsEnabled: null,
             theme: "@ViewBag.Style",
-            heightMin: 200
+            heightMin: 200,
+            toolbarVisibleWithoutSelection: true
         });
         $('#edit2').froalaEditor({
+            toolbarInline: true,
             dragInline: false,
             toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
             pluginsEnabled: null,
             theme: "@ViewBag.Style",
-            heightMin: 200
+            heightMin: 200,
+            toolbarVisibleWithoutSelection: true
         });
         $('#edit3').froalaEditor({
+            toolbarInline: true,
             dragInline: false,
             toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
             pluginsEnabled: null,
             theme: "@ViewBag.Style",
-            heightMin: 200
+            heightMin: 200,
+            toolbarVisibleWithoutSelection: true
         });
     });
 </script>

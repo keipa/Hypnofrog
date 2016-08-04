@@ -1,0 +1,91 @@
+﻿body {
+    background-color: #FF9D40;
+    color: #A63400;
+}
+
+pre {
+    color: #FF9D40;
+    background-color: #A65100;
+    border: 1px solid black;
+}
+
+.fr-element {
+    background-color: #FF9D40;
+}
+
+.fr-box {
+    border: solid 1px #A65100;
+    margin:10px 5px 5px 5px;
+}
+
+.row .icons{
+    margin:20px 5px 5px 5px;
+    text-decoration:none;
+    color:#A65100;
+    font-size: 3em;
+}
+
+.icons{
+    cursor: pointer;
+}
+
+.red-theme.fr-toolbar {
+    background: #FF7C00;
+    border: solid 1px #A65100;
+    border-top: 5px solid #A65100;
+}
+
+.red-theme.fr-popup {
+    color: #A63400;
+    border: solid 1px #A65100;
+    border-bottom: 5px solid #A65100;
+    background: #FF7C00;
+}
+
+.red-theme.fr-box a.fr-floating-btn {
+    background: #FF7C00;
+    color: #A65100;
+}
+
+.red-theme.fr-toolbar .fr-command.fr-btn, .red-theme.fr-popup .fr-command.fr-btn {
+    color: #A63400;
+}
+
+.red-theme .fr-command.fr-btn + .fr-dropdown-menu .fr-dropdown-wrapper {
+    background: #A65100;
+}
+
+.red-theme.fr-box.fr-basic .fr-element {
+    color: #A63400;
+}
+
+.red-theme.fr-toolbar .fr-command.fr-btn.fr-dropdown.fr-active, .red-theme.fr-popup .fr-command.fr-btn.fr-dropdown.fr-active {
+    color: #FF7C00;
+    background: #A65100;
+}
+
+.red-theme.fr-box .fr-counter {
+    color: #A63400;
+    background: #FF7C00;
+    border-top: solid 1px #A65100;
+    border-left: solid 1px #A65100;
+}
+
+.red-theme .fr-wrapper ::selection {
+    background: #ffe6e6;
+    color: #A63400;
+}
+
+.navbar-inverse {
+    border: solid 1px #A65100;
+    border-bottom: 5px solid #A65100;
+    background-color: #FF7C00;
+}
+
+    .navbar-inverse .navbar-brand {
+        color: #A63400;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: #A63400;
+    }

@@ -345,5 +345,17 @@ namespace Hypnofrog.Controllers
             ViewBag.Message = "Your contact page.";
             return View();
         }
+
+        [HttpPost]
+        public ActionResult LoadAction()
+        {
+            if (Request != null && Request.IsAjaxRequest())
+            {
+                System.Threading.Thread.Sleep(3000);
+
+                return Content(bool.TrueString);
+            }
+            return Content(bool.FalseString);
+        }
     }
 }

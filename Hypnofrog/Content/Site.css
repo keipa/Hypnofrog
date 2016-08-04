@@ -14,3 +14,15 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.loader {
+    position: absolute;
+    z-index: 1000;
+    background-image: url(http://res.cloudinary.com/dldmfb5fo/image/upload/v1463145180/bigLoader_edcwx3.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    display: none;
+} 

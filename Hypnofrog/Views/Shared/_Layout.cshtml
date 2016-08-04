@@ -7,7 +7,6 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
-@*    @Scripts.Render("~/bundles/wordcloud")  *@
 
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/jquery-ui")
@@ -15,6 +14,7 @@
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
 <body>
+    <div id="loadingDiv" class="loader"></div>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">

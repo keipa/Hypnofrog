@@ -1,0 +1,91 @@
+﻿body {
+    background-color: #160D1B;
+    color:#BDAECD;
+}
+
+pre {
+    color: #BDAECD;
+    background-color: #1E072D;
+    border: 1px solid black;
+}
+
+.fr-element {
+    background-color: #160D1B;
+}
+
+.fr-box {
+    border: solid 1px #BDAECD;
+    margin:10px 5px 5px 5px;
+}
+
+.row .icons{
+    margin:20px 5px 5px 5px;
+    text-decoration:none;
+    color:#BDAECD;
+    font-size: 3em;
+}
+
+.icons{
+    cursor: pointer;
+}
+
+.dark-theme.fr-toolbar {
+    border: solid 1px #1E072D;
+    border-top: 5px solid #1E072D;
+    background-color: #0C0114;
+}
+
+.navbar-inverse {
+    border: solid 1px #1E072D;
+    border-bottom: 5px solid #1E072D;
+    background-color: #0C0114;
+}
+
+    .navbar-inverse .navbar-brand {
+        color: #BDAECD;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: #BDAECD;
+    }
+
+.dark-theme.fr-box a.fr-floating-btn {
+    background: #0C0114;
+    color: #1E072D;
+}
+
+.dark-theme.fr-popup {
+    color: #BDAECD;
+    border: solid 1px #1E072D;
+    border-bottom: 5px solid #1E072D;
+    background: #0C0114;
+}
+
+.dark-theme.fr-toolbar .fr-command.fr-btn, .red-theme.fr-popup .fr-command.fr-btn {
+    color: #BDAECD;
+}
+
+.dark-theme .fr-command.fr-btn + .fr-dropdown-menu .fr-dropdown-wrapper {
+    background: #0C0114;
+}
+
+.dark-theme.fr-box.fr-basic .fr-element {
+    color: #BDAECD;
+}
+
+.dark-theme.fr-toolbar .fr-command.fr-btn.fr-dropdown.fr-active, .dark-theme.fr-popup .fr-command.fr-btn.fr-dropdown.fr-active {
+    color: #BDAECD;
+    background: #0C0114;
+}
+
+.dark-theme.fr-box .fr-counter {
+    color: #BDAECD;
+    background: #0C0114;
+    border-top: solid 1px #0C0114;
+    border-left: solid 1px #0C0114;
+}
+
+.dark-theme .fr-wrapper ::selection {
+    background: #ffffff;
+    color: #0C0114;
+}

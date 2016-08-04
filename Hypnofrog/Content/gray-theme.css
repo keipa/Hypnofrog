@@ -1,0 +1,75 @@
+﻿body {
+    background-color: #F3FFF5;
+    color:#37474f;
+}
+
+pre {
+    color: #F3FFF5;
+    background-color: #9AC6BC;
+    border: 1px solid black;
+}
+
+.fr-element {
+    background-color: #F3FFF5;
+}
+
+.fr-box {
+    border: solid 1px #4CB29B;
+    margin:10px 5px 5px 5px;
+}
+
+.row .icons{
+    margin:20px 5px 5px 5px;
+    text-decoration:none;
+    color:#4CB29B;
+    font-size: 3em;
+}
+
+.icons{
+    cursor: pointer;
+}
+
+.gray-theme.fr-toolbar {
+    border: solid 1px #4CB29B;
+    border-top: 5px solid #4CB29B;
+    background-color: #9AC6BC;
+}
+
+.gray-theme.fr-box a.fr-floating-btn {
+    background: #9AC6BC;
+    color: #4CB29B;
+}
+
+.gray-theme.fr-box.fr-basic .fr-element {
+    color: #37474f;
+}
+
+.navbar-inverse {
+    border: solid 1px #4CB29B;
+    border-bottom: 5px solid #4CB29B;
+    background-color: #9AC6BC;
+}
+
+    .navbar-inverse .navbar-brand {
+        color: #37474f;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: #37474f;
+    }
+
+.gray-theme.fr-box .fr-counter {
+    color: #37474f;
+    background: #9AC6BC;
+    border-top: solid 1px #9AC6BC;
+    border-left: solid 1px #9AC6BC;
+}
+
+.gray-theme .fr-wrapper ::selection {
+    background: #9AC6BC;
+    color: #F3FFF5;
+}
+
+.gray-theme.fr-toolbar .fr-command.fr-btn.fr-disabled, .gray-theme.fr-popup .fr-command.fr-btn.fr-disabled {
+    color: #EFFFF2;
+}
