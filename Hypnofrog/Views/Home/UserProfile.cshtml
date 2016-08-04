@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Hypnofrog.DBModels.Site>
 @using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = "UserProfile";
+    ViewBag.Title = "Профиль";
 }
 <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
 <link href="~/Content/star-rating.css" rel="stylesheet" />
@@ -18,7 +18,7 @@
             </div>
             <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
                 <h3>@ViewBag.Email</h3>
-                <h6>Рейтинг: -52</h6>
+                <h6>Рейтинг: @ViewBag.Rate</h6>
                 <h6>Комментариев: Colombia</h6>
                 <h6>Сайтов добавил: @Model.Count()</h6>
             </div>
@@ -40,11 +40,10 @@
     </div>
 </div>
 
-@if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
+@if (ViewBag.Email == User.Identity.Name)
 {
     <a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">Добавить сайт</a>
 }
-    @*<input id="input-id" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="1" data-min="0" data-max="5" data-step="1" data-size="xs">*@<hr />
 
     <div id="site-table">
         @{ Html.RenderPartial("_SiteTable", Model);}
