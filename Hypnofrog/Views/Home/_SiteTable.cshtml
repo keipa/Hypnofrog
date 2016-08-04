@@ -41,24 +41,24 @@
                             <span>@Model.ElementAt(j).Description</span>
                         </div>
                         @*<div class='language'>
-                            <span>Готовность</span>
-                            @if (Model.ElementAt(j).Iscomplited)
-                            {
-                                <span>
-                                    Опубликовано
-                                </span>
-                            }
-                            else
-                            {
-                                <span style="color:red"> В разработке</span>
-                            }
-                        </div>*@
+                                <span>Готовность</span>
+                                @if (Model.ElementAt(j).Iscomplited)
+                                {
+                                    <span>
+                                        Опубликовано
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span style="color:red"> В разработке</span>
+                                }
+                            </div>*@
                         <div class='language'>
-                            <span>Время создания</span>
+                            <span>Теги</span>
 
-                                <span>
-                                    @Model.ElementAt(j).CreationTime
-                                </span>
+                            <span>
+                                @Model.ElementAt(j).Tags
+                            </span>
 
                         </div>
 
@@ -72,9 +72,10 @@
                                     <i class='fa fa-pencil'></i>
                                 </a>
                             }
-                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin")) { 
-                            using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del" }))
+                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
                             {
+                                using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del" }))
+                                {
                                     <a id="deletebutton" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
                                 }
 

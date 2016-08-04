@@ -32,6 +32,7 @@ namespace Hypnofrog.Controllers
                 }
             }
         }
+
         private string GetTopUsersAvatar(Context db, string email)
         {
             return db.Avatars.Where(x => x.UserId == email).FirstOrDefault().Path;
@@ -79,7 +80,7 @@ namespace Hypnofrog.Controllers
 
         public ActionResult Creating()
         {
-
+            ViewBag.Tags = GetAllTags();
             return PartialView("_ViewConfig", new SettingsModel()
             {
                 UserId = User.Identity.GetUserId(),
@@ -151,15 +152,32 @@ namespace Hypnofrog.Controllers
             var page = new Page();
             using (var db = new Context())
             {
-                var site = new Site { CreationTime = DateTime.Now, Title = param[0], Description = param[1], Url = param[2], Iscomplited = false, MenuType = param[5], UserId = User.Identity.GetUserId(), Rate = 0.0 };
+                var site = new Site { CreationTime = DateTime.Now, Title = param[0], Description = param[1], Url = param[2], Iscomplited = false, MenuType = param[5], UserId = User.Identity.GetUserId(), Rate = 0.0, Tags = param[7]};
                 db.Sites.Add(site);
                 dbsite = site;
                 page = new Page { SiteId = site.SiteId, Color = param[4], HasComments = param[3] == "true" ? true : false, TemplateType = param[6], Title = "Page Title" };
                 db.Pages.Add(page);
+                AddUpdateNewTags(param[7], db);
+
                 db.SaveChanges();
             }
             CreatePageContent(page.PageId, param[6]);
             return RedirectToAction("EditSite", new { siteid = dbsite.SiteId });
+        }
+
+        private void AddUpdateNewTags(string newtags, Context db)
+        {
+            var alltags = db.Tags.ToList();
+            foreach (var item in newtags.Split(','))
+            {
+                var checktag = alltags.Where(x => x.Name == item).FirstOrDefault();
+                if (checktag == null)
+                {
+                    Tag mynewtag = new Tag() { Name = item, Repeats = 1 };
+                    db.Tags.Add(mynewtag);
+                }
+                else checktag.Repeats += 1;
+            }
         }
 
         public ActionResult EditSite(int siteid = 0)
@@ -382,7 +400,7 @@ namespace Hypnofrog.Controllers
 
         private List<Site> GetTop3Sites(Context db)
         {
-             var sites = db.Sites.OrderByDescending(x => x.Rate).Take(3).ToList();
+            var sites = db.Sites.OrderByDescending(x => x.Rate).Take(3).ToList();
             return sites;
         }
 

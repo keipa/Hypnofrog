@@ -254,6 +254,10 @@
     <Compile Include="Migrations\201608040900215_Tags added without site implementation.Designer.cs">
       <DependentUpon>201608040900215_Tags added without site implementation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608041549144_Site Implementation Tags.cs" />
+    <Compile Include="Migrations\201608041549144_Site Implementation Tags.Designer.cs">
+      <DependentUpon>201608041549144_Site Implementation Tags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HTMLContextClass.cs" />
@@ -455,6 +459,10 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.12.0.js" />
     <Content Include="Scripts\jquery-ui-1.12.0.min.js" />
+    <Content Include="Scripts\jquery.caret.min.js" />
+    <Content Include="Scripts\jquery.tag-editor.css" />
+    <Content Include="Scripts\jquery.tag-editor.js" />
+    <Content Include="Scripts\jquery.tag-editor.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -590,6 +598,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608040900215_Tags added without site implementation.resx">
       <DependentUpon>201608040900215_Tags added without site implementation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608041549144_Site Implementation Tags.resx">
+      <DependentUpon>201608041549144_Site Implementation Tags.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
