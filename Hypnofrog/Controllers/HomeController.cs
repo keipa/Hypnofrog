@@ -312,6 +312,19 @@ namespace Hypnofrog.Controllers
             return PartialView("_SiteTable", GetProfilerSites(userid != ""? userid: User.Identity.GetUserName()));
         }
 
+        public ActionResult PreviewSite(int siteid)
+        {
+            Site model = null;
+            using (var db = new Context())
+            {
+                model = db.Sites.Where(x => x.SiteId == siteid).Include(x => x.Pages).FirstOrDefault();
+                var pages = db.Pages.Where(x => x.SiteId == siteid).Include(x => x.Contents).ToList();
+                model.Pages = pages;
+            }
+            ViewBag.PageTitles = FromPageTitles(model);
+            return View("PreviewSite", model);
+        }
+
 
         public ActionResult UserProfile(string userid)
         {

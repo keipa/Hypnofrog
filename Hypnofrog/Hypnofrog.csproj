@@ -530,6 +530,8 @@
     <Content Include="Views\Shared\_LoginVMPartial.cshtml" />
     <Content Include="Views\Home\_UpdateRatingResult.cshtml" />
     <Content Include="Views\Home\_SiteTable.cshtml" />
+    <Content Include="Views\Home\PreviewSite.cshtml" />
+    <Content Include="Views\Home\_PreviewPagemixed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
