@@ -395,7 +395,7 @@ namespace Hypnofrog.Controllers
                 var tags = db.Tags.ToList();
                 foreach (var item in tags)
                 {
-                    tagstring += item.Name + " " + item.Repeats.ToString() + ";";
+                    tagstring += item.Name + "," + item.Repeats.ToString() + ";";
                 }
                 return tagstring.Remove(tagstring.Length - 1); ;
             }

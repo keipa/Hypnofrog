@@ -43,7 +43,7 @@
     var tags = '@ViewBag.Tags';
     tags = tags.split(';')
     for (i = 0; i < tags.length; i++) {
-        tags[i] = tags[i].split(' ');
+        tags[i] = tags[i].split(',');
         tags[i][1] = parseInt(tags[i][1])
     }
     WordCloud(document.getElementById('my_canvas'), {

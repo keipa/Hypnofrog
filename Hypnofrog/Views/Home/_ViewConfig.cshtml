@@ -11,6 +11,11 @@
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 
 
+<style>
+    .autocomplete { position: absolute; cursor: default;z-index:999999999999;}  
+    .ui-front { z-index: 999999999; }
+</style>
+
 
 <div class="modal-body">
     <div class="confirm">
@@ -119,7 +124,7 @@
     var tags = '@ViewBag.Tags';
     tags = tags.split(';')
     for (i = 0; i < tags.length; i++) {
-        tags[i] = tags[i].split(' ')[0];
+        tags[i] = tags[i].split(',')[0];
     }
     $('#tagsarea').tagEditor({
         initialTags: ['Hello', 'World'],
@@ -139,6 +144,7 @@
     });
 </script>
 <script>
+
     $('input[name=Color]').change(function () {
         $('#aform').submit();
     });
