@@ -330,6 +330,32 @@ namespace Hypnofrog.Controllers
             return View();
         }
 
+        public PartialViewResult DeleteTopSite(int siteid)
+        {
+            string userid = "";
+            using (var db = new Context())
+            {
+                using (var udb = new ApplicationDbContext())
+                {
+                    var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
+                    foreach (var item in pages)
+                    {
+                        var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
+                        foreach (var elem in content)
+                        {
+                            db.Contents.Remove(elem);
+                        }
+                        db.Pages.Remove(item);
+                    }
+                    var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+                    ViewBag.Email = userid = (string)Session["useremail"];
+                    db.Sites.Remove(site);
+                    db.SaveChanges();
+                    return PartialView("_HomePageTopSiteTable", GetTop3Sites(db));
+                }
+            }
+        }
+
         public PartialViewResult DeleteSite(int siteid)
         {
             string userid = "";

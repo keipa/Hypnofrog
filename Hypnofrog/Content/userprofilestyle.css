@@ -211,9 +211,9 @@ html {
         padding: 20px;
     }
 
-        .courses .course .details > div span {
+        /*.courses .course .details > div span {
             display: block;
-        }
+        }*/
 
             .courses .course .details > div span:first-child {
                 color: #4a4f51;

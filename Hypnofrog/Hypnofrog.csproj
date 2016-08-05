@@ -545,6 +545,7 @@
     <Content Include="Views\Home\_SiteTable.cshtml" />
     <Content Include="Views\Home\PreviewSite.cshtml" />
     <Content Include="Views\Home\_PreviewPagemixed.cshtml" />
+    <Content Include="Views\Home\_HomePageTopSiteTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
