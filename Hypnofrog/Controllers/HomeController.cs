@@ -40,8 +40,15 @@ namespace Hypnofrog.Controllers
 
         private string GetTopUser(Context db, ApplicationDbContext udb)
         {
-            var userid = db.Sites.OrderByDescending(x => x.Rate).FirstOrDefault().UserId;
-            return udb.Users.Where(x => x.Id == userid).FirstOrDefault().Email;
+            try
+            {
+                var userid = db.Sites.OrderByDescending(x => x.Rate).FirstOrDefault().UserId;
+                return udb.Users.Where(x => x.Id == userid).FirstOrDefault().Email;
+            }
+            catch (Exception)
+            {
+                return "qwerty@gmail.com";
+            }
         }
 
         [Authorize(Roles = "Admin")]
@@ -328,20 +335,24 @@ namespace Hypnofrog.Controllers
             string userid = "";
             using (var db = new Context())
             {
-                var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
-                foreach (var item in pages)
+                using (var udb = new ApplicationDbContext())
                 {
-                    var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
-                    foreach(var elem in content)
+                    var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
+                    foreach (var item in pages)
                     {
-                        db.Contents.Remove(elem);
+                        var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
+                        foreach (var elem in content)
+                        {
+                            db.Contents.Remove(elem);
+                        }
+                        db.Pages.Remove(item);
                     }
-                    db.Pages.Remove(item);
+                    var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+                    ViewBag.Email = userid = (string)Session["useremail"];
+                    db.Sites.Remove(site);
+                    db.SaveChanges();
+                    return PartialView("_SiteTable", GetProfilerSites(userid != "" ? userid : User.Identity.GetUserName(), udb, db));
                 }
-                var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
-                ViewBag.Email = userid = (string)Session["useremail"];
-                db.Sites.Remove(site);
-                db.SaveChanges(); 
             }
         }
 

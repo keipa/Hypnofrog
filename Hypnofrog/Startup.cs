@@ -1,4 +1,5 @@
-﻿using Hypnofrog.Models;
+﻿using Hypnofrog.DBModels;
+using Hypnofrog.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
@@ -34,6 +35,11 @@ namespace Hypnofrog
                 if (chkUser.Succeeded)
                 {
                     var result1 = UserManager.AddToRole(user.Id, "Admin");
+                    using(var db = new Context())
+                    {
+                        db.Avatars.Add(new Avatar() { Path = "https://pp.vk.me/c637127/v637127185/26b3/d6xhDAEYvW8.jpg", UserId = user.Email});
+                        db.SaveChanges();
+                    }
                 }
             }
             if (!roleManager.RoleExists("Anonymous"))
