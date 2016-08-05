@@ -8,6 +8,7 @@
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
 
+
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/jquery-ui")
     @Styles.Render("~/bundles/froalacss")
@@ -48,9 +49,6 @@
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                         if (User.IsInRole("Admin"))
                         {
                             <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>

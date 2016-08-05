@@ -17,7 +17,7 @@
             {
                 <div class='course'>
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
-                        @if (User.Identity.IsAuthenticated && ViewBag.Email != User.Identity.Name)
+                        @if (User.Identity.IsAuthenticated && ViewBag.Email != User.Identity.Name && Model.ElementAt(j).UserId != User.Identity.GetUserId())
                         {
                             <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
                         }
@@ -45,30 +45,41 @@
                             <span>Описание</span>
                             <span>@Model.ElementAt(j).Description</span>
                         </div>
+                        @*<div class='language'>
+                                <span>Готовность</span>
+                                @if (Model.ElementAt(j).Iscomplited)
+                                {
+                                    <span>
+                                        Опубликовано
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span style="color:red"> В разработке</span>
+                                }
+                            </div>*@
                         <div class='language'>
-                            <span>Готовность</span>
-                            @if (Model.ElementAt(j).Iscomplited)
-                            {
-                                <span>
-                                    Опубликовано
-                                </span>
-                            }
-                            else
-                            {
-                                <span style="color:red"> В разработке</span>
-                            }
+                            <span>Теги</span>
+
+                            <span>
+                                @Model.ElementAt(j).Tags
+                            </span>
+
                         </div>
 
                         <span class='actions'>
                             <a href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                 <i class='fa fa-eye'></i>
                             </a>
-                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
+                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin") || Model.ElementAt(j).UserId == User.Identity.GetUserId())
                             {
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>
                                 </a>
-                                using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del-" + j }))
+                            }
+                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
+                            {
+                                using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del-"+j }))
                                 {
                                     <a id="deletebutton-@j" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
                                 }
@@ -88,3 +99,10 @@
         </div>
     }
 }
+<script type="text/javascript">
+    $(function () {
+        $('#deletebutton').click(function () {
+            $('#ajax-del').submit();
+        });
+    });
+</script>

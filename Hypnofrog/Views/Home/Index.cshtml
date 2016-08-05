@@ -1,38 +1,70 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IEnumerable<Hypnofrog.DBModels.Site>
+
+@{
+    ViewBag.Title = "Hypnofrog";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
+<link href="~/Content/star-rating.css" rel="stylesheet" />
+<link href="~/Content/star-rating.min.css" rel="stylesheet" />
+<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
+
+<hr />
+<div class="maincontainer" style="display:flex;">
+    <a href="@Url.Action("UserProfile",  new { userid = ViewBag.Email })" class="topdesignrcontainer" style="position:relative;width:300px;">
+        <div class="numberone" style="position: absolute;top: 50%;color :white;font-family: inherit;font-size: 215px;left:50%;z-index :1000;transform: translate(-50%, -50%);">#1</div>
+        <img src="@ViewBag.Avatarpath" style="width:300px;height:300px;">
+    </a>
+    <div class="tagcloud" style="width: 100%;position: relative;">
+
+        <canvas id="my_canvas" width="400px" height="300px" style="position: absolute;left: 50%;right: 50%;top: 50%;transform: translate(-50%, -50%);"></canvas>
+
+    </div>
+
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>WYSIWYG</h2>
-        <p>
-            CHECK OUR WYSIWYG REDACTOR.
-        </p>
-        <p><a class="btn btn-default" href="@Url.Action("Wysiwyg", "Home")">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+
+<hr />
+<h2>Топ лучших сайтов</h2>
+<hr />
+
+
+<div id="site-table">
+    @{ Html.RenderPartial("_SiteTable", Model);}
 </div>
+
+
+
+@Scripts.Render("~/bundles/wordcloud")
+
+<script>
+    var tags = '@ViewBag.Tags';
+    tags = tags.split(';')
+    for (i = 0; i < tags.length; i++) {
+        tags[i] = tags[i].split(' ');
+        tags[i][1] = parseInt(tags[i][1])
+    }
+    WordCloud(document.getElementById('my_canvas'), {
+        list: tags, fontFamily: 'Times, serif', color: function (word, weight) {
+            return (weight > 4) ? '#f02222' : '#000000';
+        },
+        gridSize: Math.round(16 * $('my_canvas').width() / 1024),
+        weightFactor: function (size) {
+            return size * 15;
+        },
+
+        rotateRatio: 0.5,
+        backgroundColor: '#ffffff'
+    });
+
+</script>
+
+@section scripts{
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
+    <script src="~/Scripts/star-rating.js"></script>
+    <script src="~/Scripts/star-rating.min.js"></script>
+    <script src="~/Content/themes/krajee-svg/theme.js"></script>
+
+}

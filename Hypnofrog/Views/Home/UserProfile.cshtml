@@ -1,13 +1,19 @@
 ﻿@model IEnumerable<Hypnofrog.DBModels.Site>
 @using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = "UserProfile";
+    ViewBag.Title = "Профиль";
 }
 <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
 <link href="~/Content/star-rating.css" rel="stylesheet" />
 <link href="~/Content/star-rating.min.css" rel="stylesheet" />
 <link href="~/Content/userprofilestyle.css" rel="stylesheet" />
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+
+<script src="~/Scripts/jquery.caret.min.js"></script>
+<script src="~/Scripts/jquery.tag-editor.js"></script>
+<script src="~/Scripts/jquery.tag-editor.min.js"></script>
+<link href="~/Scripts/jquery.tag-editor.css" rel="stylesheet" />
+
 
 <br>
 <div class="container-fluid well span6">
@@ -18,7 +24,7 @@
             </div>
             <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
                 <h3>@ViewBag.Email</h3>
-                <h6>Рейтинг: -52</h6>
+                <h6>Рейтинг: @ViewBag.Rate</h6>
                 <h6>Комментариев: Colombia</h6>
                 <h6>Сайтов добавил: @Model.Count()</h6>
             </div>
@@ -40,7 +46,7 @@
     </div>
 </div>
 
-@if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
+@if (ViewBag.Email == User.Identity.Name)
 {
     <a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">Добавить сайт</a>
 }
@@ -56,5 +62,4 @@
         <script src="~/Scripts/star-rating.js"></script>
         <script src="~/Scripts/star-rating.min.js"></script>
         <script src="~/Content/themes/krajee-svg/theme.js"></script>
-
     }

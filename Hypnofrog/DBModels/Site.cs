@@ -13,6 +13,7 @@ namespace Hypnofrog.DBModels
         public bool Iscomplited { get; set; }
         public string MenuType { get; set; }
         public string Url { get; set; }
+        public string Tags { get; set; }
         public double Rate { get; set; }
         public DateTime CreationTime { get; set; }
         public string UserId { get; set; }
