@@ -61,8 +61,8 @@
                         <div class='language'>
                             <span>Теги</span><br>
 
-                            @foreach (var item in Model.ElementAt(j).Tags.Split(','))
-                            {<span class="label label-success">@item</span><span> </span>}
+                                @foreach (var item in Model.ElementAt(j).Tags.Split(','))
+                                {<span class="label label-success">@item</span><span> </span>}
 
                         </div>
 
@@ -78,7 +78,7 @@
                             }
                             @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
                             {
-                                using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del-" + j }))
+                                using (Ajax.BeginForm("DeleteTopSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del-" + j }))
                                 {
                                     <a id="deletebutton-@j" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
                                 }
