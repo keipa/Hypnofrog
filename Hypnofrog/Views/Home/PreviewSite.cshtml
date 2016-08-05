@@ -13,6 +13,26 @@
 <div id="page-redactor" class="fr-view">
     @{Html.RenderPartial(String.Format("_PreviewPage{0}", Model.Pages.FirstOrDefault().TemplateType), Model.Pages.FirstOrDefault());}
 </div>
+@if (Model.HasComments)
+{
+    <div class="comments">
+        <div class="comment-wrap">
+            <div class="photo">
+                <div class="avatar" style="background-image: url('@ViewBag.UserAvatar')"></div>
+            </div>
+            <div class="comment-block">
+                @using (Ajax.BeginForm("CommentSite", "Home", new { }, new AjaxOptions() { UpdateTargetId = "comments" }, new { @id = "ajaxform" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.TextArea("NewComment",new { @cols = "30", @rows = "3", @placeholder = "Add comment..." })
+                }
+            </div>
+        </div>
+        <div id="comments" class="comments-container">
+            @{Html.RenderPartial("_Comments", Model.Comments);}
+        </div>
+    </div>
+}
 
 @section scripts{
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>

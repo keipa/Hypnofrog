@@ -15,13 +15,16 @@ namespace Hypnofrog.DBModels
         public string Url { get; set; }
         public string Tags { get; set; }
         public double Rate { get; set; }
+        public bool HasComments { get; set; }
         public DateTime CreationTime { get; set; }
         public string UserId { get; set; }
         public virtual ICollection<Page> Pages { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
 
         public Site()
         {
             Pages = new List<Page>();
+            Comments = new List<Comment>();
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Hypnofrog.DBModels.Comment>
+
+<ul id="comments-list" class="comments-list">
+    @foreach (var elem in Model)
+    {
+        <li>
+            <div class="comment-main-level">
+                <div class="comment-avatar">
+                    <a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">
+                        <img src="@elem.UserAvatar" />
+                    </a>
+                </div>
+                <div class="comment-head">
+                    <span>@elem.CreationTime</span>
+                </div>
+                <div class="comment-content">
+                    @elem.Text
+                </div>
+            </div>
+        </li>
+    }
+</ul>

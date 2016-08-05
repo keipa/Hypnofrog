@@ -159,16 +159,15 @@ namespace Hypnofrog.Controllers
             var page = new Page();
             using (var db = new Context())
             {
-                var site = new Site { CreationTime = DateTime.Now, Title = param[0], Description = param[1], Url = param[2], Iscomplited = false, MenuType = param[5], UserId = User.Identity.GetUserId(), Rate = 0.0, Tags = param[7]};
+                var site = new Site { CreationTime = DateTime.Now, HasComments = param[3] == "true", Title = param[0], Description = param[1], Url = param[2], Iscomplited = false, MenuType = param[5], UserId = User.Identity.GetUserId(), Rate = 0.0, Tags = param[7] };
                 db.Sites.Add(site);
                 dbsite = site;
-                page = new Page { SiteId = site.SiteId, Color = param[4], HasComments = param[3] == "true" ? true : false, TemplateType = param[6], Title = "Page Title" };
+                page = new Page { SiteId = site.SiteId, Color = param[4], TemplateType = param[6], Title = "Page Title" };
                 db.Pages.Add(page);
                 AddUpdateNewTags(param[7], db);
-
+                CreatePageContent(page.PageId, param[6], db);
                 db.SaveChanges();
             }
-            CreatePageContent(page.PageId, param[6]);
             return RedirectToAction("EditSite", new { siteid = dbsite.SiteId });
         }
 
@@ -187,18 +186,32 @@ namespace Hypnofrog.Controllers
             }
         }
 
+
+
         public ActionResult EditSite(int siteid = 0)
         {
             if (siteid == 0) return View("Error");
             Site model = null;
             using (var db = new Context())
             {
-                model = db.Sites.Where(x => x.SiteId == siteid).Include(x => x.Pages).FirstOrDefault();
-                var pages = db.Pages.Where(x => x.SiteId == siteid).Include(x => x.Contents).ToList();
-                model.Pages = pages;
+                model = GetFullSite(siteid, db);
             }
             ViewBag.PageTitles = FromPageTitles(model);
+            ViewBag.PageIds = FromPageIds(model);
             return View(model);
+        }
+
+        private Site GetFullSite(int siteid, Context udb)
+        {
+            Site model = udb.Sites.Where(x => x.SiteId == siteid).Include(x => x.Pages).FirstOrDefault();
+            var pages = udb.Pages.Where(x => x.SiteId == siteid).Include(x => x.Contents).ToList();
+            model.Pages = pages;
+            return model;
+        }
+
+        private List<int> FromPageIds(Site model)
+        {
+            return model.Pages.Select(x => x.PageId).ToList();
         }
 
         private List<string> FromPageTitles(Site model)
@@ -207,58 +220,48 @@ namespace Hypnofrog.Controllers
             List<string> titles = new List<string>();
             foreach (var elem in obj)
             {
-                titles.Add(Regex.Replace(elem, "<[^>]+>", string.Empty));
+                titles.Add(Regex.Replace(elem??"Empty", "<[^>]+>", string.Empty));
             }
             return titles;
         }
 
-        private void CreatePageContent(int pageid, string type)
+        private void CreatePageContent(int pageid, string type, Context db)
         {
             int count = type == "mixed" ? 3 : type == "solid" ? 1 : 2;
-            using (var db = new Context())
-            {
-                for (int i = 0; i < count; i++)
-                    db.Contents.Add(new Content() { HtmlContent = "", PageId = pageid });
-                db.SaveChanges();
-            }
+            for (int i = 0; i < count; i++)
+                db.Contents.Add(new Content() { HtmlContent = "", PageId = pageid });
         }
 
         [ValidateInput(false)]
         public PartialViewResult SavePage(Page model, List<string> HtmlContent)
         {
-            SavePageToDB(model, (int)Session["PageId"]);
-            SavePageContentToDB((int)Session["PageId"], HtmlContent);
-            Page page = GetPageFromId((int)Session["PageId"]);
-            return PartialView(String.Format("_RedactPage{0}", page.TemplateType), page);
-        }
-
-        private void SavePageContentToDB(int pageid, List<string> htmlContent)
-        {
             using (var db = new Context())
             {
-                var contents = db.Contents.Where(x => x.PageId == pageid).ToList();
-                for (int i = 0; i < contents.Count; i++)
-                    contents[i].HtmlContent = htmlContent[i];
-                db.SaveChanges();
+                SavePageToDB(model, (int)Session["PageId"], db);
+                SavePageContentToDB((int)Session["PageId"], HtmlContent, db);
+                Page page = GetPageFromId((int)Session["PageId"], db);
+                return PartialView(String.Format("_RedactPage{0}", page.TemplateType), page);
             }
         }
 
-        private void SavePageToDB(Page model, int pageid)
+        private void SavePageContentToDB(int pageid, List<string> htmlContent, Context db)
         {
-            using (var db = new Context())
-            {
-                Page page = db.Pages.Where(x => x.PageId == pageid).FirstOrDefault();
-                page.Title = model.Title;
-                db.SaveChanges();
-            }
+            var contents = db.Contents.Where(x => x.PageId == pageid).ToList();
+            for (int i = 0; i < contents.Count; i++)
+                contents[i].HtmlContent = htmlContent[i];
+            db.SaveChanges();
         }
 
-        private Page GetPageFromId(int pageid)
+        private void SavePageToDB(Page model, int pageid, Context db)
         {
-            Page page;
-            using (var db = new Context())
-                page = db.Pages.Where(x => x.PageId == pageid).Include(x => x.Contents).FirstOrDefault();
-            return page;
+            Page page = db.Pages.Where(x => x.PageId == pageid).FirstOrDefault();
+            page.Title = model.Title;
+            db.SaveChanges();
+        }
+
+        private Page GetPageFromId(int pageid, Context db)
+        {
+            return db.Pages.Where(x => x.PageId == pageid).Include(x => x.Contents).FirstOrDefault();
         }
 
         public ActionResult Wysiwyg()
@@ -314,7 +317,7 @@ namespace Hypnofrog.Controllers
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 isSavedSuccessfully = false;
             }
@@ -337,23 +340,28 @@ namespace Hypnofrog.Controllers
             {
                 using (var udb = new ApplicationDbContext())
                 {
-                    var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
-                    foreach (var item in pages)
-                    {
-                        var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
-                        foreach (var elem in content)
-                        {
-                            db.Contents.Remove(elem);
-                        }
-                        db.Pages.Remove(item);
-                    }
-                    var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+                    DeleteSiteFromId(siteid, db);
                     ViewBag.Email = userid = (string)Session["useremail"];
-                    db.Sites.Remove(site);
-                    db.SaveChanges();
                     return PartialView("_SiteTable", GetProfilerSites(userid != "" ? userid : User.Identity.GetUserName(), udb, db));
                 }
             }
+        }
+
+        private void DeleteSiteFromId(int siteid, Context db)
+        {
+            var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
+            foreach (var item in pages)
+            {
+                var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
+                foreach (var elem in content)
+                {
+                    db.Contents.Remove(elem);
+                }
+                db.Pages.Remove(item);
+            }
+            var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+            db.Sites.Remove(site);
+            db.SaveChanges();
         }
 
         public ActionResult PreviewSite(int siteid)
@@ -361,14 +369,45 @@ namespace Hypnofrog.Controllers
             Site model = null;
             using (var db = new Context())
             {
-                model = db.Sites.Where(x => x.SiteId == siteid).Include(x => x.Pages).FirstOrDefault();
+                model = db.Sites.Where(x => x.SiteId == siteid).Include(x => x.Pages).Include(x=>x.Comments).FirstOrDefault();
                 var pages = db.Pages.Where(x => x.SiteId == siteid).Include(x => x.Contents).ToList();
                 model.Pages = pages;
+                ViewBag.UserAvatar = GetCurrentUserAvatar(db);
             }
             ViewBag.PageTitles = FromPageTitles(model);
+            ViewBag.PageIds = FromPageIds(model);
+            Session["siteid"] = siteid;
             return View("PreviewSite", model);
         }
 
+        private string GetCurrentUserAvatar(Context db)
+        {
+            string email = User.Identity.GetUserName();
+            return db.Avatars.Where(x => x.UserId == email).FirstOrDefault().Path;
+        }
+
+        public PartialViewResult CommentSite(string NewComment)
+        {
+            using(var db = new Context())
+            {
+                string useravatar = GetCurrentUserAvatar(db);
+                db.Comments.Add(new Comment()
+                {
+                    CreationTime = DateTime.Now,
+                    SiteId = (int)Session["siteid"],
+                    Text = NewComment,
+                    UserAvatar = useravatar,
+                    UserId = User.Identity.GetUserId()
+                });
+                db.SaveChanges();
+                return PartialView("_Comments", GetSiteComments((int)Session["siteid"], db));
+            }
+        }
+
+        private List<Comment> GetSiteComments(int siteid, Context db)
+        {
+            return db.Comments.Where(x => x.SiteId == siteid).ToList();
+        }
 
         public ActionResult UserProfile(string userid)
         {
@@ -450,6 +489,71 @@ namespace Hypnofrog.Controllers
                 return Content(bool.TrueString);
             }
             return Content(bool.FalseString);
+        }
+
+        public ActionResult AddPage(int siteid = 0)
+        {
+            using (var db = new Context())
+            {
+                var fpage = db.Pages.Where(x => x.SiteId == siteid).FirstOrDefault();
+                Page page = new Page { SiteId = siteid, Color = fpage.Color, TemplateType = fpage.TemplateType, Title = "Page Title" };
+                db.Pages.Add(page);
+                CreatePageContent(page.PageId, page.TemplateType, db);
+                db.SaveChanges();
+                return RedirectToAction("EditSite", new { siteid = siteid});
+            }
+        }
+
+        public PartialViewResult ShowPage(int pageid = 0)
+        {
+            using (var db = new Context())
+            {
+                Page page = db.Pages.Where(x => x.PageId == pageid).Include(x => x.Contents).FirstOrDefault();
+                return PartialView(String.Format("_RedactPage{0}", page.TemplateType), page);
+            }
+        }
+
+        public PartialViewResult PreviewShowPage(int pageid = 0)
+        {
+            using (var db = new Context())
+            {
+                Page page = db.Pages.Where(x => x.PageId == pageid).Include(x => x.Contents).FirstOrDefault();
+                return PartialView(String.Format("_PreviewPage{0}", page.TemplateType), page);
+            }
+        }
+
+        public ActionResult DeletePage(int pageid = 0)
+        {
+            using (var db = new Context())
+            {
+                var page = db.Pages.Where(x => x.PageId == pageid).FirstOrDefault();
+                int? siteid = page.SiteId;
+                int count_pages = db.Pages.Where(x => x.SiteId == siteid).ToList().Count();
+                if (count_pages > 1)
+                {
+                    DeleteOnePage(page, db);
+                    return RedirectToAction("EditSite", new { siteid = siteid });
+                }
+                else
+                {
+                    DeleteSiteFromId((int)siteid, db);
+                    return RedirectToAction("UserProfile", new { userid = User.Identity.GetUserId()});
+                }
+            }
+        }
+
+        private void DeleteOnePage(Page page, Context db)
+        {
+            DeleteContentFromPage(page.PageId, db);
+            db.Pages.Remove(page);
+            db.SaveChanges();
+        }
+
+        private void DeleteContentFromPage(int pageId, Context db)
+        {
+            var contents = db.Contents.Where(x=>x.PageId == pageId);
+            foreach (var elem in contents)
+                db.Contents.Remove(elem);
         }
     }
 }

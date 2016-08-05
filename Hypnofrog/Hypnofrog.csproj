@@ -181,6 +181,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DBModels\Avatar.cs" />
+    <Compile Include="DBModels\Comment.cs" />
     <Compile Include="DBModels\Content.cs" />
     <Compile Include="DBModels\Context.cs" />
     <Compile Include="DBModels\Page.cs" />
@@ -258,6 +259,22 @@
     <Compile Include="Migrations\201608041549144_Site Implementation Tags.Designer.cs">
       <DependentUpon>201608041549144_Site Implementation Tags.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608051201356_Comments.cs" />
+    <Compile Include="Migrations\201608051201356_Comments.Designer.cs">
+      <DependentUpon>201608051201356_Comments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608051223201_Comment Avatars.cs" />
+    <Compile Include="Migrations\201608051223201_Comment Avatars.Designer.cs">
+      <DependentUpon>201608051223201_Comment Avatars.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608051250262_Comment Avatars Second.cs" />
+    <Compile Include="Migrations\201608051250262_Comment Avatars Second.Designer.cs">
+      <DependentUpon>201608051250262_Comment Avatars Second.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608051256342_Comment Set.cs" />
+    <Compile Include="Migrations\201608051256342_Comment Set.Designer.cs">
+      <DependentUpon>201608051256342_Comment Set.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HTMLContextClass.cs" />
@@ -273,6 +290,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\comments.css" />
     <Content Include="Content\dark-theme.css" />
     <Content Include="Content\gray-theme.css" />
     <Content Include="Content\popupwindows.css" />
@@ -545,6 +563,7 @@
     <Content Include="Views\Home\_SiteTable.cshtml" />
     <Content Include="Views\Home\PreviewSite.cshtml" />
     <Content Include="Views\Home\_PreviewPagemixed.cshtml" />
+    <Content Include="Views\Home\_Comments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -607,6 +626,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608041549144_Site Implementation Tags.resx">
       <DependentUpon>201608041549144_Site Implementation Tags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608051201356_Comments.resx">
+      <DependentUpon>201608051201356_Comments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608051223201_Comment Avatars.resx">
+      <DependentUpon>201608051223201_Comment Avatars.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608051250262_Comment Avatars Second.resx">
+      <DependentUpon>201608051250262_Comment Avatars Second.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608051256342_Comment Set.resx">
+      <DependentUpon>201608051256342_Comment Set.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
 
 
-@using (Ajax.BeginForm("SavePage", "Home", new { }, new AjaxOptions() { UpdateTargetId = "page-redactor" }, new { @id = "ajaxform"}))
+@using (Ajax.BeginForm("SavePage", "Home", new { }, new AjaxOptions() { UpdateTargetId = "page-redactor" }, new { @id = "ajaxform" }))
 {
     @Html.AntiForgeryToken()
     <div id="page-redactor" class="fr-view">
@@ -22,47 +22,47 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
     <script>
-    $(function () {
-        $('#title').froalaEditor({
-            toolbarInline: true,
-            dragInline: false,
-            toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
-            toolbarButtonsSM: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize','-', 'color', 'align', '|', 'undo', 'redo'],
-            toolbarButtonsMD: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
-            toolbarButtonsXS: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', '-', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
-            theme: "@ViewBag.Style",
-            heightMin: 100,
-            charCounterMax: 50,
-            toolbarVisibleWithoutSelection: true
+        $(function () {
+            $('#title').froalaEditor({
+                toolbarInline: true,
+                dragInline: false,
+                toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
+                toolbarButtonsSM: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', '-', 'color', 'align', '|', 'undo', 'redo'],
+                toolbarButtonsMD: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
+                toolbarButtonsXS: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', '-', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
+                theme: "@ViewBag.Style",
+                heightMin: 100,
+                charCounterMax: 50,
+                toolbarVisibleWithoutSelection: true
+            });
+            $('#edit1').froalaEditor({
+                toolbarInline: true,
+                dragInline: false,
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
+                pluginsEnabled: null,
+                theme: "@ViewBag.Style",
+                heightMin: 200,
+                toolbarVisibleWithoutSelection: true
+            });
+            $('#edit2').froalaEditor({
+                toolbarInline: true,
+                dragInline: false,
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
+                pluginsEnabled: null,
+                theme: "@ViewBag.Style",
+                heightMin: 200,
+                toolbarVisibleWithoutSelection: true
+            });
+            $('#edit3').froalaEditor({
+                toolbarInline: true,
+                dragInline: false,
+                toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
+                pluginsEnabled: null,
+                theme: "@ViewBag.Style",
+                heightMin: 200,
+                toolbarVisibleWithoutSelection: true
+            });
         });
-        $('#edit1').froalaEditor({
-            toolbarInline: true,
-            dragInline: false,
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
-            pluginsEnabled: null,
-            theme: "@ViewBag.Style",
-            heightMin: 200,
-            toolbarVisibleWithoutSelection: true
-        });
-        $('#edit2').froalaEditor({
-            toolbarInline: true,
-            dragInline: false,
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
-            pluginsEnabled: null,
-            theme: "@ViewBag.Style",
-            heightMin: 200,
-            toolbarVisibleWithoutSelection: true
-        });
-        $('#edit3').froalaEditor({
-            toolbarInline: true,
-            dragInline: false,
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
-            pluginsEnabled: null,
-            theme: "@ViewBag.Style",
-            heightMin: 200,
-            toolbarVisibleWithoutSelection: true
-        });
-    });
-</script>
+    </script>
 }
 

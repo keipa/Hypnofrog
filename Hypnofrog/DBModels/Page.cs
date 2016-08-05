@@ -11,7 +11,6 @@ namespace Hypnofrog.DBModels
         public string Title { get; set; }
         public string Color { get; set; }
         public string TemplateType { get; set; }
-        public bool HasComments { get; set; }
         public virtual ICollection<Content> Contents { get; set; }
 
         public int? SiteId { get; set; }

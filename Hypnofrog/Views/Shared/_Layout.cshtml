@@ -37,13 +37,13 @@
                 <ul class="nav navbar-nav">
                     @if (ViewBag.RedactorEnable == true)
                     {
-                        foreach (var elem in (List<string>)ViewBag.PageTitles)
+                        for (int i = 0; i < ((List<string>)ViewBag.PageTitles).Count(); i++)
                         {
-                            <li>@Html.ActionLink(Html.Raw(elem).ToString(), "Index", "Home")</li>
+                            <li>@Ajax.ActionLink(Html.Raw(((List<string>)ViewBag.PageTitles)[i]).ToString(), ViewBag.Preview == true? "PreviewShowPage" : "ShowPage", new { pageid = ((List<int>)ViewBag.PageIds)[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
                         }
                         if (ViewBag.Preview != true)
                         {
-                            <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
+                            <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId },  new { })</li>
                         }
 
                     }
