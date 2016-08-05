@@ -9,8 +9,8 @@
     @Styles.Render("~/bundles/dropzonescss")
 
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-ui")
     @Styles.Render("~/bundles/froalacss")
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
@@ -79,6 +79,38 @@
     @Scripts.Render("~/bundles/froala-plugins-js")
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/dropzonescripts")
+
+    <script src="~/Scripts/jquery.signalR-2.2.1.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+
+    <script src="/signalr/hubs"></script>
+
+
+    <script type="text/javascript">
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        $(function () {
+            var chat = $.connection.chatHub;
+            chat.client.broadcastMessage = function (text,link) {
+                if (text != 'Поздравляем! Вы получили достижение: ') {
+                    var notification = new Notification('', {
+                        body: text,
+                        icon: 'http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif',
+                    });
+                    notification.onclick = function () {
+                        window.open(link);
+                    };
+                }
+            };
+            $.connection.hub.start().done(function () {
+                //$('#sendmessage').click(function () {
+                //    //chat.server.send('kek', $('#message').val());
+                //});
+                chat.server.send('@ViewBag.Achievment');
+
+            });
+        });
+    </script>
     <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
         <div id="modal-content">
         </div>

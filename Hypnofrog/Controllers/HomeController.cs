@@ -28,9 +28,15 @@ namespace Hypnofrog.Controllers
                     ViewBag.Tags = GetAllTags();
                     ViewBag.Email = GetTopUser(db, udb);
                     ViewBag.Avatarpath = GetTopUsersAvatar(db, ViewBag.Email);
+                    ViewBag.Achievment = "Охуенно";
                     return View(GetTop3Sites(db));
                 }
             }
+        }
+
+        public string CheckAchievments()
+        {
+            return User.Identity.GetUserId();
         }
 
         private string GetTopUsersAvatar(Context db, string email)
@@ -418,7 +424,7 @@ namespace Hypnofrog.Controllers
             string tagstring = "";
             using (var db = new Context())
             {
-                var tags = db.Tags.ToList();
+                var tags = db.Tags.OrderByDescending(x => x.Repeats).ToList();
                 foreach (var item in tags)
                 {
                     tagstring += item.Name + "," + item.Repeats.ToString() + ";";

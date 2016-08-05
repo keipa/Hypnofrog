@@ -48,13 +48,12 @@
     }
     WordCloud(document.getElementById('my_canvas'), {
         list: tags, fontFamily: 'Times, serif', color: function (word, weight) {
-            return (weight > 4) ? '#f02222' : '#000000';
+            return (word===tags[0][0]) ? '#f02222' : '#000000';
         },
         gridSize: Math.round(16 * $('my_canvas').width() / 1024),
         weightFactor: function (size) {
             return size * 15;
         },
-
         rotateRatio: 0.5,
         backgroundColor: '#ffffff'
     });
