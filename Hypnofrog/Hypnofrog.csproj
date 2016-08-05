@@ -189,6 +189,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="DBModels\AchievementLog.cs" />
     <Compile Include="DBModels\Avatar.cs" />
     <Compile Include="DBModels\Comment.cs" />
     <Compile Include="DBModels\Content.cs" />
@@ -283,6 +284,14 @@
     <Compile Include="Migrations\201608051256342_Comment Set.cs" />
     <Compile Include="Migrations\201608051256342_Comment Set.Designer.cs">
       <DependentUpon>201608051256342_Comment Set.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608051412570_Added AchievmentLog.cs" />
+    <Compile Include="Migrations\201608051412570_Added AchievmentLog.Designer.cs">
+      <DependentUpon>201608051412570_Added AchievmentLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608051415291_Added AchievmentLog to dbset.cs" />
+    <Compile Include="Migrations\201608051415291_Added AchievmentLog to dbset.Designer.cs">
+      <DependentUpon>201608051415291_Added AchievmentLog to dbset.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -650,6 +659,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608051256342_Comment Set.resx">
       <DependentUpon>201608051256342_Comment Set.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608051412570_Added AchievmentLog.resx">
+      <DependentUpon>201608051412570_Added AchievmentLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608051415291_Added AchievmentLog to dbset.resx">
+      <DependentUpon>201608051415291_Added AchievmentLog to dbset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
