@@ -14,6 +14,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Index;
+using Hypnofrog.SearchLucene;
 
 namespace Hypnofrog.Controllers
 {
@@ -34,6 +38,48 @@ namespace Hypnofrog.Controllers
                 }
             }
         }
+
+        public ActionResult Search(string searchstring)
+        {
+            if (searchstring==null) return View("DefaultSearch");
+            using (var db = new Context())
+            {
+                var sites = SearchSitesLucene(db, searchstring);
+                var comments = SearchCommentsLucene(db, searchstring);
+                var context = SearchContextLucene(db, searchstring);
+
+            }
+            return View();
+        }
+
+        private object SearchCommentsLucene(Context db, string searchstring)
+        {
+            var site_searcher = new SearchComments();
+            site_searcher.ClearLuceneIndex();
+            site_searcher.AddUpdateLuceneIndex(db.Comments.ToList());
+            return site_searcher.Search(searchstring);
+        }
+
+        private object SearchContextLucene(Context db, string searchstring)
+        {
+            var site_searcher = new SearchContent();
+            site_searcher.ClearLuceneIndex();
+            site_searcher.AddUpdateLuceneIndex(db.Contents.ToList());
+            return site_searcher.Search(searchstring);
+        }
+
+        public IEnumerable<Site> SearchSitesLucene(Context db, string searchstring )
+        {
+            var site_searcher = new SearchSites();
+            site_searcher.ClearLuceneIndex();
+            site_searcher.AddUpdateLuceneIndex(db.Sites.ToList());
+            return site_searcher.Search(searchstring);
+        }
+
+
+
+
+
 
         public string CheckAchievments(Context db)
         {

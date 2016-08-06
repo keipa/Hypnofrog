@@ -25,7 +25,18 @@
 
 </div>
 
+<hr/>
 
+
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    {<div class="input-group">
+        <input type="text" class="form-control" placeholder="Я ищу..." name="searchstring">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Поиск</button>
+        </span>
+    </div>
+    }
+    
 <hr />
 <h2>Топ лучших сайтов</h2>
 <hr />

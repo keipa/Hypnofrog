@@ -8,8 +8,8 @@
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
     @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jquery-ui")
-        
+    @Scripts.Render("~/bundles/jquery-ui")
+
     @Styles.Render("~/bundles/froalacss")
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
@@ -58,6 +58,12 @@
                         }
                     }
                 </ul>
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        @Html.ActionLink("Поиск", "Search", "Home")
+                    </li>
+                </ul>
+
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
