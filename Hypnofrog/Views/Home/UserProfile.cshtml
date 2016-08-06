@@ -25,7 +25,7 @@
             <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
                 <h3>@ViewBag.Email</h3>
                 <h6>Рейтинг: @ViewBag.Rate</h6>
-                <h6>Комментариев: Colombia</h6>
+                <h6>Достижений: @ViewBag.howmuchachievments</h6>
                 <h6>Сайтов добавил: @Model.Count()</h6>
             </div>
             @if (ViewBag.Email == User.Identity.Name)
@@ -36,6 +36,7 @@
                             <span class="icon-cog icon-white"></span><span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Famehall", "Home")"><span class="fa fa-trophy fa-3 "></span> Мои достижения</a></li>
                             <li><a href="@Url.Action("Index", "Manage")"><span class="fa fa-cog fa-3 "></span> Настройки аккаунта</a></li>
                             <li><a href="@Url.Action("Delete", new {id = User.Identity.GetUserId() })"><span class="fa fa-trash fa-3"></span> Удалить аккаунт</a></li>
                         </ul>

@@ -14,6 +14,7 @@ namespace Hypnofrog.DBModels
         public DbSet<Content> Contents { get; set; }
         public DbSet<Rate> RateLog { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public Context() : base("DefaultConnection") { }
     }
