@@ -49,28 +49,55 @@ namespace Hypnofrog.ViewModels
         //иметь 10 сайтов - Кочегар
         //иметь 100 сайтов - Воу Воу Палехче
         //10 рейтингов с 5 - Беспринциптный
-        private string descHasThreeSites = "В некотором государстве...";
-        private string descHasFiveRatingWithOnes = "Я Дартаньян";
-        private string descHasOneSite = "В некотором царстве...";
-        private string descHasTenTags = "Архивариус";
-        private string descHasThreeSitesWithRatesGreaterThanThree = "Три богатыря";
-        private string descHasOneRating = "Держи печеньку";
-        private string descHasTenSites = "Кочегар";
-        private string descHas100Sites = "Воу Воу Палехче";
-        private string descHasTenRatingsWith5Stars = "Беспринциптный";
+
+
+        private string descRUHasThreeSites = "Иметь три сайта.";
+        private string descRUHasFiveRatingWithOnes = "Поставить 5 отметок с единицами";
+        private string descRUHasOneSite = "Написать один сайт";
+        private string descRUHasTenTags = "Иметь на сайтах 10 тегов";
+        private string descRUHasThreeSitesWithRatesGreaterThanThree = "Иметь три сайта с рейтингом не менее 3";
+        private string descRUHasOneRating = "Поставить одну оценку";
+        private string descRUHasTenSites = "Написать 10 сайтов";
+        private string descRUHas100Sites = "Написать 100 сайтов";
+        private string descRUHasTenRatingsWith5Stars = "Поставить 10 отметок с пятёрками";
+
+        private string nameHasThreeSites = "В некотором государстве...";
+        private string nameHasFiveRatingWithOnes = "Я Дартаньян";
+        private string nameHasOneSite = "В некотором царстве...";
+        private string nameHasTenTags = "Архивариус";
+        private string nameHasThreeSitesWithRatesGreaterThanThree = "Три богатыря";
+        private string nameHasOneRating = "Держи печеньку";
+        private string nameHasTenSites = "Кочегар";
+        private string nameHas100Sites = "Воу Воу Палехче";
+        private string nameHasTenRatingsWith5Stars = "Беспринциптный";
+
+        public List<string> GetAllAchievmentsDescriptionsRU()
+        {
+            List<string> allachievments = new List<string>();
+            allachievments.Add(descRUHasThreeSites);
+            allachievments.Add(descRUHasFiveRatingWithOnes);
+            allachievments.Add(descRUHasOneSite);
+            allachievments.Add(descRUHasTenTags);
+            allachievments.Add(descRUHasThreeSitesWithRatesGreaterThanThree);
+            allachievments.Add(descRUHasOneRating);
+            allachievments.Add(descRUHasTenSites);
+            allachievments.Add(descRUHas100Sites);
+            allachievments.Add(descRUHasTenRatingsWith5Stars);
+            return allachievments;
+        }
 
         public List<string> GetAllAchievments()
         {
             List<string> allachievments = new List<string>();
-            allachievments.Add(descHasThreeSites);
-            allachievments.Add(descHasFiveRatingWithOnes);
-            allachievments.Add(descHasOneSite);
-            allachievments.Add(descHasTenTags);
-            allachievments.Add(descHasThreeSitesWithRatesGreaterThanThree);
-            allachievments.Add(descHasOneRating);
-            allachievments.Add(descHasTenSites);
-            allachievments.Add(descHas100Sites);
-            allachievments.Add(descHasTenRatingsWith5Stars);
+            allachievments.Add(nameHasThreeSites);
+            allachievments.Add(nameHasFiveRatingWithOnes);
+            allachievments.Add(nameHasOneSite);
+            allachievments.Add(nameHasTenTags);
+            allachievments.Add(nameHasThreeSitesWithRatesGreaterThanThree);
+            allachievments.Add(nameHasOneRating);
+            allachievments.Add(nameHasTenSites);
+            allachievments.Add(nameHas100Sites);
+            allachievments.Add(nameHasTenRatingsWith5Stars);
             return allachievments;
         }
 

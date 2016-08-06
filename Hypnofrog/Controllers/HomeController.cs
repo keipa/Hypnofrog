@@ -92,29 +92,20 @@ namespace Hypnofrog.Controllers
                 var log = db.Achievements.Where(x => x.User == id).ToList();
                 AchievmentChecker achievments = new AchievmentChecker(sites, rates, log, id);
                 foreach (var item in log)
-                {
                     userachievments.Add(item.Name);
-                }
-                return View(GetKeyValueAchievments(achievments.GetAllAchievments(), userachievments));
+                return View(GetKeyValueAchievments(achievments.GetAllAchievments(), achievments.GetAllAchievmentsDescriptionsRU(), userachievments));
             }
         }
 
-        private Dictionary<string, bool> GetKeyValueAchievments(List<string> allachievments, List<string> userachievments)
+        private Dictionary<string, bool> GetKeyValueAchievments(List<string> allachievments, List<string> alldesc, List<string> userachievments)
         {
             Dictionary<string, bool> achievments = new Dictionary<string, bool>();
-            foreach (var item in allachievments)
-            {
-                if (userachievments.Contains(item))
-                {
-                    achievments.Add(item, true);
-                }
+            for (int i = 0; i < allachievments.Count() - 1; i++)
+                if (userachievments.Contains(allachievments[i]))
+                    achievments.Add(allachievments[i] + ":" + alldesc[i], true);
                 else
-                {
-                    achievments.Add(item, false);
-                }
-            }
+                    achievments.Add(allachievments[i] + ":" + alldesc[i], false);
             return achievments;
-
         }
 
         public ActionResult Users()

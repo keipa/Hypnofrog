@@ -1,6 +1,71 @@
 ﻿
 @model Dictionary<string, bool>
 
-
+<hr />
 <h2>Зал славы</h2>
+<hr />
 
+<link href="~/Content/bootstrap.cards.min.css" rel="stylesheet" />
+
+
+
+
+@if (Model.Count() > 0)
+{
+    for (int i = 0; i < Model.Count(); i += 4)
+    {
+        <div class="cards" style="display:flex;">
+            @for (int j = i; (j < i + 4) && (j < Model.Count()); j++)
+            {
+                if (Model.ElementAt(j).Value)
+                {
+                    <div class="card card-inverse">
+                        <img class="card-img" src="http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif" alt="Card image" style="width: 100%;">
+                        <div class="card-img-overlay">
+                            <h4 class="card-title">@Model.ElementAt(j).Key.Split(':')[0]</h4>
+                            <h6 class="card-title">@Model.ElementAt(j).Key.Split(':')[1]</h6>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card card-inverse notgot">
+                        <img class="card-img" src="http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif" alt="Card image" style="width: 100%;">
+                        <div class="card-img-overlay">
+                            <h4 class="card-title">@Model.ElementAt(j).Key.Split(':')[0]</h4>
+                            <h6 class="card-title">@Model.ElementAt(j).Key.Split(':')[1]</h6>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+}
+
+
+
+         
+
+
+
+
+
+<style>
+    .card img {
+        -webkit-transition: all .2s linear;
+        -moz-transition: all .2s linear;
+        -o-transition: all .2s linear;
+        -ms-transition: all .2s linear;
+        transition: all .2s linear;
+        -webkit-filter: blur(3px);
+    }
+
+    .card.notgot img{
+            -webkit-filter: grayscale(100%) blur(5px);
+    }
+    .cards > .card {
+        max-width: 15rem;
+        width: 100%;
+        margin: 10px 10px;
+    }
+</style>

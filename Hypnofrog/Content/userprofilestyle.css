@@ -14,8 +14,10 @@
 
 .imageratingcontainer:hover > .blur img{
             -webkit-filter: grayscale(100%) blur(5px);
-
 }
+
+
+
 .rating-container.rating-xs.rating-animate {
     position: absolute;
     left: 50%;
