@@ -9,6 +9,16 @@ pre {
     border: 1px solid black;
 }
 
+svg > rect{
+    fill: #FF9D40;
+}
+
+.highcharts-container{
+    border: 5px solid #A63400;
+    margin:5px;
+    border-radius:15px;
+}
+
 .fr-element {
     background-color: #FF9D40;
 }

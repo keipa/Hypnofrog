@@ -14,6 +14,10 @@ namespace Hypnofrog
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jquery-charts").Include(
+                        "~/Scripts/highcharts.js",
+                        "~/Scripts/jquery.highchartTable.js"));
+
 
             bundles.Add(new StyleBundle("~/Content/starratingcss").Include(
             "~/Content/star-rating.css",

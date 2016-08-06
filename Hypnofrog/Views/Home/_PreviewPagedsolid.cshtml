@@ -19,22 +19,14 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-6 col-xs-6 col-sm-6">
         <div class="fr-view">
             @Html.Raw(Model.Contents.ElementAt(0).HtmlContent.ToString())
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6 col-xs-6 col-sm-6">
-        <div class="fr-view">
-            @Html.Raw(Model.Contents.ElementAt(1).HtmlContent.ToString())
-        </div>
-    </div>
     <div class="col-md-6  col-sm-6 col-xs-6">
         <div class="fr-view">
-            @Html.Raw(Model.Contents.ElementAt(2).HtmlContent.ToString())
+            @Html.Raw(Model.Contents.ElementAt(1).HtmlContent.ToString())
         </div>
     </div>
 </div>
@@ -45,4 +37,3 @@
             $('table.highchart').remove();
         });
 </script>
-

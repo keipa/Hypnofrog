@@ -634,7 +634,7 @@ namespace Hypnofrog.Controllers
                 else
                 {
                     DeleteSiteFromId((int)siteid, db);
-                    return RedirectToAction("UserProfile", new { userid = User.Identity.GetUserId() });
+                    return RedirectToAction("UserProfile", new { userid = User.Identity.GetUserName() });
                 }
             }
         }
