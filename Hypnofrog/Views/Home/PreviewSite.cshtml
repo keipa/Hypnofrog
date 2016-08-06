@@ -1,4 +1,5 @@
 ﻿@model Hypnofrog.DBModels.Site
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Preview = true;
     ViewBag.RedactorEnable = true;
@@ -15,26 +16,77 @@
 </div>
 @if (Model.HasComments)
 {
-    <div class="comments">
-        <div class="comment-wrap">
-            <div class="photo">
-                <div class="avatar" style="background-image: url('@ViewBag.UserAvatar')"></div>
-            </div>
-            <div class="comment-block">
-                @using (Ajax.BeginForm("CommentSite", "Home", new { }, new AjaxOptions() { UpdateTargetId = "comments" }, new { @id = "ajaxform" }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.TextArea("NewComment",new { @cols = "30", @rows = "3", @placeholder = "Add comment..." })
-                }
-            </div>
-        </div>
-        <div id="comments" class="comments-container">
-            @{Html.RenderPartial("_Comments", Model.Comments);}
-        </div>
+    <hr />
+    <div class="comments-container">
+        <h1>Комментарии</h1>
+        <ul class="newlist comments-list">
+            @if (ViewBag.UserAvatar != null)
+            {
+                <li>
+                    <div class="comment-main-level">
+                        <div class="comment-avatar">
+                            <a href="@Url.Action("UserProfile",  new { userid = User.Identity.GetUserName() })">
+                                <img src="@ViewBag.UserAvatar" />
+                            </a>
+                        </div>
+                        <div class="comment-box">
+                            <div class="comment-head">
+                                <span>@User.Identity.GetUserName()</span>
+
+                            </div>
+                            <div class="comment-content">
+                                @using (Ajax.BeginForm("CommentSite", "Home", new { }, new AjaxOptions() { UpdateTargetId = "comments-list" }, new { @id = "ajaxform" }))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-10 col-sm-10 col-xs-10">
+                                            @*fr-element fr-view*@
+                                            @Html.AntiForgeryToken()
+                                            @Html.TextArea("NewComment", "", new { @id = "newcomid" })
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-2">
+                                            <i class="fa fa-paper-plane icons" id="sendbtn"></i>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+            <li>
+                <ul id="comments-list">
+                    @{Html.RenderPartial("_Comments", Model.Comments);}
+                </ul>
+            </li>
+        </ul>
     </div>
-}
+                        }
 
 @section scripts{
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
+    <script>
+        $(function () {
+            $('#sendbtn').click(function () {
+                $('#ajaxform').submit();
+                $('div.fr-element').empty();
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#newcomid').froalaEditor({
+                toolbarInline: true,
+                dragInline: false,
+                toolbarButtons: ['emoticons'],
+                toolbarButtonsSM: ['emoticons'],
+                toolbarButtonsMD: ['emoticons'],
+                toolbarButtonsXS: ['emoticons'],
+                pluginsEnabled: ['emoticons'],
+                theme: "@ViewBag.Style",
+                toolbarVisibleWithoutSelection: true,
+                heightMin: 50
+            });
+        });
+    </script>
 }

@@ -404,6 +404,7 @@ namespace Hypnofrog.Controllers
                 model = db.Sites.Where(x => x.SiteId == siteid).Include(x => x.Pages).Include(x=>x.Comments).FirstOrDefault();
                 var pages = db.Pages.Where(x => x.SiteId == siteid).Include(x => x.Contents).ToList();
                 model.Pages = pages;
+                model.Comments = model.Comments.OrderByDescending(x => x.CreationTime).ToList();
                 ViewBag.UserAvatar = GetCurrentUserAvatar(db);
             }
             ViewBag.PageTitles = FromPageTitles(model);
@@ -415,9 +416,12 @@ namespace Hypnofrog.Controllers
         private string GetCurrentUserAvatar(Context db)
         {
             string email = User.Identity.GetUserName();
-            return db.Avatars.Where(x => x.UserId == email).FirstOrDefault().Path;
+            var avatar = db.Avatars.Where(x => x.UserId == email).FirstOrDefault();
+            return avatar == null ? null : avatar.Path;
         }
 
+
+        [ValidateInput(false)]
         public PartialViewResult CommentSite(string NewComment)
         {
             using(var db = new Context())
@@ -429,8 +433,19 @@ namespace Hypnofrog.Controllers
                     SiteId = (int)Session["siteid"],
                     Text = NewComment,
                     UserAvatar = useravatar,
-                    UserId = User.Identity.GetUserId()
+                    UserId = User.Identity.GetUserName()
                 });
+                db.SaveChanges();
+                return PartialView("_Comments", GetSiteComments((int)Session["siteid"], db));
+            }
+        }
+
+        public PartialViewResult DeleteComment(int comid = 0)
+        {
+            using (var db = new Context())
+            {
+                var comment = db.Comments.Where(x => x.CommentId == comid).FirstOrDefault();
+                db.Comments.Remove(comment);
                 db.SaveChanges();
                 return PartialView("_Comments", GetSiteComments((int)Session["siteid"], db));
             }
@@ -438,7 +453,7 @@ namespace Hypnofrog.Controllers
 
         private List<Comment> GetSiteComments(int siteid, Context db)
         {
-            return db.Comments.Where(x => x.SiteId == siteid).ToList();
+            return db.Comments.Where(x => x.SiteId == siteid).OrderByDescending(x => x.CreationTime).ToList();
         }
 
         public ActionResult UserProfile(string userid)

@@ -45,6 +45,20 @@
 </script>
 <script>
     $(function () {
+        $.FroalaEditor.DefineIcon('insert', { NAME: 'plus' });
+        $.FroalaEditor.RegisterCommand('insert', {
+            title: 'Insert HTML',
+            focus: true,
+            undo: true,
+            refreshAfterCallback: true,
+            callback: function () {
+                this.html.insert('<table style="width: 100%;"><thead><tr><th>Values</th><th>Counts'+
+                    '</th></tr></thead><tbody><tr><td style="width: 50%;">Val1</td><td style="width: 50.0000%;">1</td></tr>'+
+                    '<tr><td style="width: 50%;">Val2<br></td><td style="width: 50.0000%;">2</td></tr><tr><td style="width: 50%;">Val3'+
+                    '<br></td><td style="width: 50.0000%;">3</td></tr><tr><td style="width: 50%;">Val4<br></td><td style="width: 50.0000%;">4</td>'+
+                    '</tr><tr><td style="width: 50%;">Val5<br></td><td style="width: 50.0000%;">5</td></tr></tbody></table>');
+            }
+        });
         $('#title').froalaEditor({
             toolbarInline: true,
             dragInline: false,
@@ -60,7 +74,7 @@
         $('#edit1').froalaEditor({
             toolbarInline: true,
             dragInline: false,
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html'],
+            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html', 'insert'],
             pluginsEnabled: null,
             theme: "@ViewBag.Style",
             heightMin: 200,

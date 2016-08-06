@@ -10,8 +10,7 @@
     white-space: normal;
 }
 input,
-select,
-textarea {
+select{
     max-width: 280px;
 }
 
