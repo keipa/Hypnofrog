@@ -25,7 +25,7 @@
             <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
                 <h3>@ViewBag.Email</h3>
                 <h6>Рейтинг: @ViewBag.Rate</h6>
-                <h6>Комментариев: Colombia</h6>
+                <h6>Достижений: @ViewBag.howmuchachievments</h6>
                 <h6>Сайтов добавил: @Model.Count()</h6>
             </div>
             @if (ViewBag.Email == User.Identity.Name)

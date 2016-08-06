@@ -495,6 +495,8 @@ namespace Hypnofrog.Controllers
                     ViewBag.Email = userid;
                     ViewBag.avatarpath = avatar != null ? avatar.Path : "";
                     ViewBag.Rate = GetProfilerRate(db, applicationdb);
+                    var id = GetIdThoughtEmail(applicationdb, userid);
+                    ViewBag.howmuchachievments = db.Achievements.Where(x => x.User == id).Count().ToString()+" из 8";
                     if (userid == User.Identity.Name)
                     {
                         ViewBag.Achievment = CheckAchievments(db);
