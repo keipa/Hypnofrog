@@ -53,6 +53,12 @@ namespace Hypnofrog.Controllers
             }
         }
 
+        public ActionResult DefaultSearchPage()
+        {
+            return View();
+        }
+
+
         private List<Site> ConvertContentToSites(List<Content> list, Context db)
         {
             List<Site> converted = new List<Site>();
