@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Hypnofrog.DBModels.Site>
+
+@{
+    ViewBag.Title = "Search";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
+<link href="~/Content/star-rating.css" rel="stylesheet" />
+<link href="~/Content/star-rating.min.css" rel="stylesheet" />
+<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
+<link href="~/Content/comments.css" rel="stylesheet" />
+<hr>
+
+@using (Html.BeginForm("Search", "Home", FormMethod.Post))
+{<div class="input-group">
+        <input type="text" class="form-control" placeholder="@ViewBag.SearchString" name="searchstring">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Поиск</button>
+        </span>
+    </div>
+}
+<hr />
+
+<h4>Сайты и контент</h4>
+
+<hr />
+
+<div id="site-table">
+    @{ Html.RenderPartial("_SiteTable", Model);}
+</div>
+
+
+<hr />
+
+<h4>Комментарии</h4>
+<div class="comments-container">
+
+    <ul class="newlist comments-list">
+        <li>
+            <ul id="comments-list">
+                @using Microsoft.AspNet.Identity
+                @foreach (var elem in ViewBag.comments)
+            {
+                    <li>
+                        <div class="comment-main-level">
+                            <div class="comment-avatar">
+                                <a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">
+                                    <img src="@elem.UserAvatar" />
+                                </a>
+                            </div>
+                            <div class="comment-box">
+                                <div class="comment-head">
+                                    <span><a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">@elem.UserId</a></span>
+                                    <i class="fa fa-clock-o"> @elem.CreationTime</i>
+                                    @if (elem.UserId == User.Identity.GetUserName() || User.IsInRole("Admin"))
+                                    {
+                                        <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#comments-list" href="/Home/DeleteComment?comid=@elem.CommentId">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    }
+                                </div>
+                                <div class="comment-content fr-view">
+                                    @Html.Raw(elem.Text)
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </li>
+    </ul>
+    </div>
+    <hr />
+
+
+
+    @section scripts{
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
+        <script src="~/Scripts/star-rating.js"></script>
+        <script src="~/Scripts/star-rating.min.js"></script>
+        <script src="~/Content/themes/krajee-svg/theme.js"></script>
+
+    }

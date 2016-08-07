@@ -42,6 +42,7 @@ namespace Hypnofrog.SearchLucene
             doc.Add(new Field("SiteId", sampleData.SiteId.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("Avatar", sampleData.UserAvatar, Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("Userid", sampleData.UserId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("CreationTime", sampleData.CreationTime.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("Text", sampleData.Text, Field.Store.YES, Field.Index.ANALYZED));
 
 
@@ -120,7 +121,8 @@ namespace Hypnofrog.SearchLucene
                 SiteId = Convert.ToInt32(doc.Get("SiteId")),
                 UserAvatar = doc.Get("Avatar"),
                 UserId = doc.Get("Userid"),
-                Text = doc.Get("Text")
+                Text = doc.Get("Text"),
+                CreationTime = Convert.ToDateTime(doc.Get("CreationTime"))
 
             };
         }

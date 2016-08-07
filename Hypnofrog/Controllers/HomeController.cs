@@ -41,18 +41,36 @@ namespace Hypnofrog.Controllers
 
         public ActionResult Search(string searchstring)
         {
-            if (searchstring==null) return View("DefaultSearch");
+            if (searchstring==null) return RedirectToAction("DefaultSearchPage");
             using (var db = new Context())
             {
-                var sites = SearchSitesLucene(db, searchstring);
-                var comments = SearchCommentsLucene(db, searchstring);
-                var context = SearchContextLucene(db, searchstring);
+                var sites = SearchSitesLucene(db, searchstring).ToList();
+                ViewBag.comments = SearchCommentsLucene(db, searchstring);
+                ViewBag.SearchString = searchstring;
+                sites.AddRange(ConvertContentToSites(SearchContentLucene(db, searchstring).ToList(), db));
+                return View(sites);
 
             }
-            return View();
         }
 
-        private object SearchCommentsLucene(Context db, string searchstring)
+        private List<Site> ConvertContentToSites(List<Content> list, Context db)
+        {
+            List<Site> converted = new List<Site>();
+            foreach (var content in list)
+            {
+                var siteid = GetSiteIdThoughtContent(content,db);
+                converted.Add(db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault());
+            }
+            return converted;
+        }
+
+        private int? GetSiteIdThoughtContent(Content content, Context db)
+        {
+            var pageid = content.PageId;
+            return  db.Pages.Where(x => x.PageId == pageid).FirstOrDefault().SiteId;
+        }
+
+        private IEnumerable<Comment> SearchCommentsLucene(Context db, string searchstring)
         {
             var site_searcher = new SearchComments();
             site_searcher.ClearLuceneIndex();
@@ -60,7 +78,7 @@ namespace Hypnofrog.Controllers
             return site_searcher.Search(searchstring);
         }
 
-        private object SearchContextLucene(Context db, string searchstring)
+        private IEnumerable<Content> SearchContentLucene(Context db, string searchstring)
         {
             var site_searcher = new SearchContent();
             site_searcher.ClearLuceneIndex();

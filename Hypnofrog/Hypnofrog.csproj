@@ -597,6 +597,7 @@
     <Content Include="Views\Home\_HomePageTopSiteTable.cshtml" />
     <Content Include="Views\Home\Famehall.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

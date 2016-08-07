@@ -117,7 +117,7 @@ namespace Hypnofrog.SearchLucene
         {
             return new Site
             {
-                SiteId = Convert.ToInt32(doc.Get("Id")),
+                SiteId = Convert.ToInt32(doc.Get("SiteId")),
                 Title = doc.Get("Name"),
                 Description = doc.Get("Description"),
                 Tags = doc.Get("Tags")

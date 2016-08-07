@@ -59,8 +59,11 @@
                                 }
                             </div>*@
                         <div class='language'>
+                            @if (Model.ElementAt(j).Tags.Split(',').Count() != 1 || Model.ElementAt(j).Tags.Split(',')[0] != "")
+                            {
                             <span>Теги</span><br>
-
+                            }
+                            
                             @foreach (var item in Model.ElementAt(j).Tags.Split(','))
                             {<span class="label label-success">@item</span><span> </span>}
 
