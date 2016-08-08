@@ -19,6 +19,7 @@ using Hypnofrog.Filters;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Index;
 using Hypnofrog.SearchLucene;
+using System.Net.Mail;
 
 namespace Hypnofrog.Controllers
 {
@@ -744,6 +745,25 @@ namespace Hypnofrog.Controllers
             }
             return Content(bool.FalseString);
         }
+
+        public ActionResult Resend(string callbackURL, string uid, string to)
+        {
+            var from = "tumanov.97.dima@mail.ru";
+            var password = "102938usugen";
+            MailMessage mail = new MailMessage(from, to);
+            SmtpClient client = new SmtpClient("smtp.mail.ru", Convert.ToInt32(587));
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Credentials = new System.Net.NetworkCredential(from, password);
+            client.EnableSsl = true;
+            mail.Subject = "Подтверждение Email";
+            mail.Body = "Для завершения регистрации перейдите по адресу:" + callbackURL;
+            client.Send(mail);
+            ViewBag.CallBack = callbackURL;
+            ViewBag.uid = uid;
+            ViewBag.email = to;
+            return View();
+        }
+
 
         [HttpPost]
         public ActionResult AddPage(string inputData)

@@ -177,6 +177,7 @@ namespace Hypnofrog.Controllers
                     var callbackURL = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     ViewBag.CallBack = callbackURL;
                     ViewBag.uid = user.Id;
+                    ViewBag.email = user.Email;
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение Email", "Для завершения регистрации перейдите по адресу:" +
                         "<a href=\"" + callbackURL + "\">Подвердить Email</a>");
                     return View("DisplayConfirmMessage");
@@ -193,6 +194,7 @@ namespace Hypnofrog.Controllers
         }
         //
         // GET: /Account/ConfirmEmail
+
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
