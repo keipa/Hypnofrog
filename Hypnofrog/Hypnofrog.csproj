@@ -614,7 +614,6 @@
     <Content Include="Views\Home\_PreviewPagedsolid.cshtml" />
     <Content Include="Views\Home\_ViewConfigPage.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
-    <Content Include="Views\Home\DefaultSearchPage.cshtml" />
     <Content Include="Views\Home\_UsersTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
