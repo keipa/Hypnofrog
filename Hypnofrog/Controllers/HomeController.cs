@@ -635,7 +635,9 @@ namespace Hypnofrog.Controllers
 
         private string GetIdThoughtEmail(ApplicationDbContext applicationdb, string username)
         {
-            return applicationdb.Users.Where(x => x.UserName == username).FirstOrDefault().Id;
+            var id = applicationdb.Users.Where(x => x.UserName == username).FirstOrDefault().Id;
+            if (id == null) { throw new HttpException(404, "Item Not Found"); }
+            return id;
         }
 
         private double GetProfilerRate(Context db, ApplicationDbContext applicationdb)

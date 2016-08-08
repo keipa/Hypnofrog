@@ -17,7 +17,7 @@ namespace Hypnofrog
         public void Send(string AchievmentName)
         {
             // Call the broadcastMessage method to update clients.
-            Clients.All.broadcastMessage("Поздравляем! Вы получили достижение: "+AchievmentName, "http://localhost:61065/Home/Achievments");
+            Clients.All.broadcastMessage("Поздравляем! Вы получили достижение: "+AchievmentName, "http://localhost:61065/Home/Famehall");
         }
     }
 }
