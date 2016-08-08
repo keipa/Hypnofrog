@@ -9,10 +9,10 @@
 .dl-horizontal dt {
     white-space: normal;
 }
-input,
+/*input,
 select{
     max-width: 280px;
-}
+}*/
 
 .loader {
     position: absolute;

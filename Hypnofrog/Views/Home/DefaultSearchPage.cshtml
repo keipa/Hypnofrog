@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "DefaultSearchPage";
+}
+
+
+<hr />
+
+@using (Html.BeginForm("Search", "Home", FormMethod.Post))
+{<div class="input-group">
+        <input type="text" class="form-control" placeholder="@ViewBag.SearchString" name="searchstring">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Поиск</button>
+        </span>
+    </div>
+}

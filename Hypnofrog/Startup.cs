@@ -15,6 +15,7 @@ namespace Hypnofrog
             ConfigureAuth(app);
             createRolesandUsers();
             app.MapSignalR();
+
         }
 
         private void createRolesandUsers()
