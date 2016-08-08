@@ -36,7 +36,7 @@
                     @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.UserName })
                 </td>
                 <td>
-                    @if (User.Identity.Name == item.Email || User.IsInRole("Admin"))
+                    @if (User.Identity.Name == item.UserName || User.IsInRole("Admin"))
                     {
                         @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
                     }

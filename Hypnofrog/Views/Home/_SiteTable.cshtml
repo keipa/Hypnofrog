@@ -8,7 +8,6 @@
 <script src="~/Scripts/star-rating.min.js"></script>
 <script src="~/Content/themes/krajee-svg/theme.js"></script>
 
-
 <div class='courses cards'>
     @if (Model.Count() > 0)
     {
@@ -18,7 +17,7 @@
             {
                 <div class='course'>
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
-                        @if (User.Identity.IsAuthenticated && ViewBag.Email != User.Identity.Name && Model.ElementAt(j).UserId != User.Identity.GetUserId())
+                        @if (User.Identity.IsAuthenticated  && Model.ElementAt(j).UserId != User.Identity.GetUserName())
                         {
                             <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
                         }
@@ -71,7 +70,7 @@
                         </div>
 
                         <span class='actions'>
-                            <a href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                            <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserId, siteurl = Model.ElementAt(j).Url }) ">
                                 <i class='fa fa-eye'></i>
                             </a>
                             @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin") || Model.ElementAt(j).UserId == User.Identity.GetUserId())
@@ -101,11 +100,10 @@
             }
         }
     }
-    else
-    {
-        <h4>У этого пользователя еще нет сайтов.</h4>
-    }
 </div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('#deletebutton').click(function () {

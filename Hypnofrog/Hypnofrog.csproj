@@ -307,10 +307,12 @@
     <Compile Include="SearchLucene\SearchContent.cs" />
     <Compile Include="SearchLucene\SearchComments.cs" />
     <Compile Include="SearchLucene\SearchSites.cs" />
+    <Compile Include="SearchLucene\SearchUsers.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AchievmentChecker.cs" />
     <Compile Include="ViewModels\SettingsModel.cs" />
     <Compile Include="ViewModels\SettingsPage.cs" />
+    <Compile Include="ViewModels\UserView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="404.html" />
@@ -379,6 +381,7 @@
     <Content Include="Content\themes\krajee-uni\theme.min.css" />
     <Content Include="Content\themes\krajee-uni\theme.min.js" />
     <Content Include="Content\userprofilestyle.css" />
+    <Content Include="Content\userslist.css" />
     <Content Include="Content\verticalmenu.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -606,6 +609,7 @@
     <Content Include="Views\Home\_ViewConfigPage.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\DefaultSearchPage.cshtml" />
+    <Content Include="Views\Home\_UsersTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

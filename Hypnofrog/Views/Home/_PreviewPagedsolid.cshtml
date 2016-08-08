@@ -7,9 +7,12 @@
 
 <div class="row" style="margin-top:10px;">
     <div class="col-md-2 col-sm-2 col-xs-2">
-        <a href="@Url.Action("EditSite", "Home", new { siteid = Model.SiteId}) " class="icons">
+@if ((bool)ViewBag.Admin)
+{
+        <a href="@Url.Action("EditSite", "Home", new { siteid = Model.SiteId }) " class="icons">
             <i class="fa fa-pencil-square-o"></i>
         </a>
+}
     </div>
     <div class="col-md-6 col-sm-6 col-xs-6 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
         <div class="fr-view">

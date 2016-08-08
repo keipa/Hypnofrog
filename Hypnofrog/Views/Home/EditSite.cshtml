@@ -1,5 +1,7 @@
 ﻿@model Hypnofrog.DBModels.Site
 @{
+    Session["siteurl"] = Model.Url;
+    Session["username"] = Model.UserId;
     ViewBag.RedactorEnable = true;
     ViewBag.Title = Model.Title;
     ViewBag.SiteId = Model.SiteId;
