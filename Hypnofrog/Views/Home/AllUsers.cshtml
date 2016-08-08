@@ -45,7 +45,7 @@
                 <td>
                     @if (User.Identity.Name == item.UserName || User.IsInRole("Admin"))
                     {
-                        @Html.ActionLink(Resources.Resource.de, "Delete", new { id = item.Id })
+                        @Html.ActionLink(Resources.Resource.delete, "Delete", new { id = item.Id })
                     }
                 </td>
                 <td>

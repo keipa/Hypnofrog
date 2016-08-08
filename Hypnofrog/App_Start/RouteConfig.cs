@@ -11,6 +11,12 @@ namespace Hypnofrog
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            //routes.MapRoute(
+            //    name: "Account",
+            //    url: "Account/{action}/{id}",
+            //    defaults: new {  action = "Index", id = UrlParameter.Optional }
+            //);
+
             routes.MapMvcAttributeRoutes();
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
