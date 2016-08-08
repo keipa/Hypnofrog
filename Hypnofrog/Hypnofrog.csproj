@@ -203,6 +203,7 @@
     <Compile Include="DBModels\Rate.cs" />
     <Compile Include="DBModels\Site.cs" />
     <Compile Include="DBModels\Tag.cs" />
+    <Compile Include="Filters\CultureAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -304,6 +305,11 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="SearchLucene\SearchContent.cs" />
     <Compile Include="SearchLucene\SearchComments.cs" />
     <Compile Include="SearchLucene\SearchSites.cs" />
@@ -687,6 +693,12 @@
     <EmbeddedResource Include="Migrations\201608051415291_Added AchievmentLog to dbset.resx">
       <DependentUpon>201608051415291_Added AchievmentLog to dbset.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resource.ru.resx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

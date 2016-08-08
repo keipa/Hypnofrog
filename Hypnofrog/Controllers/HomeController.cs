@@ -15,14 +15,39 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Lucene.Net.Analysis;
+using Hypnofrog.Filters;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Index;
 using Hypnofrog.SearchLucene;
 
 namespace Hypnofrog.Controllers
 {
+    [Culture]
     public class HomeController : Controller
     {
+        public ActionResult ChangeCulture(string lang)
+        {
+            string returnUrl = Request.UrlReferrer.AbsolutePath;
+            List<string> cultures = new List<string>() { "ru", "en"};
+            if (!cultures.Contains(lang))
+            {
+                lang = "ru";
+            }
+            HttpCookie cookie = Request.Cookies["lang"];
+            if (cookie != null)
+                cookie.Value = lang;  
+            else
+            {
+                cookie = new HttpCookie("lang");
+                cookie.HttpOnly = false;
+                cookie.Value = lang;
+                cookie.Expires = DateTime.Now.AddYears(1);
+            }
+            Response.Cookies.Add(cookie);
+            return Redirect(returnUrl);
+        }
+
+
         public ActionResult Index()
         {
             using (var db = new Context())
@@ -153,6 +178,7 @@ namespace Hypnofrog.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        [Route("Famehall")]
         public ActionResult Famehall()
         {
             using (var db = new Context())
@@ -608,7 +634,7 @@ namespace Hypnofrog.Controllers
                     ViewBag.avatarpath = avatar != null ? avatar.Path : "";
                     ViewBag.Rate = GetProfilerRate(db, applicationdb);
                     var id = GetIdThoughtEmail(applicationdb, userid);
-                    ViewBag.howmuchachievments = db.Achievements.Where(x => x.User == id).Count().ToString()+" из 8";
+                    ViewBag.howmuchachievments = db.Achievements.Where(x => x.User == id).Count().ToString()+" / 8";
                     if (userid == User.Identity.Name)
                     {
                         ViewBag.Achievment = CheckAchievments(db);

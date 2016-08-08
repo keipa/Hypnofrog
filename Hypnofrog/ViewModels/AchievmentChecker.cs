@@ -4,9 +4,12 @@ using System.Linq;
 using System.Web;
 using Hypnofrog;
 using Hypnofrog.DBModels;
+using Hypnofrog.Filters;
+
 
 namespace Hypnofrog.ViewModels
 {
+    [Culture]
     public class AchievmentChecker
     {
         public string Result { get; set; }
@@ -51,25 +54,25 @@ namespace Hypnofrog.ViewModels
         //10 рейтингов с 5 - Беспринциптный
 
 
-        private string descRUHasThreeSites = "Иметь три сайта.";
-        private string descRUHasFiveRatingWithOnes = "Поставить 5 отметок с единицами";
-        private string descRUHasOneSite = "Написать один сайт";
-        private string descRUHasTenTags = "Иметь на сайтах 10 тегов";
-        private string descRUHasThreeSitesWithRatesGreaterThanThree = "Иметь три сайта с рейтингом не менее 3";
-        private string descRUHasOneRating = "Поставить одну оценку";
-        private string descRUHasTenSites = "Написать 10 сайтов";
-        private string descRUHas100Sites = "Написать 100 сайтов";
-        private string descRUHasTenRatingsWith5Stars = "Поставить 10 отметок с пятёрками";
+        private string descRUHasThreeSites = Resources.Resource.descRUHasThreeSites;
+        private string descRUHasFiveRatingWithOnes = Resources.Resource.descRUHasFiveRatingWithOnes;
+        private string descRUHasOneSite = Resources.Resource.descRUHasOneSite;
+        private string descRUHasTenTags = Resources.Resource.descRUHasTenTags;
+        private string descRUHasThreeSitesWithRatesGreaterThanThree = Resources.Resource.descRUHasThreeSitesWithRatesGreaterThanThree;
+        private string descRUHasOneRating = Resources.Resource.descRUHasOneRating;
+        private string descRUHasTenSites = Resources.Resource.descRUHasTenSites;
+        private string descRUHas100Sites = Resources.Resource.descRUHas100Sites;
+        private string descRUHasTenRatingsWith5Stars = Resources.Resource.descRUHasTenRatingsWith5Stars;
 
-        private string nameHasThreeSites = "В некотором государстве...";
-        private string nameHasFiveRatingWithOnes = "Я Дартаньян";
-        private string nameHasOneSite = "В некотором царстве...";
-        private string nameHasTenTags = "Архивариус";
-        private string nameHasThreeSitesWithRatesGreaterThanThree = "Три богатыря";
-        private string nameHasOneRating = "Держи печеньку";
-        private string nameHasTenSites = "Кочегар";
-        private string nameHas100Sites = "Воу Воу Палехче";
-        private string nameHasTenRatingsWith5Stars = "Беспринциптный";
+        private string nameHasThreeSites = Resources.Resource.nameHasThreeSites;
+        private string nameHasFiveRatingWithOnes = Resources.Resource.nameHasFiveRatingWithOnes;
+        private string nameHasOneSite = Resources.Resource.nameHasOneSite;
+        private string nameHasTenTags = Resources.Resource.nameHasTenTags;
+        private string nameHasThreeSitesWithRatesGreaterThanThree = Resources.Resource.nameHasThreeSitesWithRatesGreaterThanThree;
+        private string nameHasOneRating = Resources.Resource.nameHasOneRating;
+        private string nameHasTenSites = Resources.Resource.nameHasTenSites;
+        private string nameHas100Sites = Resources.Resource.nameHas100Sites;
+        private string nameHasTenRatingsWith5Stars = Resources.Resource.nameHasTenRatingsWith5Stars;
 
         public List<string> GetAllAchievmentsDescriptionsRU()
         {

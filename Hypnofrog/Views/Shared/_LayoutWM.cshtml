@@ -42,7 +42,7 @@
         $(function () {
             var chat = $.connection.chatHub;
             chat.client.broadcastMessage = function (text, link) {
-                if (text != 'Поздравляем! Вы получили достижение: ') {
+                if (text != '@Resources.Resource.congrats') {
                     var notification = new Notification('', {
                         body: text,
                         icon: 'http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif',

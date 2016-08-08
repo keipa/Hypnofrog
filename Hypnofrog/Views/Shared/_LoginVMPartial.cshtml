@@ -6,9 +6,22 @@
         @Html.AntiForgeryToken()
 
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "UserProfile", "Home", new { userid = User.Identity.GetUserName() }, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink(Resources.Resource.hi + User.Identity.GetUserName() + "!", "UserProfile", "Home", new { userid = User.Identity.GetUserName() }, htmlAttributes: new { title = "Manage" })
         </li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Resources.Resource.Logout</a></li>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            @Resources.Resource.Language
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Русский</a></li>
+                            <li><a href="#">Английский</a></li>
+                        </ul>
+                    </li>
+                </ul>
     }
 }
 else

@@ -42,7 +42,7 @@
                         if (ViewBag.Preview != true)
                         {
                     <li>
-                        <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">+ Добавить страницу</a>
+                        <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">@Resources.Resource.addpage</a>
                         @*@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { @class = "modal-link" })*@
                     </li>
                         }
@@ -56,13 +56,13 @@
                         }
                         else
                         {
-                    <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
+                    <li>@Html.ActionLink(@Resources.Resource.Users, "Users", "Home")</li>
                         }
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-left">
                     <li>
-                        @Html.ActionLink("Поиск", "Search", "Home")
+                        @Html.ActionLink(@Resources.Resource.Search, "Search", "Home")
                     </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -76,7 +76,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Hypnofrog</p>
         </footer>
     </div>
 
@@ -102,7 +102,7 @@
         $(function () {
             var chat = $.connection.chatHub;
             chat.client.broadcastMessage = function (text, link) {
-                if (text != 'Поздравляем! Вы получили достижение: ') {
+                if (text != '@Resources.Resource.congrats') {
                     var notification = new Notification('', {
                         body: text,
                         icon: 'http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif',
@@ -113,9 +113,7 @@
                 }
             };
             $.connection.hub.start().done(function () {
-                //$('#sendmessage').click(function () {
-                //    //chat.server.send('kek', $('#message').val());
-                //});
+
                 chat.server.send('@ViewBag.Achievment');
 
             });

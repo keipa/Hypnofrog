@@ -37,15 +37,15 @@
 
     @using (Html.BeginForm("Search", "Home", FormMethod.Post))
     {<div class="input-group">
-        <input type="text" class="form-control" placeholder="Я ищу..." name="searchstring">
+        <input type="text" class="form-control" placeholder="@Resources.Resource.isearch" name="searchstring">
         <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">Поиск</button>
+            <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
         </span>
     </div>
     }
     
 <hr />
-<h2>Топ лучших сайтов</h2>
+<h2>@Resources.Resource.TopSites</h2>
 <hr />
 
 

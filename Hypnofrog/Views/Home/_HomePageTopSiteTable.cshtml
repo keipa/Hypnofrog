@@ -38,17 +38,17 @@
 
                     <div class='details'>
                         <div class='title'>
-                            <span>Название</span><br>
+                            <span>@Resources.Resource.Name</span><br>
                             <span>@Model.ElementAt(j).Title</span>
                         </div>
                         <div class='description'>
-                            <span>Описание</span><br>
+                            <span>@Resources.Resource.Description</span><br>
                             <span>@Model.ElementAt(j).Description</span>
                         </div>
                         <div class='language'>
                             @if (Model.ElementAt(j).Tags.Split(',').Count() != 1 && Model.ElementAt(j).Tags.Split(',')[0] != "")
                             {
-                                <span>Теги</span><br>
+                                <span>@Resources.Resource.Tags</span><br>
                             }
                             @foreach (var item in Model.ElementAt(j).Tags.Split(','))
                             {<span class="label label-success">@item</span><span> </span>}

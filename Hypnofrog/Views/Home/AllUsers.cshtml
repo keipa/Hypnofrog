@@ -1,11 +1,9 @@
 ﻿@model IEnumerable<Hypnofrog.Models.ApplicationUser>
 @using Microsoft.AspNet.Identity
 
-@{
-    ViewBag.Title = "Пользователи";
-}
 
-<h2>Все пользователи</h2>
+
+<h2>@Resources.Resource.Users</h2>
 <br />
 <table class="table">
         <tr>
@@ -21,13 +19,13 @@
             @if (User.Identity.IsAuthenticated)
             {
             <th>
-                Удалить
+                @Resources.Resource.delete
             </th>
             }
             @if ((bool)ViewBag.IsAdmin )
                 {
                 <th>
-                    Повысить
+                    @Resources.Resource.makeadmin
                 </th>
             }
             <th></th>
@@ -47,13 +45,13 @@
                 <td>
                     @if (User.Identity.Name == item.UserName || User.IsInRole("Admin"))
                     {
-                        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                        @Html.ActionLink(Resources.Resource.de, "Delete", new { id = item.Id })
                     }
                 </td>
                 <td>
                     @if ((bool)ViewBag.IsAdmin)
                         {
-                        @Html.ActionLink("Повысить до админа", "UpInRole", new { id = item.Id })
+                        @Html.ActionLink(Resources.Resource.makeadmin, "UpInRole", new { id = item.Id })
                 }
                 </td>
             </tr>

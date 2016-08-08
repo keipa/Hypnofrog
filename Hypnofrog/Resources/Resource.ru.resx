@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="accountsettings" xml:space="preserve">
+    <value>Настройки аккаунта</value>
+  </data>
+  <data name="Achievments" xml:space="preserve">
+    <value>Достижений: </value>
+  </data>
+  <data name="addpage" xml:space="preserve">
+    <value>+ Добавить страницу</value>
+  </data>
+  <data name="addsite" xml:space="preserve">
+    <value>Добавить сайт</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>Администрирование</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Цветовая гамма:</value>
+  </data>
+  <data name="columns" xml:space="preserve">
+    <value>Колонки</value>
+  </data>
+  <data name="comment" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
+  <data name="comments" xml:space="preserve">
+    <value>Добавить комментарии?</value>
+  </data>
+  <data name="confirm" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="congrats" xml:space="preserve">
+    <value>Поздравляем! Вы заработали достижение : </value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Тёмный</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="deleteaccount" xml:space="preserve">
+    <value>Удалить аккаунт</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="descRUHas100Sites" xml:space="preserve">
+    <value>Написать 100 сайтов</value>
+  </data>
+  <data name="descRUHasFiveRatingWithOnes" xml:space="preserve">
+    <value>Поставить 5 отметок с единицами</value>
+  </data>
+  <data name="descRUHasOneRating" xml:space="preserve">
+    <value>Поставить одну оценку</value>
+  </data>
+  <data name="descRUHasOneSite" xml:space="preserve">
+    <value>Написать один сайт</value>
+  </data>
+  <data name="descRUHasTenRatingsWith5Stars" xml:space="preserve">
+    <value>Поставить 10 отметок с пятёрками</value>
+  </data>
+  <data name="descRUHasTenSites" xml:space="preserve">
+    <value>Написать 10 сайтов</value>
+  </data>
+  <data name="descRUHasTenTags" xml:space="preserve">
+    <value>Иметь на сайтах 10 тегов</value>
+  </data>
+  <data name="descRUHasThreeSites" xml:space="preserve">
+    <value>Иметь три сайта.</value>
+  </data>
+  <data name="descRUHasThreeSitesWithRatesGreaterThanThree" xml:space="preserve">
+    <value>Иметь три сайта с рейтингом не менее 3</value>
+  </data>
+  <data name="errordontcare" xml:space="preserve">
+    <value>Если вы считаете, что кто-то тут не прав, не пишите — нам всё равно.</value>
+  </data>
+  <data name="errorgotomain" xml:space="preserve">
+    <value>На главную</value>
+  </data>
+  <data name="errornopage" xml:space="preserve">
+    <value>Запрашиваемой страницы никогда не было на нашем сайте или она была удалена.</value>
+  </data>
+  <data name="errorwearedone" xml:space="preserve">
+    <value>Здрасьте, приехали!</value>
+  </data>
+  <data name="Famehall" xml:space="preserve">
+    <value>Зал славы</value>
+  </data>
+  <data name="from" xml:space="preserve">
+    <value> из </value>
+  </data>
+  <data name="hi" xml:space="preserve">
+    <value>Привет </value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Горизонтальное</value>
+  </data>
+  <data name="isearch" xml:space="preserve">
+    <value>Я ищу</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="makeadmin" xml:space="preserve">
+    <value>Повысить до админа</value>
+  </data>
+  <data name="Menuplacing" xml:space="preserve">
+    <value>Положение меню:</value>
+  </data>
+  <data name="mixed" xml:space="preserve">
+    <value>Смешанное</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="nameHas100Sites" xml:space="preserve">
+    <value>Воу Воу Палехче</value>
+  </data>
+  <data name="nameHasFiveRatingWithOnes" xml:space="preserve">
+    <value>Я Дартаньян</value>
+  </data>
+  <data name="nameHasOneRating" xml:space="preserve">
+    <value>Держи печеньку</value>
+  </data>
+  <data name="nameHasOneSite" xml:space="preserve">
+    <value>В некотором царстве...</value>
+  </data>
+  <data name="nameHasTenRatingsWith5Stars" xml:space="preserve">
+    <value>Беспринциптный</value>
+  </data>
+  <data name="nameHasTenSites" xml:space="preserve">
+    <value>Кочегар</value>
+  </data>
+  <data name="nameHasTenTags" xml:space="preserve">
+    <value>Архивариус</value>
+  </data>
+  <data name="nameHasThreeSites" xml:space="preserve">
+    <value>В некотором государстве...</value>
+  </data>
+  <data name="nameHasThreeSitesWithRatesGreaterThanThree" xml:space="preserve">
+    <value>Три богатыря</value>
+  </data>
+  <data name="nomenu" xml:space="preserve">
+    <value>Без меню</value>
+  </data>
+  <data name="one" xml:space="preserve">
+    <value>Одна</value>
+  </data>
+  <data name="rating" xml:space="preserve">
+    <value>Рейтинг:</value>
+  </data>
+  <data name="red" xml:space="preserve">
+    <value>Рыжий</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="siteandcontent" xml:space="preserve">
+    <value>Сайты и контент</value>
+  </data>
+  <data name="sitesadded" xml:space="preserve">
+    <value>Сайтов добавил: </value>
+  </data>
+  <data name="sitesettings" xml:space="preserve">
+    <value>Настройки вашего сайта</value>
+  </data>
+  <data name="sitesettingsdesc" xml:space="preserve">
+    <value>Здесь вы можете настроить свой сайт и его первую страницу.</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="TopSites" xml:space="preserve">
+    <value>Топ лучших сайтов</value>
+  </data>
+  <data name="two" xml:space="preserve">
+    <value>Две</value>
+  </data>
+  <data name="urltoaccess" xml:space="preserve">
+    <value>URL для доступа к сайту</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
+  <data name="vertivcal" xml:space="preserve">
+    <value>Вертикальное</value>
+  </data>
+  <data name="white" xml:space="preserve">
+    <value>Светлый</value>
+  </data>
+</root>

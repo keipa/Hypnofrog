@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="accountsettings" xml:space="preserve">
+    <value>Account settings</value>
+  </data>
+  <data name="Achievments" xml:space="preserve">
+    <value>Achievments: </value>
+  </data>
+  <data name="addpage" xml:space="preserve">
+    <value>+ Add page</value>
+  </data>
+  <data name="addsite" xml:space="preserve">
+    <value>Add Site</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="columns" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="comment" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="comments" xml:space="preserve">
+    <value>Add comments bar?</value>
+  </data>
+  <data name="confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="congrats" xml:space="preserve">
+    <value>Congratulation! You got an achievment: </value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="deleteaccount" xml:space="preserve">
+    <value>Delete account</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="descRUHas100Sites" xml:space="preserve">
+    <value>Write 100 sites</value>
+  </data>
+  <data name="descRUHasFiveRatingWithOnes" xml:space="preserve">
+    <value>Set five ratings with ones</value>
+  </data>
+  <data name="descRUHasOneRating" xml:space="preserve">
+    <value>Set on rating</value>
+  </data>
+  <data name="descRUHasOneSite" xml:space="preserve">
+    <value>Have one site</value>
+  </data>
+  <data name="descRUHasTenRatingsWith5Stars" xml:space="preserve">
+    <value>Set 10 rating with 5 stars</value>
+  </data>
+  <data name="descRUHasTenSites" xml:space="preserve">
+    <value>Write ten wites</value>
+  </data>
+  <data name="descRUHasTenTags" xml:space="preserve">
+    <value>Have 10 tags on your site</value>
+  </data>
+  <data name="descRUHasThreeSites" xml:space="preserve">
+    <value>Have three sites</value>
+  </data>
+  <data name="descRUHasThreeSitesWithRatesGreaterThanThree" xml:space="preserve">
+    <value>Have three sites with rating greater than three</value>
+  </data>
+  <data name="errordontcare" xml:space="preserve">
+    <value>If you think that someone here is not right, do not write - we do not care.</value>
+  </data>
+  <data name="errorgotomain" xml:space="preserve">
+    <value>Go Home</value>
+  </data>
+  <data name="errornopage" xml:space="preserve">
+    <value>The requested page has never been on our site, or it was removed.</value>
+  </data>
+  <data name="errorwearedone" xml:space="preserve">
+    <value>We are done!</value>
+  </data>
+  <data name="Famehall" xml:space="preserve">
+    <value>Famehall</value>
+  </data>
+  <data name="from" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="hi" xml:space="preserve">
+    <value>Hi, </value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="isearch" xml:space="preserve">
+    <value>I'm searching</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="makeadmin" xml:space="preserve">
+    <value>Give admin rules</value>
+  </data>
+  <data name="Menuplacing" xml:space="preserve">
+    <value>Menu placing</value>
+  </data>
+  <data name="mixed" xml:space="preserve">
+    <value>Mixed</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="nameHas100Sites" xml:space="preserve">
+    <value>Superman</value>
+  </data>
+  <data name="nameHasFiveRatingWithOnes" xml:space="preserve">
+    <value>I'm Dartan'an</value>
+  </data>
+  <data name="nameHasOneRating" xml:space="preserve">
+    <value>Get a coin</value>
+  </data>
+  <data name="nameHasOneSite" xml:space="preserve">
+    <value>First Step</value>
+  </data>
+  <data name="nameHasTenRatingsWith5Stars" xml:space="preserve">
+    <value>No principals</value>
+  </data>
+  <data name="nameHasTenSites" xml:space="preserve">
+    <value>Batman</value>
+  </data>
+  <data name="nameHasTenTags" xml:space="preserve">
+    <value>Archivarius</value>
+  </data>
+  <data name="nameHasThreeSites" xml:space="preserve">
+    <value>Second step</value>
+  </data>
+  <data name="nameHasThreeSitesWithRatesGreaterThanThree" xml:space="preserve">
+    <value>Three Great Whales</value>
+  </data>
+  <data name="nomenu" xml:space="preserve">
+    <value>No menu</value>
+  </data>
+  <data name="one" xml:space="preserve">
+    <value>One</value>
+  </data>
+  <data name="rating" xml:space="preserve">
+    <value>Rating: </value>
+  </data>
+  <data name="red" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="siteandcontent" xml:space="preserve">
+    <value>Sites and content</value>
+  </data>
+  <data name="sitesadded" xml:space="preserve">
+    <value>Sites added: </value>
+  </data>
+  <data name="sitesettings" xml:space="preserve">
+    <value>Site settings</value>
+  </data>
+  <data name="sitesettingsdesc" xml:space="preserve">
+    <value>Here you can set up your site and its first page.</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TopSites" xml:space="preserve">
+    <value>Top Sites</value>
+  </data>
+  <data name="two" xml:space="preserve">
+    <value>Two</value>
+  </data>
+  <data name="urltoaccess" xml:space="preserve">
+    <value>URL to access</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="vertivcal" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="white" xml:space="preserve">
+    <value>White</value>
+  </data>
+</root>

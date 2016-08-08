@@ -7,17 +7,30 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Привет " + User.Identity.GetUserName() + "!", "UserProfile", "Home", new { userid = User.Identity.GetUserName()}, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink(@Resources.Resource.hi+ User.Identity.GetUserName() + "!", "UserProfile", "Home", new { userid = User.Identity.GetUserName()}, htmlAttributes: new { title = "Manage" })
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">@Resources.Resource.Logout</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                @Resources.Resource.Language
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Русский", "ChangeCulture", "Home", new { lang = "ru" }, new { })</li>
+                <li>@Html.ActionLink("English", "ChangeCulture", "Home", new { lang = "en" }, new { })</li>
+            </ul>
+        </li>
     </ul>
     }
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.ActionLink(@Resources.Resource.Login, "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
+
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -25,8 +38,8 @@ else
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-                <li><a href="#">Русский</a></li>
-                <li><a href="#">Английский</a></li>
+                <li>@Html.ActionLink("Русский", "ChangeCulture", "Home", new { lang = "ru" }, new { })</li>
+                <li>@Html.ActionLink("English", "ChangeCulture", "Home", new { lang = "en" }, new { })</li>
             </ul>
         </li>
     </ul>
