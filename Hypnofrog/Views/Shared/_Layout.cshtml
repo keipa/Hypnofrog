@@ -37,14 +37,14 @@
                     {
                         for (int i = 0; i < ((List<string>)ViewBag.PageTitles).Count(); i++)
                         {
-                            <li>@Ajax.ActionLink(Html.Raw(((List<string>)ViewBag.PageTitles)[i]).ToString(), ViewBag.Preview == true ? "PreviewShowPage" : "ShowPage", new { pageid = ((List<int>)ViewBag.PageIds)[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
+                    <li>@Ajax.ActionLink(Html.Raw(((List<string>)ViewBag.PageTitles)[i]).ToString(), ViewBag.Preview == true ? "PreviewShowPage" : "ShowPage", new { pageid = ((List<int>)ViewBag.PageIds)[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
                         }
                         if (ViewBag.Preview != true)
                         {
-                            <li>
-                                <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">+ Добавить страницу</a>
-                                @*@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { @class = "modal-link" })*@
-                            </li>
+                    <li>
+                        <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">+ Добавить страницу</a>
+                        @*@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { @class = "modal-link" })*@
+                    </li>
                         }
 
                     }
@@ -52,11 +52,11 @@
                     {
                         if (User.IsInRole("Admin"))
                         {
-                            <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
+                    <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
                         }
                         else
                         {
-                            <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
+                    <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
                         }
                     }
                 </ul>
@@ -65,8 +65,10 @@
                         @Html.ActionLink("Поиск", "Search", "Home")
                     </li>
                 </ul>
-
                 @Html.Partial("_LoginPartial")
+
+
+
             </div>
         </div>
     </div>

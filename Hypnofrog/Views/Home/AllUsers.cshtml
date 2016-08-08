@@ -13,11 +13,17 @@
                 ID
             </th>
             <th>
+                User Name
+            </th>
+            <th>
                 Email
             </th>
+            @if (User.Identity.IsAuthenticated)
+            {
             <th>
                 Удалить
             </th>
+            }
             @if ((bool)ViewBag.IsAdmin )
                 {
                 <th>
@@ -32,11 +38,14 @@
                 <td>
                     @item.Id
                 </td>
+                <th>
+                    @Html.ActionLink(item.UserName, "UserProfile", new { userid = item.UserName })
+                </th>
                 <td>
                     @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.UserName })
                 </td>
                 <td>
-                    @if (User.Identity.Name == item.Email || User.IsInRole("Admin"))
+                    @if (User.Identity.Name == item.UserName || User.IsInRole("Admin"))
                     {
                         @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
                     }

@@ -39,6 +39,7 @@ namespace Hypnofrog.Controllers
             }
         }
 
+        [Route("Search/Results")]
         public ActionResult Search(string searchstring)
         {
             if (searchstring==null) return RedirectToAction("DefaultSearchPage");
@@ -53,6 +54,7 @@ namespace Hypnofrog.Controllers
             }
         }
 
+        [Route("Search")]
         public ActionResult DefaultSearchPage()
         {
             return View();

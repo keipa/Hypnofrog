@@ -18,4 +18,19 @@ else
     <ul class="nav navbar-nav navbar-right">
         <li>@Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Язык
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Русский</a></li>
+                <li><a href="#">Английский</a></li>
+            </ul>
+        </li>
+    </ul>
+
+
+
 }
