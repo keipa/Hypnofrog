@@ -55,7 +55,8 @@ namespace Hypnofrog
                       "~/Content/bootstrap.css",
                       "~/Content/Site.css",
                       "~/Content/popupwindows.css",
-                      "~/Content/comments.css"));
+                      "~/Content/comments.css",
+                      "~/Content/userslist.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/vertical").Include(
                      "~/Scripts/verticalmenuj.js"));

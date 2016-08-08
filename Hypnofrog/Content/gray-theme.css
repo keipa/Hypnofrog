@@ -58,6 +58,8 @@ svg > rect{
     border: solid 1px #4CB29B;
     border-bottom: 5px solid #4CB29B;
     background-color: #9AC6BC;
+    position: inherit;
+    margin-top: -50px;
 }
 
     .navbar-inverse .navbar-brand {

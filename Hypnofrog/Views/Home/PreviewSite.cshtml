@@ -1,6 +1,7 @@
 ﻿@model Hypnofrog.DBModels.Site
 @using Microsoft.AspNet.Identity
 @{
+    ViewBag.Admin = Model.UserId == User.Identity.GetUserName() || User.IsInRole("Admin");
     ViewBag.Preview = true;
     ViewBag.RedactorEnable = true;
     ViewBag.Title = Model.Title;

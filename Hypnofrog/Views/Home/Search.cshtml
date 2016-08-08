@@ -40,26 +40,35 @@
 </div>
 
 
+<h4>Пользователи</h4>
 <hr />
+
+<div id="site-table">
+    @{ Html.RenderPartial("_UsersTable", (IEnumerable<Hypnofrog.ViewModels.UserView>)ViewBag.users);}
+</div>
+
 
 <h4>@Resources.Resource.comment</h4>
 <div class="comments-container">
 
-    <ul class="newlist comments-list">
+
+<div class="users-container">
+
+    <ul class="newlist users-list">
         <li>
-            <ul id="comments-list">
+            <ul id="users-list">
                 @using Microsoft.AspNet.Identity
                 @foreach (var elem in ViewBag.comments)
             {
                     <li>
-                        <div class="comment-main-level">
-                            <div class="comment-avatar">
+                        <div class="user-main-level">
+                            <div class="user-avatar">
                                 <a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">
                                     <img src="@elem.UserAvatar" />
                                 </a>
                             </div>
-                            <div class="comment-box">
-                                <div class="comment-head">
+                            <div class="user-box">
+                                <div class="user-head">
                                     <span><a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">@elem.UserId</a></span>
                                     <i class="fa fa-clock-o"> @elem.CreationTime</i>
                                     @if (elem.UserId == User.Identity.GetUserName() || User.IsInRole("Admin"))
@@ -69,7 +78,7 @@
                                         </a>
                                     }
                                 </div>
-                                <div class="comment-content fr-view">
+                                <div class="user-content fr-view">
                                     @Html.Raw(elem.Text)
                                 </div>
                             </div>

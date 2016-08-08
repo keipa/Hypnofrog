@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Hypnofrog.ViewModels.UserView>
+<div class="users-container">
+    <ul class="newlist users-list">
+        <li>
+            <ul id="users-list">
+                @foreach (var elem in Model)
+            {
+                    <li>
+                        <div class="user-main-level">
+                            <div class="user-avatar">
+                                <a href="@Url.Action("UserProfile",  new { userid = elem.UserName })">
+                                    <img src="@elem.UserAvatar" />
+                                </a>
+                            </div>
+                            <div class="user-box">
+                                <div class="user-head">
+                                    <span><a href="@Url.Action("UserProfile",  new { userid = elem.UserName })">@elem.UserName</a></span>
+                                </div>
+                                <div class="user-content">
+                                    Rating: @elem.Rating
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </li>
+    </ul>
+</div>
+

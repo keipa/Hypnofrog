@@ -21,11 +21,17 @@
                 @if (ViewBag.RedactorEnable == true)
             {
                     <li class = "sidebar-brand">@Html.ActionLink((string)ViewBag.Title, "Index", "Home")</li>
-                    foreach (var elem in (IEnumerable<string>)ViewBag.PageTitles)
+                    for (int i = 0; i < ((List<string>)ViewBag.PageTitles).Count(); i++)
                     {
-                        <li>@Html.ActionLink(elem, "Index", "Home")</li>
+                        <li>@Ajax.ActionLink(Html.Raw(((List<string>)ViewBag.PageTitles)[i]).ToString(), ViewBag.Preview == true ? "PreviewShowPage" : "ShowPage", new { pageid = ((List<int>)ViewBag.PageIds)[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
                     }
-                    <li>@Html.ActionLink(Resources.Resource.addpage, "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
+                    if (ViewBag.Preview != true)
+                    {
+                        <li>
+                            <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">+ @Resources.Resource.addpage</a>
+                        </li>
+                    }
+                    <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
                 }
                 else
                 {

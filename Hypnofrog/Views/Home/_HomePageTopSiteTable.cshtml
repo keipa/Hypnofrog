@@ -7,6 +7,7 @@
 <script src="~/Scripts/star-rating.js"></script>
 <script src="~/Scripts/star-rating.min.js"></script>
 <script src="~/Content/themes/krajee-svg/theme.js"></script>
+@Scripts.Render("~/bundles/jqueryval")
 
 @if (Model.Count() > 0)
 {
@@ -17,7 +18,7 @@
             {
                 <div class='course'>
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
-                        @if (User.Identity.IsAuthenticated && ViewBag.Email != User.Identity.Name && Model.ElementAt(j).UserId != User.Identity.GetUserId())
+                        @if (User.Identity.IsAuthenticated && Model.ElementAt(j).UserId != User.Identity.GetUserName())
                         {
                             <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
                         }
@@ -56,29 +57,14 @@
                         </div>
 
                         <span class='actions'>
-                            <a href="@Url.Action("PreviewSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                            <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserId, siteurl = Model.ElementAt(j).Url }) ">
                                 <i class='fa fa-eye'></i>
                             </a>
-                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin") || Model.ElementAt(j).UserId == User.Identity.GetUserId())
+                            @if (User.IsInRole("Admin") || Model.ElementAt(j).UserId == User.Identity.GetUserName())
                             {
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>
                                 </a>
-                            }
-                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
-                            {
-                                using (Ajax.BeginForm("DeleteTopSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del-" + j }))
-                                {
-                                    <a id="deletebutton-@j" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
-                                }
-                                <script>
-                                    $(function () {
-                                        $('#deletebutton-@j').click(function () {
-                                            $('#ajax-del-@j').submit();
-                                        });
-                                    });
-                                </script>
-
                             }
                         </span>
                     </div>
