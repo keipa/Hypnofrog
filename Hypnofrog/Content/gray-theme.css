@@ -68,6 +68,20 @@ svg > rect{
         color: #37474f;
     }
 
+#sidebar-wrapper{
+    border: solid 1px #4CB29B;
+    border-right: 5px solid #4CB29B;
+    background-color: #9AC6BC;
+}
+
+.sidebar-nav li a {
+    color: #37474f;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #37474f;
+}
+
 .gray-theme.fr-box .fr-counter {
     color: #37474f;
     background: #9AC6BC;

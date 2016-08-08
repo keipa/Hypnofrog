@@ -99,3 +99,17 @@ svg > rect{
     .navbar-inverse .navbar-nav > li > a {
         color: #A63400;
     }
+
+#sidebar-wrapper{
+    border: solid 1px #A65100;
+    border-right: 5px solid #A65100;
+    background-color: #FF7C00;
+}
+
+.sidebar-nav li a {
+    color: #A63400;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #A63400;
+}

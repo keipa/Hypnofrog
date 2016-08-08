@@ -13,7 +13,7 @@
 
 <hr />
 <div class="maincontainer" style="display:flex;">
-    <a href="@Url.Action("UserProfile",  new { userid = ViewBag.Email })" class="topdesignrcontainer" style="position:relative;width:300px;">
+    <a href="@Url.Action("UserProfile",  new { userid = ViewBag.UserName })" class="topdesignrcontainer" style="position:relative;width:300px;">
         <div class="numberone" style="position: absolute;top: 50%;color :white;font-family: inherit;font-size: 215px;left:50%;z-index :1000;transform: translate(-50%, -50%);">#1</div>
         <img src="@ViewBag.Avatarpath" style="width:300px;height:300px;">
     </a>
@@ -39,28 +39,27 @@
 
 @Scripts.Render("~/bundles/wordcloud")
 
-<script>
-    var tags = '@ViewBag.Tags';
-    tags = tags.split(';')
-    for (i = 0; i < tags.length; i++) {
-        tags[i] = tags[i].split(',');
-        tags[i][1] = parseInt(tags[i][1])
-    }
-    WordCloud(document.getElementById('my_canvas'), {
-        list: tags, fontFamily: 'Times, serif', color: function (word, weight) {
-            return (word===tags[0][0]) ? '#f02222' : '#000000';
-        },
-        gridSize: Math.round(16 * $('my_canvas').width() / 1024),
-        weightFactor: function (size) {
-            return size * 15;
-        },
-        rotateRatio: 0.5,
-        backgroundColor: '#ffffff'
-    });
-
-</script>
-
 @section scripts{
+    <script>
+        var tags = '@ViewBag.Tags';
+        tags = tags.split(';')
+        for (i = 0; i < tags.length; i++) {
+            tags[i] = tags[i].split(',');
+            tags[i][1] = parseInt(tags[i][1])
+        }
+        WordCloud(document.getElementById('my_canvas'), {
+            list: tags, fontFamily: 'Times, serif', color: function (word, weight) {
+                return (word === tags[0][0]) ? '#f02222' : '#000000';
+            },
+            gridSize: Math.round(16 * $('my_canvas').width() / 1024),
+            weightFactor: function (size) {
+                return size * 7;
+            },
+            rotateRatio: 0.5,
+            backgroundColor: '#ffffff'
+        });
+
+    </script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
     <script src="~/Scripts/star-rating.js"></script>
     <script src="~/Scripts/star-rating.min.js"></script>

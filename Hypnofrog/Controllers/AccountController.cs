@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using Hypnofrog.Models;
 using Hypnofrog;
 using Hypnofrog.DBModels;
+using System.Text.RegularExpressions;
 
 namespace Hypnofrog.Controllers
 {
@@ -72,13 +73,13 @@ namespace Hypnofrog.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.Email, model.Password);
+                var user = await UserManager.FindAsync(UserManager.FindByEmail(model.Email).UserName, model.Password);
                 if (user != null)
                 {
                     if (user.EmailConfirmed == true)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("UserProfile", "Home", new { userid = user.Email });
+                        return RedirectToAction("UserProfile", "Home", new { userid = user.UserName });
                     }
                     else
                     {
@@ -154,11 +155,16 @@ namespace Hypnofrog.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (!Regex.IsMatch(model.Name, @"^[a-zA-Z][a-zA-Z0-9]{1,20}$"))
+                {
+                    ModelState.AddModelError("", "Not valid user name(it should contains only letters and numbers).");
+                    return View(model);
+                }
+                var user = new ApplicationUser { UserName = model.Name, Email = model.Email };
 
                 using (var db = new Context())
                 {
-                    db.Avatars.Add(new Avatar() { UserId = model.Email, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
+                    db.Avatars.Add(new Avatar() { UserId = model.Name, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
                     db.SaveChanges();
                 }
 
@@ -377,7 +383,7 @@ namespace Hypnofrog.Controllers
         {
             using (var db = new Context())
             {
-                db.Avatars.Add(new Avatar() { UserId = model.Email, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
+                db.Avatars.Add(new Avatar() { UserId = model.Name, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
                 db.SaveChanges();
             }
 
@@ -394,7 +400,12 @@ namespace Hypnofrog.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (!Regex.IsMatch(model.Name, @"^[a-zA-Z][a-zA-Z0-9]{1,20}$"))
+                {
+                    ModelState.AddModelError("", "Not valid user name(it should contains only letters and numbers).");
+                    return View(model);
+                }
+                var user = new ApplicationUser { UserName = model.Name, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

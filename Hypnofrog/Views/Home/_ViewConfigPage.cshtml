@@ -3,18 +3,11 @@
     Layout = null;
 }
 
-
-<style>
-    .autocomplete { position: absolute; cursor: default;z-index:999999999999;}  
-    .ui-front { z-index: 999999999; }
-</style>
-
-
-<div class="modal-body">
+<div class="modal-body" style="color:black;">
     <div class="confirm">
-        <h3>Настройки вашего сайта</h3>
+        <h3>Настройки новой страницы</h3>
         <p>
-            Здесь вы можете настроить свой сайт и его первую страницу.
+            Настройки цвета и названия новой страницы
             <em>Последующие страницы будут создаваться по мере необходимости.</em>
         </p>
         @using (Ajax.BeginForm("ChangeTemplate", "Home", new AjaxOptions() { UpdateTargetId = "tutu" }, new { id = "aform", style = "margin: 25px 10px 40px 30px" }))
@@ -23,8 +16,6 @@
                 <div class="row">
                     <div class="col-md-7">
                         <input type="text" class="form-control" placeholder="Название" id="sitename">
-                        <br />
-                        <input type="text" class="form-control " placeholder="Описание" id="sitedescription">
                         <br />
                         <div class="row">
                             <label class="control-label col-md-10" for="Template">Цветовая гамма:</label>
@@ -39,22 +30,6 @@
                                 </label>
                                 <label class="btn btn-primary">
                                     @Html.RadioButtonFor(x => x.Color, "orange") Рыжий
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="control-label col-md-10 " for="Template">Положение меню:</label>
-                        </div>
-                        <div class="row">
-                            <div class="btn-group col-md-12" data-toggle="buttons">
-                                <label class="btn btn-primary active">
-                                    @Html.RadioButtonFor(x => x.Menu, "without") Без меню
-                                </label>
-                                <label class="btn btn-primary">
-                                    @Html.RadioButtonFor(x => x.Menu, "horizontal") Горизонтальное
-                                </label>
-                                <label class="btn btn-primary">
-                                    @Html.RadioButtonFor(x => x.Menu, "vertical") Вертикальное
                                 </label>
                             </div>
                         </div>
@@ -74,19 +49,6 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="btn-group col-md-12 checkbox col-lg-offset-1">
-                                <label>@Html.CheckBoxFor(x => x.CommentsAvailable, new { @id = "chbox" }) Добавить комментарии?</label>
-                            </div>
-                        </div>
-                        <label for="basic-url">Теги</label>
-                        <textarea class="tag-editor-hidden-src" id="tagsarea"></textarea>
-
-                        <label for="basic-url">URL для доступа к сайту</label>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">/users/username/</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                        </div>
                     </div>
                     <div class="col-md-3">
                         <div id="tutu" class="preview col-md-12">
@@ -98,7 +60,7 @@
                                 }
         <button id="approve-btn">Cancel</button>
         <button id="confirm-btn" type="submit">Confirm</button>
-        @using (Html.BeginForm("CreateSite", "Home", FormMethod.Post, new { id = "bform", style = "margin-bottom:40px;" }))
+        @using (Html.BeginForm("AddPage", "Home", FormMethod.Post, new { id = "bform", style = "margin-bottom:40px;" }))
         {
             Html.AntiForgeryToken();
             <input type="hidden" id="inputData" name="inputData" />
@@ -109,21 +71,6 @@
 
 
 <script type="text/javascript">
-    var tags = '@ViewBag.Tags';
-    tags = tags.split(';')
-    for (i = 0; i < tags.length; i++) {
-        tags[i] = tags[i].split(',')[0];
-    }
-    $('#tagsarea').tagEditor({
-        initialTags: ['Hello', 'World'],
-        autocomplete: {
-            delay: 0, 
-            source: tags
-        },
-        forceLowercase: false,
-        placeholder: 'Programming languages ...'
-    });
-
     $(function () {
         $('#approve-btn').click(function () {
             $('#modal-container').modal('hide');
@@ -132,11 +79,7 @@
     });
 </script>
 <script>
-
     $('input[name=Color]').change(function () {
-        $('#aform').submit();
-    });
-    $('input[name=Menu]').change(function () {
         $('#aform').submit();
     });
     $('input[name=Template]').change(function () {
@@ -144,13 +87,9 @@
     });
     $('#confirm-btn').click(function () {
         document.getElementById('inputData').value += document.getElementById("sitename").value+ ";";
-        document.getElementById('inputData').value += document.getElementById("sitedescription").value + ";";
-        document.getElementById('inputData').value += document.getElementById("basic-url").value + ";";
-        document.getElementById('inputData').value += document.getElementById("chbox").checked + ";";
         var colors = document.getElementsByClassName('active');
-        for (i = 0; i < colors.length; i++) 
+        for (i = 0; i < colors.length; i++)
             document.getElementById('inputData').value += colors[i].getElementsByTagName('input')[0].value + ';';
-        document.getElementById('inputData').value += $('#tagsarea').tagEditor('getTags')[0].tags + ";";
         $('#bform').submit();
     });
 </script>

@@ -7,61 +7,100 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-ui")
     @Styles.Render("~/bundles/froalacss")
     @Styles.Render("~/bundles/froala-plugins-css")
     <link href="~/Content/verticalmenu.css" rel="stylesheet" />
 </head>
-<body>
-    <div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
-        <ul class="nav nav-stacked" id="menu-bar">
-            @if (ViewBag.RedactorEnable == true)
+<body style="padding-top:0;">
+    <div id="loadingDiv" class="loader"></div>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav" id="menu-bar">
+                @if (ViewBag.RedactorEnable == true)
             {
-                <li>@Html.ActionLink((string)ViewBag.Title, "Index", "Home", new { @style = "font-size: 18px;" })</li>
-                foreach (var elem in (IEnumerable<string>)ViewBag.PageTitles)
-                {
-                    <li>@Html.ActionLink(elem, "Index", "Home")</li>
-                }
-                <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
-            }
-            else
-            {
-                <li>@Html.ActionLink("Hypnofrog", "Index", "Home", new { @style = "font-size: 18px;" })</li>
-                <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("About", "About", "Home")</li>
-                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                if (User.IsInRole("Admin"))
-                {
-                    <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
+                    <li class = "sidebar-brand">@Html.ActionLink((string)ViewBag.Title, "Index", "Home")</li>
+                    foreach (var elem in (IEnumerable<string>)ViewBag.PageTitles)
+                    {
+                        <li>@Html.ActionLink(elem, "Index", "Home")</li>
+                    }
+                    <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
                 }
                 else
                 {
-                    <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
+                    <li class = "sidebar-brand">@Html.ActionLink("Hypnofrog", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
+                    }
                 }
-            }
-        </ul>
-        @Html.Partial("_LoginVMPartial")
-    </div>
-    <div class="clearfix"></div>
-    <div class="content">
-        <div class="container body-content">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>
+                <li class="marginli"></li>
+                @Html.Partial("_LoginVMPartial")
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        @RenderBody()
+                        <hr />
+                        <footer>
+                            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                        </footer>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jquery-ui")
-    @Scripts.Render("~/bundles/popup")
+    @Scripts.Render("~/bundles/jquery-caret")
+    @Styles.Render("~/bundles/caret-css")
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/popup")
     @Scripts.Render("~/bundles/froalajs")
     @Scripts.Render("~/bundles/froala-plugins-js")
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/dropzonescripts")
+    @Scripts.Render("~/bundles/signalr")
+    <script src="/signalr/hubs"></script>
+
+
+    <script type="text/javascript">
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        $(function () {
+            var chat = $.connection.chatHub;
+            chat.client.broadcastMessage = function (text, link) {
+                if (text != 'Поздравляем! Вы получили достижение: ') {
+                    var notification = new Notification('', {
+                        body: text,
+                        icon: 'http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif',
+                    });
+                    notification.onclick = function () {
+                        window.open(link);
+                    };
+                }
+            };
+            $.connection.hub.start().done(function () {
+                //$('#sendmessage').click(function () {
+                //    //chat.server.send('kek', $('#message').val());
+                //});
+                chat.server.send('@ViewBag.Achievment');
+
+            });
+        });
+    </script>
     <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
         <div id="modal-content">
         </div>

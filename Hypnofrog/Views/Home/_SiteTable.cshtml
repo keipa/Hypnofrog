@@ -8,12 +8,13 @@
 <script src="~/Scripts/star-rating.min.js"></script>
 <script src="~/Content/themes/krajee-svg/theme.js"></script>
 
-@if (Model.Count() > 0)
-{
-    for (int i = 0; i < Model.Count(); i += 3)
+
+<div class='courses cards'>
+    @if (Model.Count() > 0)
     {
-        <div class='courses cards'>
-            @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
+        for (int i = 0; i < Model.Count(); i += 3)
+        {
+            for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
             {
                 <div class='course'>
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
@@ -95,9 +96,13 @@
                     </div>
                 </div>
             }
-        </div>
+        }
     }
-}
+    else
+    {
+        <h4>У этого пользователя еще нет сайтов.</h4>
+    }
+</div>
 <script type="text/javascript">
     $(function () {
         $('#deletebutton').click(function () {

@@ -28,7 +28,7 @@ namespace Hypnofrog
                 role.Name = "Admin";
                 roleManager.Create(role);
                 var user = new ApplicationUser();
-                user.UserName = "qwerty@gmail.com";
+                user.UserName = "qwertyADMIN";
                 user.Email = "qwerty@gmail.com";
                 user.EmailConfirmed = true;
                 string userPWD = "102938kek";
@@ -38,7 +38,7 @@ namespace Hypnofrog
                     var result1 = UserManager.AddToRole(user.Id, "Admin");
                     using(var db = new Context())
                     {
-                        db.Avatars.Add(new Avatar() { Path = "https://pp.vk.me/c637127/v637127185/26b3/d6xhDAEYvW8.jpg", UserId = user.Email});
+                        db.Avatars.Add(new Avatar() { Path = "https://pp.vk.me/c637127/v637127185/26b3/d6xhDAEYvW8.jpg", UserId = user.UserName});
                         db.SaveChanges();
                     }
                 }

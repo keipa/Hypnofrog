@@ -7,6 +7,8 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-ui")
     @Styles.Render("~/bundles/froalacss")
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
@@ -19,15 +21,46 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jquery-ui")
-    @Scripts.Render("~/bundles/popup")
+    @Scripts.Render("~/bundles/jquery-caret")
+    @Styles.Render("~/bundles/caret-css")
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/popup")
     @Scripts.Render("~/bundles/froalajs")
     @Scripts.Render("~/bundles/froala-plugins-js")
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/dropzonescripts")
+    @Scripts.Render("~/bundles/signalr")
+    <script src="/signalr/hubs"></script>
+
+
+    <script type="text/javascript">
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        $(function () {
+            var chat = $.connection.chatHub;
+            chat.client.broadcastMessage = function (text, link) {
+                if (text != 'Поздравляем! Вы получили достижение: ') {
+                    var notification = new Notification('', {
+                        body: text,
+                        icon: 'http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif',
+                    });
+                    notification.onclick = function () {
+                        window.open(link);
+                    };
+                }
+            };
+            $.connection.hub.start().done(function () {
+                //$('#sendmessage').click(function () {
+                //    //chat.server.send('kek', $('#message').val());
+                //});
+                chat.server.send('@ViewBag.Achievment');
+
+            });
+        });
+    </script>
     <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
         <div id="modal-content">
         </div>

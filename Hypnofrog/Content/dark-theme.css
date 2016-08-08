@@ -59,6 +59,20 @@ svg > rect{
         color: #BDAECD;
     }
 
+#sidebar-wrapper{
+    border: solid 1px #1E072D;
+    border-right: 5px solid #1E072D;
+    background-color: #0C0114;
+}
+
+.sidebar-nav li a {
+    color: #BDAECD;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #BDAECD;
+}
+
 .dark-theme.fr-box a.fr-floating-btn {
     background: #0C0114;
     color: #1E072D;

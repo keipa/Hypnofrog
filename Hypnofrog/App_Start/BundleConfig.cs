@@ -66,6 +66,16 @@ namespace Hypnofrog
             bundles.Add(new ScriptBundle("~/bundles/wordcloud").Include(
                      "~/Scripts/wordcloud2.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jquery-caret").Include(
+                    "~/Scripts/jquery.caret.min.js",
+                    "~/Scripts/jquery.tag-editor.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+                    "~/Scripts/jquery.signalR-2.2.1.js",
+                    "~/Scripts/jquery.signalR-2.2.1.min.js"));
+
+            bundles.Add(new StyleBundle("~/bundles/caret-css").Include(
+                    "~/Scripts/jquery.tag-editor.css"));
 
             bundles.Add(new StyleBundle("~/bundles/verticalstyle").Include(
                      "~/Content/verticalmenu.css"));

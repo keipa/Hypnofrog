@@ -33,7 +33,7 @@
                     @item.Id
                 </td>
                 <td>
-                    @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.Email })
+                    @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.UserName })
                 </td>
                 <td>
                     @if (User.Identity.Name == item.Email || User.IsInRole("Admin"))

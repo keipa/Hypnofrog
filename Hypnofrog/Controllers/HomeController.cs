@@ -26,8 +26,8 @@ namespace Hypnofrog.Controllers
                 using (var udb = new ApplicationDbContext())
                 {
                     ViewBag.Tags = GetAllTags();
-                    ViewBag.Email = GetTopUser(db, udb);
-                    ViewBag.Avatarpath = GetTopUsersAvatar(db, ViewBag.Email);
+                    ViewBag.UserName = GetTopUser(db, udb);
+                    ViewBag.Avatarpath = GetTopUsersAvatar(db, ViewBag.UserName);
                     ViewBag.Achievment = CheckAchievments(db);
                     db.SaveChanges();
                     return View(GetTop3Sites(db));
@@ -57,9 +57,9 @@ namespace Hypnofrog.Controllers
             }
         }
 
-        private string GetTopUsersAvatar(Context db, string email)
+        private string GetTopUsersAvatar(Context db, string username)
         {
-            return db.Avatars.Where(x => x.UserId == email).FirstOrDefault().Path;
+            return db.Avatars.Where(x => x.UserId == username).FirstOrDefault().Path;
         }
 
         private string GetTopUser(Context db, ApplicationDbContext udb)
@@ -67,11 +67,11 @@ namespace Hypnofrog.Controllers
             try
             {
                 var userid = db.Sites.OrderByDescending(x => x.Rate).FirstOrDefault().UserId;
-                return udb.Users.Where(x => x.Id == userid).FirstOrDefault().Email;
+                return udb.Users.Where(x => x.Id == userid).FirstOrDefault().UserName;
             }
             catch (Exception)
             {
-                return "qwerty@gmail.com";
+                return "qwertyADMIN";
             }
         }
 
@@ -113,6 +113,7 @@ namespace Hypnofrog.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        [Route("AllUsers")]
         public ActionResult AllUsers()
         {
             ViewBag.IsAdmin = User.IsInRole("Admin");
@@ -151,10 +152,30 @@ namespace Hypnofrog.Controllers
             });
         }
 
+        public ActionResult CreatingPage()
+        {
+            return PartialView("_ViewConfigPage", new SettingsModel()
+            {
+                Color = "dark",
+                Template = "solid",
+                Url = SettingsModel.CreatePhoto("dark", (string)Session["menu"], "solid")
+            });
+        }
+
         public PartialViewResult ChangeTemplate(SettingsModel model)
         {
-            return PartialView("_ColorTemplate", SettingsModel.CreatePhoto(model.Color, model.Menu, model.Template));
+            Session["color"] = model.Color ?? (string)Session["color"];
+            Session["menu"] = model.Menu ?? (string)Session["menu"];
+            Session["template"] = model.Template ?? (string)Session["template"];
+            return PartialView("_ColorTemplate", SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"], (string)Session["template"]));
         }
+
+        //public PartialViewResult ChangeTemplatePage(SettingsModel model)
+        //{
+        //    Session["color"] = model.Color ?? (string)Session["color"];
+        //    Session["template"] = model.Template ?? (string)Session["template"];
+        //    return PartialView("_ColorTemplate", SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"], (string)Session["template"]));
+        //}
 
         public PartialViewResult UpdateRating(string userid, string siteid, string value)
         {
@@ -247,6 +268,8 @@ namespace Hypnofrog.Controllers
             }
             ViewBag.PageTitles = FromPageTitles(model);
             ViewBag.PageIds = FromPageIds(model);
+            Session["siteid"] = siteid;
+            Session["menu"] = model.MenuType;
             return View(model);
         }
 
@@ -498,7 +521,9 @@ namespace Hypnofrog.Controllers
         {
             return db.Comments.Where(x => x.SiteId == siteid).OrderByDescending(x => x.CreationTime).ToList();
         }
+        
 
+        [Route("User/{userid}")]
         public ActionResult UserProfile(string userid)
         {
             Session["useremail"] = userid;
@@ -538,9 +563,9 @@ namespace Hypnofrog.Controllers
 
         }
 
-        private string GetIdThoughtEmail(ApplicationDbContext applicationdb, string email)
+        private string GetIdThoughtEmail(ApplicationDbContext applicationdb, string username)
         {
-            return applicationdb.Users.Where(x => x.Email == email).FirstOrDefault().Id;
+            return applicationdb.Users.Where(x => x.UserName == username).FirstOrDefault().Id;
         }
 
         private double GetProfilerRate(Context db, ApplicationDbContext applicationdb)
@@ -588,16 +613,17 @@ namespace Hypnofrog.Controllers
             return Content(bool.FalseString);
         }
 
-        public ActionResult AddPage(int siteid = 0)
+        [HttpPost]
+        public ActionResult AddPage(string inputData)
         {
             using (var db = new Context())
             {
-                var fpage = db.Pages.Where(x => x.SiteId == siteid).FirstOrDefault();
-                Page page = new Page { SiteId = siteid, Color = fpage.Color, TemplateType = fpage.TemplateType, Title = "Page Title" };
+                string[] values = inputData.Split(';');
+                Page page = new Page { SiteId = (int)Session["siteid"], Color = values[1], TemplateType = values[2], Title = values[0] ==""? "Page Title": values[0] };
                 db.Pages.Add(page);
                 CreatePageContent(page.PageId, page.TemplateType, db);
                 db.SaveChanges();
-                return RedirectToAction("EditSite", new { siteid = siteid });
+                return RedirectToAction("EditSite", new { siteid = (int)Session["siteid"] });
             }
         }
 

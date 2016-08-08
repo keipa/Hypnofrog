@@ -8,8 +8,7 @@
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/bundles/dropzonescss")
     @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jquery-ui")
-        
+    @Scripts.Render("~/bundles/jquery-ui")
     @Styles.Render("~/bundles/froalacss")
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
@@ -42,7 +41,10 @@
                         }
                         if (ViewBag.Preview != true)
                         {
-                            <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
+                            <li>
+                                <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">+ Добавить страницу</a>
+                                @*@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { @class = "modal-link" })*@
+                            </li>
                         }
 
                     }
@@ -72,10 +74,9 @@
 
 
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/jquery.caret.min.js"></script>
-    <script src="~/Scripts/jquery.tag-editor.min.js"></script>
-    <link href="~/Scripts/jquery.tag-editor.css" rel="stylesheet" />
-    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+    @Scripts.Render("~/bundles/jquery-caret")
+    @Styles.Render("~/bundles/caret-css")
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/popup")
@@ -83,10 +84,7 @@
     @Scripts.Render("~/bundles/froala-plugins-js")
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/dropzonescripts")
-
-    <script src="~/Scripts/jquery.signalR-2.2.1.js"></script>
-    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
-
+    @Scripts.Render("~/bundles/signalr")
     <script src="/signalr/hubs"></script>
 
 
