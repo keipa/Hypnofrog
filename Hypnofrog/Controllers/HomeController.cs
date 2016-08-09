@@ -207,6 +207,7 @@ namespace Hypnofrog.Controllers
             return achievments;
         }
 
+        [AllowAnonymous]
         public ActionResult Users()
         {
             return RedirectToAction("AllUsers");
