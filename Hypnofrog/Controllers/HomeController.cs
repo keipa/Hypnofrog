@@ -287,13 +287,22 @@ namespace Hypnofrog.Controllers
             {
                 var rate = db.RateLog.Where(x => x.User == userid).Where(x => x.Site == siteid).FirstOrDefault();
                 if (rate == null)
+                {
                     rate = FirstRatedRate(userid, siteid, value, firstRate, db);
+                }
                 else
+                {
                     if (rate.Value == Convert.ToInt32(value))
-                    return RepeatedValueRating(sameRate);
-                else
-                    UpdatingRating(value, rate);
+                    {
+                        return RepeatedValueRating(sameRate);
+                    }
+                    else
+                    {
+                        UpdatingRating(value, rate);
+                    }
+                }
                 SaveAndcountAverage(siteid, db);
+                db.SaveChanges();
             }
             return PartialView("_UpdateRatingResult");
         }
@@ -313,7 +322,15 @@ namespace Hypnofrog.Controllers
             double average = 0.0;
             foreach (var item in sites)
                 average += (double)item.Value;
-            average = average / (double)sites.Count();
+            if (sites.Count() == 0)
+            {
+                return average;
+            }
+            else
+            {
+                average = average / (double)sites.Count();
+
+            }
             return average;
         }
 

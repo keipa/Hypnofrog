@@ -37,7 +37,14 @@ namespace Hypnofrog.ViewModels
                 {
                     var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(udb));
                     foreach (var user in users)
-                        result.Add(new UserView(user, db.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(db, user.UserName), UserManager.IsInRole(user.Id, "Admin")));
+                        try
+                        {
+                            result.Add(new UserView(user, db.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(db, user.UserName), UserManager.IsInRole(user.Id, "Admin")));
+                        }
+                        catch
+                        {
+                            result.Add(new UserView(user, db.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(db, user.UserName), false));
+                        }
                 }
             }
             return result;
