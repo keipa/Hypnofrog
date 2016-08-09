@@ -1,60 +1,44 @@
-﻿@model IEnumerable<Hypnofrog.Models.ApplicationUser>
+﻿@model IEnumerable<Hypnofrog.ViewModels.UserView>
 @using Microsoft.AspNet.Identity
 
 
 
 <h2>@Resources.Resource.Users</h2>
 <br />
-<table class="table">
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                User Name
-            </th>
-            <th>
-                Email
-            </th>
-            @if (User.Identity.IsAuthenticated)
+
+<div class="users-container">
+    <ul class="newlist users-list">
+        <li>
+            <ul id="users-list">
+                @foreach (var elem in Model)
             {
-            <th>
-                @Resources.Resource.delete
-            </th>
-            }
-            @if ((bool)ViewBag.IsAdmin )
-                {
-                <th>
-                    @Resources.Resource.makeadmin
-                </th>
-            }
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @item.Id
-                </td>
-                <th>
-                    @Html.ActionLink(item.UserName, "UserProfile", new { userid = item.UserName })
-                </th>
-                <td>
-                    @Html.ActionLink(item.Email, "UserProfile",  new { userid = item.UserName })
-                </td>
-                <td>
-                    @if (User.Identity.Name == item.UserName || User.IsInRole("Admin"))
-                    {
-                        @Html.ActionLink(Resources.Resource.delete, "Delete", new { id = item.Id })
-                    }
-                </td>
-                <td>
-                    @if ((bool)ViewBag.IsAdmin)
-                        {
-                        @Html.ActionLink(Resources.Resource.makeadmin, "UpInRole", new { id = item.Id })
+                    <li>
+                        <div class="user-main-level">
+                            <div class="user-avatar">
+                                <a href="@Url.Action("UserProfile",  new { userid = elem.UserName })">
+                                    <img src="@elem.UserAvatar" />
+                                </a>
+                            </div>
+                            <div class="user-box">
+                                <div class="user-head">
+                                    <span><a href="@Url.Action("UserProfile",  new { userid = elem.UserName })">@elem.UserName</a></span>
+                                    @if (User.Identity.Name == elem.UserName || User.IsInRole("Admin"))
+                                    {
+                                        <a href="@Url.Action("Delete", new { id = elem.UserId })"><i class="fa fa-trash-o"></i></a>
+                                    }
+                                    @if ((bool)ViewBag.IsAdmin)
+                                    {
+                                        <a href="@Url.Action("UpInRole",new { id = elem.UserId})"><i class="fa fa-level-up"></i></a>
+                                    }
+                                </div>
+                                <div class="user-content">
+                                    Rating: @elem.Rating
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                 }
-                </td>
-            </tr>
-    }
-
-    </table>
+            </ul>
+        </li>
+    </ul>
+</div>

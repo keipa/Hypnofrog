@@ -33,7 +33,13 @@
                                     $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
                                 });
                             </script>
-                            <img src='//unsplash.it/400/150?image=@Model.ElementAt(j).SiteId'>
+                            @{
+                                var elem = Model.ElementAt(j);
+                                var backgroundcolor = elem.Pages.ElementAt(0).Color;
+                                var newbcolor = backgroundcolor == "orange" ? "FF7C00" : backgroundcolor == "dark" ? "0C0114" : "9AC6BC";
+                                var newfcolor = backgroundcolor == "orange" ? "A63400" : backgroundcolor == "dark" ? "BDAECD" : "37474f";
+                            }
+                            <img src="http://dummyimage.com/400x150/@newbcolor/@newfcolor&text=@Model.ElementAt(j).Title.Replace(' ', '+')">
                         </div>
                     </div>
 

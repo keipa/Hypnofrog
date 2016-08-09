@@ -52,7 +52,7 @@
                     {
                         if (User.IsInRole("Admin"))
                         {
-                    <li>@Html.ActionLink("Администрирование", "Admin", "Home")</li>
+                    <li>@Html.ActionLink(@Resources.Resource.admin, "Admin", "Home")</li>
                         }
                         else
                         {

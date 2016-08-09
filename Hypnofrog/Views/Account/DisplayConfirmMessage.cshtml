@@ -6,6 +6,6 @@
 <h3>@ViewBag.Title</h3>
 <br>
 <br>
-<p>На данный вами адрес было выслано электронное письмо с дальнейшими инструкциями по завершению регистрации.</p>
+<p>On folowwing address was send confirmation email with instructions to complete registration.</p>
 
-<a type="button" href="@Url.Action("Resend", "Home", new { callbackURL = ViewBag.CallBack, uid = ViewBag.uid, to = ViewBag.email })" class="btn btn-success">Выслать email повторно</a>
+<a type="button" href="@Url.Action("Resend", "Home", new { callbackURL = ViewBag.CallBack, uid = ViewBag.uid, to = ViewBag.email })" class="btn btn-success">Send email again</a>

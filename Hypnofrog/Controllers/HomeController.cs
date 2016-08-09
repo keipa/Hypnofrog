@@ -221,7 +221,7 @@ namespace Hypnofrog.Controllers
             List<ApplicationUser> list_of_users;
             using (var db = new ApplicationDbContext())
                 list_of_users = db.Users.ToList();
-            return View(list_of_users);
+            return View(UserView.GetUserViews(list_of_users));
         }
 
         public ActionResult Delete(string id = "")
@@ -271,8 +271,8 @@ namespace Hypnofrog.Controllers
 
         public PartialViewResult UpdateRating(string userid, string siteid, string value)
         {
-            string firstRate = "Спасибо за вашу оценку";
-            string sameRate = "Обновлено";
+            string firstRate = "Thank you!";
+            string sameRate = "Updated.";
             using (var db = new Context())
             {
                 var rate = db.RateLog.Where(x => x.User == userid).Where(x => x.Site == siteid).FirstOrDefault();
@@ -309,7 +309,7 @@ namespace Hypnofrog.Controllers
 
         private void UpdatingRating(string value, Rate rate)
         {
-            string updateRate = "Обновлено. Предыдущая оценка: " + rate.Value;
+            string updateRate = "Update. Last mark: " + rate.Value;
             rate.Value = Convert.ToInt32(value);
             ViewBag.Answer = updateRate;
         }
@@ -361,6 +361,7 @@ namespace Hypnofrog.Controllers
             db.Pages.Add(page);
             AddUpdateNewTags(param[7], db);
             CreatePageContent(page.PageId, param[6], db);
+            db.SaveChanges();
             site.Url = param[2] == "" ? site.SiteId.ToString() : param[2];
             db.SaveChanges();
         }
@@ -739,7 +740,7 @@ namespace Hypnofrog.Controllers
 
         private List<Site> GetTop3Sites(Context db)
         {
-            var sites = db.Sites.OrderByDescending(x => x.Rate).Take(3).ToList();
+            var sites = db.Sites.OrderByDescending(x => x.Rate).Take(3).Include(x=>x.Pages).ToList();
             return sites;
         }
 
@@ -747,7 +748,7 @@ namespace Hypnofrog.Controllers
         {
             List<Site> sites = new List<Site>();
             if (userid == null) { throw new HttpException(404, "Item Not Found"); }
-            sites = db.Sites.Where(x => x.UserId == userid).ToList();
+            sites = db.Sites.Where(x => x.UserId == userid).Include(x=>x.Pages).ToList();
             return sites;
         }
 
@@ -768,6 +769,7 @@ namespace Hypnofrog.Controllers
             return Content(bool.FalseString);
         }
 
+        [AllowAnonymous]
         public ActionResult Resend(string callbackURL, string uid, string to)
         {
             try
@@ -785,7 +787,7 @@ namespace Hypnofrog.Controllers
                 ConfigureResendEmailOptions(callbackURL, uid, to);
                 return View();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new HttpException(404, "Item not found");
             }
@@ -893,7 +895,8 @@ namespace Hypnofrog.Controllers
         {
             Site oldsite = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
             oldsite.Url = url == "" ? oldsite.Url : url;
-            oldsite.Tags = site.Tags == "" ? oldsite.Tags : site.Tags;
+            AddUpdateNewTags(site.Tags, db);
+            oldsite.Tags = site.Tags;
             oldsite.Description = site.Description == "" ? oldsite.Description : site.Description;
             oldsite.HasComments = site.HasComments;
             oldsite.Title = site.Title == "" ? oldsite.Title : site.Title;

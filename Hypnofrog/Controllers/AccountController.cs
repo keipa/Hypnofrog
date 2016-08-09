@@ -8,10 +8,12 @@ using Microsoft.Owin.Security;
 using Hypnofrog.Models;
 using Hypnofrog.DBModels;
 using System.Text.RegularExpressions;
+using Hypnofrog.Filters;
 
 namespace Hypnofrog.Controllers
 {
     [Authorize]
+    [Culture]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;

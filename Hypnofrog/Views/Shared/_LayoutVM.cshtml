@@ -28,10 +28,9 @@
                     if (ViewBag.Preview != true)
                     {
                         <li>
-                            <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">+ @Resources.Resource.addpage</a>
+                            <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">@Resources.Resource.addpage</a>
                         </li>
                     }
-                    <li>@Html.ActionLink("+ Добавить страницу", "AddPage", "Home", new { siteid = ViewBag.SiteId }, new { })</li>
                 }
                 else
                 {
