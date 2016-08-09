@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<Hypnofrog.ViewModels.UserView>
 @using Microsoft.AspNet.Identity
-
-
+@{ 
+    ViewBag.Title = "All Users";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
 <h2>@Resources.Resource.Users</h2>
 <br />
@@ -26,7 +28,7 @@
                                     {
                                         <a href="@Url.Action("Delete", new { id = elem.UserId })"><i class="fa fa-trash-o"></i></a>
                                     }
-                                    @if ((bool)ViewBag.IsAdmin)
+                                    @if (User.IsInRole("Admin") && !elem.IsAdmin)
                                     {
                                         <a href="@Url.Action("UpInRole",new { id = elem.UserId})"><i class="fa fa-level-up"></i></a>
                                     }

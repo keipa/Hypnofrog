@@ -269,6 +269,16 @@ namespace Hypnofrog.Controllers
             return PartialView("_ColorTemplate", SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"], (string)Session["template"]));
         }
 
+        public ActionResult UpInRole(string id)
+        {
+            using(var db = new ApplicationDbContext())
+            {
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                UserManager.AddToRole(id, "Admin");
+            }
+            return RedirectToAction("AllUsers");
+        }
+
         public PartialViewResult UpdateRating(string userid, string siteid, string value)
         {
             string firstRate = "Thank you!";
@@ -767,37 +777,6 @@ namespace Hypnofrog.Controllers
                 return Content(bool.TrueString);
             }
             return Content(bool.FalseString);
-        }
-
-        [AllowAnonymous]
-        public ActionResult Resend(string callbackURL, string uid, string to)
-        {
-            try
-            {
-                var from = "tumanov.97.dima@mail.ru";
-                var password = "102938usugen";
-                MailMessage mail = new MailMessage(from, to);
-                SmtpClient client = new SmtpClient("smtp.mail.ru", Convert.ToInt32(587));
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.Credentials = new System.Net.NetworkCredential(from, password);
-                client.EnableSsl = true;
-                mail.Subject = "Подтверждение Email";
-                mail.Body = "Для завершения регистрации перейдите по адресу:" + callbackURL;
-                client.Send(mail);
-                ConfigureResendEmailOptions(callbackURL, uid, to);
-                return View();
-            }
-            catch (Exception)
-            {
-                throw new HttpException(404, "Item not found");
-            }
-        }
-
-        private void ConfigureResendEmailOptions(string callbackURL, string uid, string to)
-        {
-            ViewBag.CallBack = callbackURL;
-            ViewBag.uid = uid;
-            ViewBag.email = to;
         }
 
         [HttpPost]

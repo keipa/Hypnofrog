@@ -615,7 +615,7 @@
     <Content Include="Views\Home\_ViewConfigPage.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\_UsersTable.cshtml" />
-    <Content Include="Views\Home\Resend.cshtml" />
+    <Content Include="Views\Account\Resend.cshtml" />
     <Content Include="Views\Home\_Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,7 @@
 ﻿using Hypnofrog.DBModels;
 using Hypnofrog.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +15,17 @@ namespace Hypnofrog.ViewModels
         public string UserAvatar { get; set; }
         public string UserId { get; set; }
         public double Rating { get; set; }
+        public bool IsAdmin { get; set; }
 
         public UserView() { }
 
-        public UserView(Models.ApplicationUser user, string avatarpath, double rating)
+        public UserView(Models.ApplicationUser user, string avatarpath, double rating, bool isadmin)
         {
             this.UserName = user.UserName;
             this.UserId = user.Id;
             this.UserAvatar = avatarpath;
             this.Rating = rating;
+            this.IsAdmin = isadmin;
         }
 
         public static IEnumerable<UserView> GetUserViews(IEnumerable<Models.ApplicationUser> users)
@@ -29,9 +33,12 @@ namespace Hypnofrog.ViewModels
             List<UserView> result = new List<UserView>();
             using (var db = new Context())
             {
-
-                foreach (var user in users)
-                    result.Add(new UserView(user, db.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(db, user.UserName)));
+                using (var udb = new ApplicationDbContext())
+                {
+                    var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(udb));
+                    foreach (var user in users)
+                        result.Add(new UserView(user, db.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(db, user.UserName), UserManager.IsInRole(user.Id, "Admin")));
+                }
             }
             return result;
         }

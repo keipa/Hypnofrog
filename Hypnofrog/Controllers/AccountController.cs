@@ -9,6 +9,8 @@ using Hypnofrog.Models;
 using Hypnofrog.DBModels;
 using System.Text.RegularExpressions;
 using Hypnofrog.Filters;
+using System.Net.Mail;
+using System;
 
 namespace Hypnofrog.Controllers
 {
@@ -465,6 +467,37 @@ namespace Hypnofrog.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Resend(string callbackURL, string uid, string to)
+        {
+            try
+            {
+                var from = "tumanov.97.dima@mail.ru";
+                var password = "102938usugen";
+                MailMessage mail = new MailMessage(from, to);
+                SmtpClient client = new SmtpClient("smtp.mail.ru", Convert.ToInt32(587));
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.Credentials = new System.Net.NetworkCredential(from, password);
+                client.EnableSsl = true;
+                mail.Subject = "Confirm Email";
+                mail.Body = "To complite registration, please, follow that link:" + callbackURL;
+                client.Send(mail);
+                ConfigureResendEmailOptions(callbackURL, uid, to);
+                return View("DisplayConfirmMessage");
+            }
+            catch (Exception)
+            {
+                throw new HttpException(404, "Item not found");
+            }
+        }
+
+        private void ConfigureResendEmailOptions(string callbackURL, string uid, string to)
+        {
+            ViewBag.CallBack = callbackURL;
+            ViewBag.uid = uid;
+            ViewBag.email = to;
         }
 
         #region Helpers
