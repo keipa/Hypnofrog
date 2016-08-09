@@ -31,26 +31,23 @@ namespace Hypnofrog.ViewModels
         public static IEnumerable<UserView> GetUserViews(IEnumerable<Models.ApplicationUser> users)
         {
             List<UserView> result = new List<UserView>();
-            using (var db = new Context())
-            {
                 using (var udb = new ApplicationDbContext())
                 {
                     var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(udb));
                     foreach (var user in users)
                         try
                         {
-                            result.Add(new UserView(user, db.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(db, user.UserName), UserManager.IsInRole(user.Id, "Admin")));
+                            result.Add(new UserView(user, udb.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(udb, user.UserName), UserManager.IsInRole(user.Id, "Admin")));
                         }
                         catch
                         {
-                            result.Add(new UserView(user, db.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(db, user.UserName), false));
+                            result.Add(new UserView(user, udb.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(udb, user.UserName), false));
                         }
                 }
-            }
             return result;
         }
 
-        private static double GetProfilerRate(Context db, string username)
+        private static double GetProfilerRate(ApplicationDbContext db, string username)
         {
             List<Site> sites = new List<Site>();
             double average = 0.0;

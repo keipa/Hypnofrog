@@ -1,12 +1,11 @@
-﻿@model Hypnofrog.DBModels.Site
+﻿@model Hypnofrog.ViewModels.SiteViewModel
 @{
-    Session["siteurl"] = Model.Url;
-    Session["username"] = Model.UserId;
     ViewBag.RedactorEnable = true;
-    ViewBag.Title = Model.Title;
-    ViewBag.SiteId = Model.SiteId;
-    Layout = Model.MenuType == "without" ? "~/Views/Shared/_LayoutWM.cshtml" :
-        Model.MenuType == "vertical" ? "~/Views/Shared/_LayoutVM.cshtml" : "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.Site.Title;
+    ViewBag.PageTitles = Model.Titles;
+    ViewBag.PageIds = Model.Ids;
+    //ViewBag.SiteId = Model.SiteId;
+    Layout = Model.Layout;
 }
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
@@ -16,7 +15,7 @@
 {
     @Html.AntiForgeryToken()
     <div id="page-redactor" class="fr-view">
-        @{Html.RenderPartial(String.Format("_RedactPage{0}", Model.Pages.FirstOrDefault().TemplateType), Model.Pages.FirstOrDefault());}
+        @{Html.RenderPartial(String.Format("_RedactPage{0}", Model.Pages.FirstOrDefault().Page.TemplateType), Model.Pages.FirstOrDefault());}
     </div>
 }
 

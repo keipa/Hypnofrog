@@ -1,33 +1,34 @@
-﻿@model Hypnofrog.DBModels.Site
+﻿@model Hypnofrog.ViewModels.SiteViewModel
 @using Microsoft.AspNet.Identity
 @{
-    ViewBag.Admin = Model.UserId == User.Identity.GetUserName() || User.IsInRole("Admin");
+    ViewBag.Admin = Model.IsAdmin;
     ViewBag.Preview = true;
     ViewBag.RedactorEnable = true;
-    ViewBag.Title = Model.Title;
-    ViewBag.SiteId = Model.SiteId;
-    Layout = Model.MenuType == "without" ? "~/Views/Shared/_LayoutWM.cshtml" :
-        Model.MenuType == "vertical" ? "~/Views/Shared/_LayoutVM.cshtml" : "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.Site.Title;
+    ViewBag.SiteId = Model.Site.SiteId;
+    ViewBag.PageTitles = Model.Titles;
+    ViewBag.PageIds = Model.Ids;
+    Layout = Model.Layout;
 }
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
 
 <div id="page-redactor" class="fr-view">
-    @{Html.RenderPartial(String.Format("_PreviewPage{0}", Model.Pages.FirstOrDefault().TemplateType), Model.Pages.FirstOrDefault());}
+    @{Html.RenderPartial(String.Format("_PreviewPage{0}", Model.Pages.ElementAt(0).Page.TemplateType), Model.Pages.FirstOrDefault());}
 </div>
-@if (Model.HasComments)
+@if (Model.Site.HasComments)
 {
     <hr />
     <div class="comments-container">
         <h1>Комментарии</h1>
         <ul class="newlist comments-list">
-            @if (ViewBag.UserAvatar != null)
+            @if (Model.UserAvatar != null)
             {
                 <li>
                     <div class="comment-main-level">
                         <div class="comment-avatar">
                             <a href="@Url.Action("UserProfile",  new { userid = User.Identity.GetUserName() })">
-                                <img src="@ViewBag.UserAvatar" />
+                                <img src="@Model.UserAvatar.Path" />
                             </a>
                         </div>
                         <div class="comment-box">
@@ -40,7 +41,6 @@
                                 {
                                     <div class="row">
                                         <div class="col-md-10 col-sm-10 col-xs-10">
-                                            @*fr-element fr-view*@
                                             @Html.AntiForgeryToken()
                                             @Html.TextArea("NewComment", "", new { @id = "newcomid" })
                                         </div>
@@ -56,7 +56,7 @@
             }
             <li>
                 <ul id="comments-list">
-                    @{Html.RenderPartial("_Comments", Model.Comments);}
+                    @{Html.RenderPartial("_Comments", Model.Site.Comments);}
                 </ul>
             </li>
         </ul>
@@ -86,7 +86,6 @@
                 toolbarButtonsMD: ['emoticons'],
                 toolbarButtonsXS: ['emoticons'],
                 pluginsEnabled: ['emoticons'],
-                theme: "@ViewBag.Style",
                 toolbarVisibleWithoutSelection: true,
                 heightMin: 50
             });

@@ -24,7 +24,7 @@ namespace Hypnofrog
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             if (!roleManager.RoleExists("Admin"))
-            { 
+            {
                 var role = new IdentityRole();
                 role.Name = "Admin";
                 roleManager.Create(role);
@@ -37,11 +37,8 @@ namespace Hypnofrog
                 if (chkUser.Succeeded)
                 {
                     var result1 = UserManager.AddToRole(user.Id, "Admin");
-                    using(var db = new Context())
-                    {
-                        db.Avatars.Add(new Avatar() { Path = "https://pp.vk.me/c637127/v637127185/26b3/d6xhDAEYvW8.jpg", UserId = user.UserName});
-                        db.SaveChanges();
-                    }
+                    context.Avatars.Add(new Avatar() { Path = "https://pp.vk.me/c637127/v637127185/26b3/d6xhDAEYvW8.jpg", UserId = user.UserName });
+                    context.SaveChanges();
                 }
             }
             if (!roleManager.RoleExists("Anonymous"))

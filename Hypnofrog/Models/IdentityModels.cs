@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Hypnofrog.DBModels;
 
 namespace Hypnofrog.Models
 {
@@ -19,6 +20,14 @@ namespace Hypnofrog.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Avatar> Avatars { get; set; }
+        public DbSet<Site> Sites { get; set; }
+        public DbSet<Page> Pages { get; set; }
+        public DbSet<Content> Contents { get; set; }
+        public DbSet<Rate> RateLog { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
