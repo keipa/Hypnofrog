@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hypnofrog.DBModels.Site>
+﻿@model Hypnofrog.ViewModels.UserProfileViewModel
 @using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Профиль";
@@ -26,15 +26,15 @@
     <div class="row-fluid">
         <div class="row">
             <div class="span2 col-lg-2 col-md-3 col-sm-4 col-xs-4">
-                <img src="@ViewBag.avatarpath" class="img-circle avatar">
+                <img src="@Model.Avatar.Path" class="img-circle avatar">
             </div>
             <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
                 <h3>@ViewBag.Email</h3>
-                <h6>@Resources.Resource.rating @ViewBag.Rate</h6>
-                <h6>@Resources.Resource.Achievments @ViewBag.howmuchachievments</h6>
-                <h6>@Resources.Resource.sitesadded @Model.Count()</h6>
+                <h6>@Resources.Resource.rating @Model.Rate</h6>
+                <h6>@Resources.Resource.Achievments @Model.AchivmentsCount / 8</h6>
+                <h6>@Resources.Resource.sitesadded @Model.Sites.Count</h6>
             </div>
-            @if (ViewBag.Email == User.Identity.Name)
+            @if (Model.Email == User.Identity.Name)
             {
                 <div class="span2 col-lg-2 col-md-2 col-sm-2 col-xs-2">
                     <div class="btn-group">
@@ -53,14 +53,14 @@
     </div>
 </div>
 
-@if (ViewBag.Email == User.Identity.Name)
+@if (Model.Email == User.Identity.Name)
 {
     <a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">@Resources.Resource.addsite</a>
 }
    <hr />
 
     <div id="site-table">
-        @{ Html.RenderPartial("_SiteTable", Model);}
+        @{ Html.RenderPartial("_SiteTable", Model.Sites);}
     </div>
 
 

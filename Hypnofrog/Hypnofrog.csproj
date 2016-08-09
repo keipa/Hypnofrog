@@ -69,6 +69,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -123,6 +135,10 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -187,10 +203,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="ChatHub.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -198,7 +216,6 @@
     <Compile Include="DBModels\Avatar.cs" />
     <Compile Include="DBModels\Comment.cs" />
     <Compile Include="DBModels\Content.cs" />
-    <Compile Include="DBModels\Context.cs" />
     <Compile Include="DBModels\Page.cs" />
     <Compile Include="DBModels\Rate.cs" />
     <Compile Include="DBModels\Site.cs" />
@@ -299,12 +316,26 @@
     <Compile Include="Migrations\201608051415291_Added AchievmentLog to dbset.Designer.cs">
       <DependentUpon>201608051415291_Added AchievmentLog to dbset.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608091054189_RepoMig.cs" />
+    <Compile Include="Migrations\201608091054189_RepoMig.Designer.cs">
+      <DependentUpon>201608091054189_RepoMig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608091223045_Repository.cs" />
+    <Compile Include="Migrations\201608091223045_Repository.Designer.cs">
+      <DependentUpon>201608091223045_Repository.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608091230234_Initial.cs" />
+    <Compile Include="Migrations\201608091230234_Initial.Designer.cs">
+      <DependentUpon>201608091230234_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HTMLContextClass.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\MSSQLRepository.cs" />
     <Compile Include="Resources\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -314,10 +345,15 @@
     <Compile Include="SearchLucene\SearchComments.cs" />
     <Compile Include="SearchLucene\SearchSites.cs" />
     <Compile Include="SearchLucene\SearchUsers.cs" />
+    <Compile Include="Services\MainService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AchievmentChecker.cs" />
+    <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\PageViewModel.cs" />
+    <Compile Include="ViewModels\SiteViewModel.cs" />
     <Compile Include="ViewModels\SettingsModel.cs" />
     <Compile Include="ViewModels\SettingsPage.cs" />
+    <Compile Include="ViewModels\UserProfileViewModel.cs" />
     <Compile Include="ViewModels\UserView.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1405,6 +1441,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1482,6 +1519,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608051415291_Added AchievmentLog to dbset.resx">
       <DependentUpon>201608051415291_Added AchievmentLog to dbset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608091054189_RepoMig.resx">
+      <DependentUpon>201608091054189_RepoMig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608091223045_Repository.resx">
+      <DependentUpon>201608091223045_Repository.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608091230234_Initial.resx">
+      <DependentUpon>201608091230234_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

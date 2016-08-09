@@ -16,7 +16,7 @@ namespace Hypnofrog.Controllers
 {
     [Authorize]
     [Culture]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -168,7 +168,7 @@ namespace Hypnofrog.Controllers
                 }
                 var user = new ApplicationUser { UserName = model.Name, Email = model.Email };
 
-                using (var db = new Context())
+                using (var db = new ApplicationDbContext())
                 {
                     db.Avatars.Add(new Avatar() { UserId = model.Name, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
                     db.SaveChanges();
@@ -389,7 +389,7 @@ namespace Hypnofrog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
-            using (var db = new Context())
+            using (var db = new ApplicationDbContext())
             {
                 db.Avatars.Add(new Avatar() { UserId = model.Name, Path = "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png" });
                 db.SaveChanges();

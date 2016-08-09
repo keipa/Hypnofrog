@@ -17,6 +17,7 @@ using Lucene.Net.Store;
 using Lucene.Net.Util;
 using Hypnofrog.DBModels;
 using System.Data.Entity;
+using Hypnofrog.Models;
 
 namespace Hypnofrog.SearchLucene
 {
@@ -172,7 +173,7 @@ namespace Hypnofrog.SearchLucene
                     analyzer.Close();
                     searcher.Dispose();
                     List<Site> sites = new List<Site>();
-                    using (var db = new Context())
+                    using (var db = new ApplicationDbContext())
                     {
                         foreach (var elem in results)
                         {
@@ -192,7 +193,7 @@ namespace Hypnofrog.SearchLucene
                     analyzer.Close();
                     searcher.Dispose();
                     List<Site> sites = new List<Site>();
-                    using (var db = new Context()) {
+                    using (var db = new ApplicationDbContext()) {
                         foreach (var elem in results)
                         {
                             sites.Add(db.Sites.Where(x => x.SiteId == elem.SiteId).Include(x => x.Pages).FirstOrDefault());
