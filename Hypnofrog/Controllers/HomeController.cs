@@ -29,14 +29,14 @@ namespace Hypnofrog.Controllers
         public ActionResult ChangeCulture(string lang)
         {
             string returnUrl = Request.UrlReferrer.AbsolutePath;
-            List<string> cultures = new List<string>() { "ru", "en"};
+            List<string> cultures = new List<string>() { "ru", "en" };
             if (!cultures.Contains(lang))
             {
                 lang = "ru";
             }
             HttpCookie cookie = Request.Cookies["lang"];
             if (cookie != null)
-                cookie.Value = lang;  
+                cookie.Value = lang;
             else
             {
                 cookie = new HttpCookie("lang");
@@ -52,19 +52,23 @@ namespace Hypnofrog.Controllers
         public ActionResult Index()
         {
             using (var db = new Context())
+            using (var udb = new ApplicationDbContext())
             {
-                using (var udb = new ApplicationDbContext())
-                {
-                    ViewBag.Tags = GetAllTags();
-                    ViewBag.UserName = GetTopUser(db, udb);
-                    ViewBag.Avatarpath = GetTopUsersAvatar(db, ViewBag.UserName);
-                    ViewBag.Achievment = CheckAchievments(db);
-                    db.SaveChanges();
-                    return View(GetTop3Sites(db));
-                }
+                SetIndexParameters(db, udb);
+                db.SaveChanges();
+                return View(GetTop3Sites(db));
             }
+
         }
-        
+
+        private void SetIndexParameters(Context db, ApplicationDbContext udb)
+        {
+            ViewBag.Tags = GetAllTags();
+            ViewBag.UserName = GetTopUser(db, udb);
+            ViewBag.Avatarpath = GetTopUsersAvatar(db, ViewBag.UserName);
+            ViewBag.Achievment = CheckAchievments(db);
+        }
+
         public ActionResult Search(string searchstring)
         {
             using (var db = new Context())
@@ -87,23 +91,17 @@ namespace Hypnofrog.Controllers
         {
             var site_searcher = new SearchUsers();
             site_searcher.ClearLuceneIndex();
-            using(var db = new ApplicationDbContext())
+            using (var db = new ApplicationDbContext())
                 site_searcher.AddUpdateLuceneIndex(db.Users.ToList());
             return site_searcher.Search(searchstring);
         }
-        
-        public ActionResult DefaultSearchPage()
-        {
-            return View();
-        }
-
 
         private List<Site> ConvertContentToSites(List<Content> list, Context db)
         {
             List<Site> converted = new List<Site>();
             foreach (var content in list)
             {
-                var siteid = GetSiteIdThoughtContent(content,db);
+                var siteid = GetSiteIdThoughtContent(content, db);
                 converted.Add(db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault());
             }
             return converted;
@@ -112,7 +110,7 @@ namespace Hypnofrog.Controllers
         private int? GetSiteIdThoughtContent(Content content, Context db)
         {
             var pageid = content.PageId;
-            return  db.Pages.Where(x => x.PageId == pageid).FirstOrDefault().SiteId;
+            return db.Pages.Where(x => x.PageId == pageid).FirstOrDefault().SiteId;
         }
 
         private IEnumerable<Comment> SearchCommentsLucene(Context db, string searchstring)
@@ -131,7 +129,7 @@ namespace Hypnofrog.Controllers
             return site_searcher.Search(searchstring);
         }
 
-        public IEnumerable<Site> SearchSitesLucene(Context db, string searchstring )
+        public IEnumerable<Site> SearchSitesLucene(Context db, string searchstring)
         {
             var site_searcher = new SearchSites();
             site_searcher.ClearLuceneIndex();
@@ -139,14 +137,13 @@ namespace Hypnofrog.Controllers
             return site_searcher.Search(searchstring);
         }
 
-
         public string CheckAchievments(Context db)
         {
             var id = User.Identity.GetUserId();
-            var rates = db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList();
-            var sites = db.Sites.Where(x => x.UserId == id).ToList();
-            var log = db.Achievements.Where(x => x.User == id).ToList();
-            AchievmentChecker achievments = new AchievmentChecker(sites, rates, log, id);
+            AchievmentChecker achievments = new AchievmentChecker(db.Sites.Where(x => x.UserId == id).ToList(),
+                                                                                                              db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList(),
+                                                                                                              db.Achievements.Where(x => x.User == id).ToList(),
+                                                                                                              id);
             SaveAchievments(db, achievments.NewAchievments);
             return achievments.Result;
         }
@@ -154,17 +151,14 @@ namespace Hypnofrog.Controllers
         private void SaveAchievments(Context db, List<Achievement> log)
         {
             if (log.Count() != 0)
-            {
                 foreach (var item in log)
-                {
                     db.Achievements.Add(item);
-                }
-            }
         }
 
         private string GetTopUsersAvatar(Context db, string username)
         {
-            return db.Avatars.Where(x => x.UserId == username).FirstOrDefault().Path;
+            try { return db.Avatars.Where(x => x.UserId == username).FirstOrDefault().Path; }
+            catch (Exception) { return "http://cs.pikabu.ru/images/def_avatar/def_avatar_100.png"; }
         }
 
         private string GetTopUser(Context db, ApplicationDbContext udb)
@@ -172,12 +166,9 @@ namespace Hypnofrog.Controllers
             try
             {
                 var userid = db.Sites.OrderByDescending(x => x.Rate).FirstOrDefault().UserId;
-                return udb.Users.Where(x => x.Id == userid).FirstOrDefault().UserName;
+                return udb.Users.Where(x => x.UserName == userid).FirstOrDefault().UserName;
             }
-            catch (Exception)
-            {
-                return "qwertyADMIN";
-            }
+            catch (Exception) { return "qwertyADMIN"; }
         }
 
         [Authorize(Roles = "Admin")]
@@ -193,11 +184,11 @@ namespace Hypnofrog.Controllers
             {
                 var id = User.Identity.GetUserId();
                 List<string> userachievments = new List<string>();
-                var rates = db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList();
-                var sites = db.Sites.Where(x => x.UserId == id).ToList();
-                var log = db.Achievements.Where(x => x.User == id).ToList();
-                AchievmentChecker achievments = new AchievmentChecker(sites, rates, log, id);
-                foreach (var item in log)
+                AchievmentChecker achievments = new AchievmentChecker(db.Sites.Where(x => x.UserId == id).ToList(),
+                                                                                                                  db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList(),
+                                                                                                                  db.Achievements.Where(x => x.User == id).ToList(),
+                                                                                                                  id);
+                foreach (var item in db.Achievements.Where(x => x.User == id).ToList())
                     userachievments.Add(item.Name);
                 return View(GetKeyValueAchievments(achievments.GetAllAchievments(), achievments.GetAllAchievmentsDescriptionsRU(), userachievments));
             }
@@ -225,9 +216,7 @@ namespace Hypnofrog.Controllers
             ViewBag.IsAdmin = User.IsInRole("Admin");
             List<ApplicationUser> list_of_users;
             using (var db = new ApplicationDbContext())
-            {
                 list_of_users = db.Users.ToList();
-            }
             return View(list_of_users);
         }
 
@@ -276,13 +265,6 @@ namespace Hypnofrog.Controllers
             return PartialView("_ColorTemplate", SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"], (string)Session["template"]));
         }
 
-        //public PartialViewResult ChangeTemplatePage(SettingsModel model)
-        //{
-        //    Session["color"] = model.Color ?? (string)Session["color"];
-        //    Session["template"] = model.Template ?? (string)Session["template"];
-        //    return PartialView("_ColorTemplate", SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"], (string)Session["template"]));
-        //}
-
         public PartialViewResult UpdateRating(string userid, string siteid, string value)
         {
             string firstRate = "Спасибо за вашу оценку";
@@ -291,40 +273,55 @@ namespace Hypnofrog.Controllers
             {
                 var rate = db.RateLog.Where(x => x.User == userid).Where(x => x.Site == siteid).FirstOrDefault();
                 if (rate == null)
-                {
-                    rate = new Rate() { Value = Convert.ToInt32(value), Site = siteid, User = userid };
-                    ViewBag.Answer = firstRate;
-                    db.RateLog.Add(rate);
-                }
+                    rate = FirstRatedRate(userid, siteid, value, firstRate, db);
                 else
-                {
                     if (rate.Value == Convert.ToInt32(value))
-                    {
-                        ViewBag.Answer = sameRate;
-                        return PartialView("_UpdateRatingResult");
-                    }
-                    else
-                    {
-                        string updateRate = "Обновлено. Предыдущая оценка: " + rate.Value;
-
-                        rate.Value = Convert.ToInt32(value);
-                        ViewBag.Answer = updateRate;
-                    }
-                }
-                db.SaveChanges();
-                var sites = db.RateLog.Where(x => x.Site == siteid).ToList();
-                double average = 0.0;
-                foreach (var item in sites)
-                {
-                    average += (double)item.Value;
-                }
-                average = average / (double)sites.Count();
-                int siteidd = Convert.ToInt32(siteid);
-                var site = db.Sites.Where(x => x.SiteId == siteidd).FirstOrDefault();
-                site.Rate = average;
-                db.SaveChanges();
+                    return RepeatedValueRating(sameRate);
+                else
+                    UpdatingRating(value, rate);
+                SaveAndcountAverage(siteid, db);
             }
             return PartialView("_UpdateRatingResult");
+        }
+
+        private static void SaveAndcountAverage(string siteid, Context db)
+        {
+            double average = CountingAverage(siteid, db);
+            int siteidd = Convert.ToInt32(siteid);
+            var site = db.Sites.Where(x => x.SiteId == siteidd).FirstOrDefault();
+            site.Rate = average;
+            db.SaveChanges();
+        }
+
+        private static double CountingAverage(string siteid, Context db)
+        {
+            var sites = db.RateLog.Where(x => x.Site == siteid).ToList();
+            double average = 0.0;
+            foreach (var item in sites)
+                average += (double)item.Value;
+            average = average / (double)sites.Count();
+            return average;
+        }
+
+        private void UpdatingRating(string value, Rate rate)
+        {
+            string updateRate = "Обновлено. Предыдущая оценка: " + rate.Value;
+            rate.Value = Convert.ToInt32(value);
+            ViewBag.Answer = updateRate;
+        }
+
+        private PartialViewResult RepeatedValueRating(string sameRate)
+        {
+            ViewBag.Answer = sameRate;
+            return PartialView("_UpdateRatingResult");
+        }
+
+        private Rate FirstRatedRate(string userid, string siteid, string value, string firstRate, Context db)
+        {
+            Rate rate = new Rate() { Value = Convert.ToInt32(value), Site = siteid, User = userid };
+            ViewBag.Answer = firstRate;
+            db.RateLog.Add(rate);
+            return rate;
         }
 
         [HttpPost]
@@ -336,20 +333,32 @@ namespace Hypnofrog.Controllers
             var dbsite = new Site { };
             var page = new Page();
             using (var db = new Context())
-            {
-                var site = new Site { CreationTime = DateTime.Now, HasComments = param[3] == "true", Title = param[0], Description = param[1], Iscomplited = false, MenuType = param[5], UserId = User.Identity.GetUserName(), Rate = 0.0, Tags = param[7] };
-                db.Sites.Add(site);
-                dbsite = site;
-                page = new Page { SiteId = site.SiteId, Color = param[4], TemplateType = param[6], Title = "Page Title" };
-                db.Pages.Add(page);
-                AddUpdateNewTags(param[7], db);
-                CreatePageContent(page.PageId, param[6], db);
-                db.SaveChanges();
-                site.Url = param[2] == "" ? site.SiteId.ToString() : param[2];
-                db.SaveChanges();
-
-            }
+                SavingSitetoDatabase(param, out dbsite, out page, db);
             return RedirectToAction("EditSite", new { siteid = dbsite.SiteId });
+        }
+
+        private void SavingSitetoDatabase(string[] param, out Site dbsite, out Page page, Context db)
+        {
+            var site = new Site
+            {
+                CreationTime = DateTime.Now,
+                HasComments = param[3] == "true",
+                Title = param[0],
+                Description = param[1],
+                Iscomplited = false,
+                MenuType = param[5],
+                UserId = User.Identity.GetUserName(),
+                Rate = 0.0,
+                Tags = param[7]
+            };
+            db.Sites.Add(site);
+            dbsite = site;
+            page = new Page { SiteId = site.SiteId, Color = param[4], TemplateType = param[6], Title = "Page Title" };
+            db.Pages.Add(page);
+            AddUpdateNewTags(param[7], db);
+            CreatePageContent(page.PageId, param[6], db);
+            site.Url = param[2] == "" ? site.SiteId.ToString() : param[2];
+            db.SaveChanges();
         }
 
         private void AddUpdateNewTags(string newtags, Context db)
@@ -388,10 +397,8 @@ namespace Hypnofrog.Controllers
 
         private string GetNameById(string userId)
         {
-            using(var db = new ApplicationDbContext())
-            {
+            using (var db = new ApplicationDbContext())
                 return db.Users.Where(x => x.Id == userId).FirstOrDefault().UserName;
-            }
         }
 
         private Site GetFullSite(int siteid, Context udb)
@@ -412,9 +419,7 @@ namespace Hypnofrog.Controllers
             var obj = model.Pages.Select(x => x.Title);
             List<string> titles = new List<string>();
             foreach (var elem in obj)
-            {
                 titles.Add(Regex.Replace(elem ?? "Empty", "<[^>]+>", string.Empty));
-            }
             return titles;
         }
 
@@ -478,105 +483,112 @@ namespace Hypnofrog.Controllers
                 {
                     HttpPostedFileBase file = Request.Files[fileName];
                     if (file != null && file.ContentLength > 0)
-                    {
-                        fName = file.FileName;
-                        var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\WallImages", Server.MapPath(@"\")));
-                        string pathString = Path.Combine(originalDirectory.ToString(), "imagepath");
-                        var fileName1 = Path.GetFileName(file.FileName);
-                        bool isExists = Directory.Exists(pathString);
-                        if (!isExists) Directory.CreateDirectory(pathString);
-                        var path = string.Format("{0}\\{1}", pathString, file.FileName);
-                        file.SaveAs(path);
-                        Cloudinary cloudinary = new Cloudinary(new Account("dldmfb5fo", "568721824454478", "ZO4nwcMQwcT88lUNUK5KHJmy_fU"));
-                        var param = new ImageUploadParams()
-                        {
-                            File = new FileDescription(path)
-                        };
-                        var result = cloudinary.Upload(param);
-                        using (var db = new Context())
-                        {
-                            var useravatar = db.Avatars.Where(x => x.UserId == User.Identity.Name).FirstOrDefault();
-                            if (useravatar == null)
-                            {
-                                useravatar = new Avatar() { UserId = User.Identity.GetUserName() };
-                                db.Avatars.Add(useravatar);
-                            }
-                            useravatar.Path = result.Uri.AbsoluteUri;
-                            db.SaveChanges();
-                        }
-                        return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
-                    }
-
+                        return SavingAvatar(out fName, file);
                 }
-
             }
-            catch (Exception)
-            {
-                isSavedSuccessfully = false;
-            }
+            catch (Exception) { isSavedSuccessfully = false; }
             if (isSavedSuccessfully) return Json(new { Message = fName });
             else return Json(new { Message = "Error in saving file" });
 
         }
 
+        private ActionResult SavingAvatar(out string fName, HttpPostedFileBase file)
+        {
+            string path;
+            ConfigureAvatarSaving(out fName, file, out path);
+            Cloudinary cloudinary = new Cloudinary(new Account("dldmfb5fo", "568721824454478", "ZO4nwcMQwcT88lUNUK5KHJmy_fU"));
+            var param = new ImageUploadParams()
+            {
+                File = new FileDescription(path)
+            };
+            var result = cloudinary.Upload(param);
+            SaveAvatarToDatabase(result);
+            return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
+        }
+
+        private void ConfigureAvatarSaving(out string fName, HttpPostedFileBase file, out string path)
+        {
+            string pathString;
+            bool isExists;
+            SaveAvatarToStorage(out fName, file, out pathString, out isExists);
+            if (!isExists) Directory.CreateDirectory(pathString);
+            path = string.Format("{0}\\{1}", pathString, file.FileName);
+            file.SaveAs(path);
+        }
+
+        private void SaveAvatarToDatabase(ImageUploadResult result)
+        {
+            using (var db = new Context())
+            {
+                var useravatar = db.Avatars.Where(x => x.UserId == User.Identity.Name).FirstOrDefault();
+                if (useravatar == null)
+                {
+                    useravatar = new Avatar() { UserId = User.Identity.GetUserName() };
+                    db.Avatars.Add(useravatar);
+                }
+                useravatar.Path = result.Uri.AbsoluteUri;
+                db.SaveChanges();
+            }
+        }
+
+        private void SaveAvatarToStorage(out string fName, HttpPostedFileBase file, out string pathString, out bool isExists)
+        {
+            fName = file.FileName;
+            var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\WallImages", Server.MapPath(@"\")));
+            pathString = Path.Combine(originalDirectory.ToString(), "imagepath");
+            var fileName1 = Path.GetFileName(file.FileName);
+            isExists = Directory.Exists(pathString);
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public PartialViewResult DeleteTopSite(int siteid)
         {
-            string userid = "";
             using (var db = new Context())
+            using (var udb = new ApplicationDbContext())
             {
-                using (var udb = new ApplicationDbContext())
-                {
-                    var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
-                    foreach (var item in pages)
-                    {
-                        var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
-                        foreach (var elem in content)
-                        {
-                            db.Contents.Remove(elem);
-                        }
-                        db.Pages.Remove(item);
-                    }
-                    var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
-                    ViewBag.Email = userid = (string)Session["username"];
-                    if(site!=null)
-                        db.Sites.Remove(site);
-                    db.SaveChanges();
-                    return PartialView("_HomePageTopSiteTable", GetTop3Sites(db));
-                }
+                var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
+                foreach (var item in pages)
+                    DeleteTopContentAndPages(db, item);
+                var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+                ViewBag.Email = (string)Session["username"];
+                if (site != null)
+                    db.Sites.Remove(site);
+                db.SaveChanges();
+                return PartialView("_HomePageTopSiteTable", GetTop3Sites(db));
             }
+        }
+
+        private static void DeleteTopContentAndPages(Context db, Page item)
+        {
+            var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
+            foreach (var elem in content)
+                db.Contents.Remove(elem);
+            db.Pages.Remove(item);
         }
 
         public PartialViewResult DeleteSite(int siteid)
         {
             string userid = "";
             using (var db = new Context())
+            using (var udb = new ApplicationDbContext())
             {
-                using (var udb = new ApplicationDbContext())
-                {
-                    DeleteSiteFromId(siteid, db);
-                    ViewBag.Email = userid = (string)Session["username"];
-                    return PartialView("_SiteTable", GetProfilerSites(userid != "" ? userid : User.Identity.GetUserName(), udb, db));
-                }
+                DeleteSiteFromId(siteid, db);
+                ViewBag.Email = userid = (string)Session["username"];
+                return PartialView("_SiteTable", GetProfilerSites(userid != "" ? userid : User.Identity.GetUserName(), udb, db));
             }
         }
 
         private void DeleteSiteFromId(int siteid, Context db)
         {
-            var pages = db.Pages.Where(l => l.SiteId == siteid).ToList();
-            foreach (var item in pages)
+            foreach (var item in db.Pages.Where(l => l.SiteId == siteid).ToList())
             {
-                var content = db.Contents.Where(x => x.PageId == item.PageId).ToList();
-                foreach (var elem in content)
-                {
+                foreach (var elem in db.Contents.Where(x => x.PageId == item.PageId).ToList())
                     db.Contents.Remove(elem);
-                }
                 db.Pages.Remove(item);
             }
             var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
@@ -590,18 +602,21 @@ namespace Hypnofrog.Controllers
         {
             Site model = null;
             using (var db = new Context())
-            {
-                //int userid = GetUserIdByName(username, db);
-                model = db.Sites.Where(x => x.Url == siteurl).Include(x => x.Pages).Include(x => x.Comments).FirstOrDefault();
-                var pages = db.Pages.Where(x => x.SiteId == model.SiteId).Include(x => x.Contents).ToList();
-                model.Pages = pages;
-                model.Comments = model.Comments.OrderByDescending(x => x.CreationTime).ToList();
-                ViewBag.UserAvatar = GetCurrentUserAvatar(db);
-            }
+                model = ConfigureModelToPreview(siteurl, db);
             ViewBag.PageTitles = FromPageTitles(model);
             ViewBag.PageIds = FromPageIds(model);
             Session["siteid"] = model.SiteId;
             return View("PreviewSite", model);
+        }
+
+        private Site ConfigureModelToPreview(string siteurl, Context db)
+        {
+            Site model = db.Sites.Where(x => x.Url == siteurl).Include(x => x.Pages).Include(x => x.Comments).FirstOrDefault();
+            var pages = db.Pages.Where(x => x.SiteId == model.SiteId).Include(x => x.Contents).ToList();
+            model.Pages = pages;
+            model.Comments = model.Comments.OrderByDescending(x => x.CreationTime).ToList();
+            ViewBag.UserAvatar = GetCurrentUserAvatar(db);
+            return model;
         }
 
         private string GetCurrentUserAvatar(Context db)
@@ -646,31 +661,30 @@ namespace Hypnofrog.Controllers
         {
             return db.Comments.Where(x => x.SiteId == siteid).OrderByDescending(x => x.CreationTime).ToList();
         }
-        
+
 
         [Route("User/{userid}")]
         public ActionResult UserProfile(string userid)
         {
             Session["username"] = userid;
             using (var db = new Context())
-            {
-                using (var applicationdb = new ApplicationDbContext())
-                {
-                    var avatar = db.Avatars.Where(x => x.UserId == userid).FirstOrDefault();
-                    ViewBag.Email = userid;
-                    ViewBag.avatarpath = avatar != null ? avatar.Path : "";
-                    ViewBag.Rate = GetProfilerRate(db, applicationdb);
-                    var id = GetIdThoughtEmail(applicationdb, userid);
-                    ViewBag.howmuchachievments = db.Achievements.Where(x => x.User == id).Count().ToString()+" / 8";
-                    if (userid == User.Identity.Name)
-                    {
-                        ViewBag.Achievment = CheckAchievments(db);
-                    }
-                    db.SaveChanges();
-                    return View(GetProfilerSites(userid, applicationdb, db));
-                }
+            using (var applicationdb = new ApplicationDbContext()) {
+                var id = GetIdThoughtEmail(applicationdb, userid);
+                var avatar = db.Avatars.Where(x => x.UserId == userid).FirstOrDefault();
+                ConfigureUserBanner(userid, db, applicationdb, id, avatar);
+                if (userid == User.Identity.Name)
+                    ViewBag.Achievment = CheckAchievments(db);
+                db.SaveChanges();
+                return View(GetProfilerSites(userid, applicationdb, db));
             }
+        }
 
+        private void ConfigureUserBanner(string userid, Context db, ApplicationDbContext applicationdb, string id, Avatar avatar)
+        {
+            ViewBag.Email = userid;
+            ViewBag.avatarpath = avatar != null ? avatar.Path : "";
+            ViewBag.Rate = GetProfilerRate(db, applicationdb);
+            ViewBag.howmuchachievments = db.Achievements.Where(x => x.User == id).Count().ToString() + " / 8";
         }
 
         private string GetAllTags()
@@ -678,12 +692,16 @@ namespace Hypnofrog.Controllers
             string tagstring = "";
             using (var db = new Context())
             {
-                var tags = db.Tags.OrderByDescending(x => x.Repeats).ToList();
-                foreach (var item in tags)
-                {
+                foreach (var item in db.Tags.OrderByDescending(x => x.Repeats).ToList())
                     tagstring += item.Name + "," + item.Repeats.ToString() + ";";
+                try
+                {
+                    return tagstring.Remove(tagstring.Length - 1); ;
                 }
-                return tagstring.Remove(tagstring.Length - 1); ;
+                catch (Exception)
+                {
+                    return tagstring;
+                }
             }
 
         }
@@ -698,8 +716,6 @@ namespace Hypnofrog.Controllers
             {
                 throw new HttpException(404, "Item Not Found");
             }
-
-
         }
 
         private double GetProfilerRate(Context db, ApplicationDbContext applicationdb)
@@ -708,8 +724,10 @@ namespace Hypnofrog.Controllers
             double average = 0.0;
             string name = (string)Session["username"];
             sites = db.Sites.Where(x => x.UserId == name).ToList();
-            foreach (var item in sites) average += item.Rate;
-            if (sites.Count() == 0) return 0.0;
+            foreach (var item in sites)
+                average += item.Rate;
+            if (sites.Count() == 0)
+                return 0.0;
             average = average / sites.Count();
             return average;
         }
@@ -740,7 +758,6 @@ namespace Hypnofrog.Controllers
             if (Request != null && Request.IsAjaxRequest())
             {
                 System.Threading.Thread.Sleep(3000);
-
                 return Content(bool.TrueString);
             }
             return Content(bool.FalseString);
@@ -748,22 +765,33 @@ namespace Hypnofrog.Controllers
 
         public ActionResult Resend(string callbackURL, string uid, string to)
         {
-            var from = "tumanov.97.dima@mail.ru";
-            var password = "102938usugen";
-            MailMessage mail = new MailMessage(from, to);
-            SmtpClient client = new SmtpClient("smtp.mail.ru", Convert.ToInt32(587));
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.Credentials = new System.Net.NetworkCredential(from, password);
-            client.EnableSsl = true;
-            mail.Subject = "Подтверждение Email";
-            mail.Body = "Для завершения регистрации перейдите по адресу:" + callbackURL;
-            client.Send(mail);
+            try
+            {
+                var from = "tumanov.97.dima@mail.ru";
+                var password = "102938usugen";
+                MailMessage mail = new MailMessage(from, to);
+                SmtpClient client = new SmtpClient("smtp.mail.ru", Convert.ToInt32(587));
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.Credentials = new System.Net.NetworkCredential(from, password);
+                client.EnableSsl = true;
+                mail.Subject = "Подтверждение Email";
+                mail.Body = "Для завершения регистрации перейдите по адресу:" + callbackURL;
+                client.Send(mail);
+                ConfigureResendEmailOptions(callbackURL, uid, to);
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw new HttpException(404, "Item not found");
+            }
+        }
+
+        private void ConfigureResendEmailOptions(string callbackURL, string uid, string to)
+        {
             ViewBag.CallBack = callbackURL;
             ViewBag.uid = uid;
             ViewBag.email = to;
-            return View();
         }
-
 
         [HttpPost]
         public ActionResult AddPage(string inputData)
@@ -771,7 +799,7 @@ namespace Hypnofrog.Controllers
             using (var db = new Context())
             {
                 string[] values = inputData.Split(';');
-                Page page = new Page { SiteId = (int)Session["siteid"], Color = values[1], TemplateType = values[2], Title = values[0] ==""? "Page Title": values[0] };
+                Page page = new Page { SiteId = (int)Session["siteid"], Color = values[1], TemplateType = values[2], Title = values[0] == "" ? "Page Title" : values[0] };
                 db.Pages.Add(page);
                 CreatePageContent(page.PageId, page.TemplateType, db);
                 db.SaveChanges();
