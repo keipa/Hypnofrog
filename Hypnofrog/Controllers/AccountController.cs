@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -9,7 +6,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Hypnofrog.Models;
-using Hypnofrog;
 using Hypnofrog.DBModels;
 using System.Text.RegularExpressions;
 
@@ -73,7 +69,13 @@ namespace Hypnofrog.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(UserManager.FindByEmail(model.Email).UserName, model.Password);
+                var userc = UserManager.FindByEmail(model.Email);
+                if (userc == null)
+                {
+                    ModelState.AddModelError("", "This email is not valid.");
+                    return View(model);
+                }
+                var user = await UserManager.FindAsync(userc.UserName, model.Password);
                 if (user != null)
                 {
                     if (user.EmailConfirmed == true)

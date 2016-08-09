@@ -9,17 +9,17 @@
 <script src="~/Content/themes/krajee-svg/theme.js"></script>
 
 
-    @if (Model.Count() > 0)
+@if (Model.Count() > 0)
+{
+    for (int i = 0; i < Model.Count(); i += 3)
     {
-        for (int i = 0; i < Model.Count(); i += 3)
-        {
-            <div class='courses cards'>
+        <div class='courses cards'>
 
-                @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
-                {
+            @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
+            {
                 <div class='course'>
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
-                        @if (User.Identity.IsAuthenticated  && Model.ElementAt(j).UserId != User.Identity.GetUserName())
+                        @if (User.Identity.IsAuthenticated && Model.ElementAt(j).UserId != User.Identity.GetUserName())
                         {
                             <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
                         }
@@ -30,80 +30,63 @@
                         <div id="results-@j" style="text-align: center;color: white;background-color: cornflowerblue;"></div>
                         <div class='blur asset'>
                             <script type="text/javascript">
-                        $('#input-@j').on('rating.change', function (event, value, caption) {
-                            $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
-                        });
+                                $('#input-@j').on('rating.change', function (event, value, caption) {
+                                    $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
+                                });
                             </script>
                             <img src='//unsplash.it/400/150?image=@Model.ElementAt(j).SiteId'>
                         </div>
                     </div>
 
                     <div class='details'>
-                        <div class='title'>
-                            <span>@Resources.Resource.Name</span><br>
-                            <span>@Model.ElementAt(j).Title</span>
+                        <div class="row">
+                            <div class="title col-md-10">
+                                <span>@Resources.Resource.Name</span><br>
+                                <span>@Model.ElementAt(j).Title</span>
+                            </div>
+                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
+                            {
+                                <div class="col-md-2">
+                                    <a class="modal-link" href="@Url.Action("Settings", "Home", new { siteid = Model.ElementAt(j).SiteId })" style="cursor:pointer;">
+                                        <i class="fa fa-cog"></i>
+                                    </a>
+                                </div>
+                            }
                         </div>
                         <div class='description'>
                             <span>@Resources.Resource.Description</span><br>
                             <span>@Model.ElementAt(j).Description</span>
                         </div>
-                        @*<div class='language'>
-                                <span>Готовность</span>
-                                @if (Model.ElementAt(j).Iscomplited)
-                                {
-                                    <span>
-                                        Опубликовано
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span style="color:red"> В разработке</span>
-                                }
-                            </div>*@
                         <div class='language'>
                             @if (Model.ElementAt(j).Tags.Split(',').Count() != 1 || Model.ElementAt(j).Tags.Split(',')[0] != "")
-                    {
-                    <span>@Resources.Resource.Tags</span><br>
-                    }
-
+                            {
+                                <span>@Resources.Resource.Tags</span><br>
+                            }
                             @foreach (var item in Model.ElementAt(j).Tags.Split(','))
-                    {<span class="label label-success">@item</span><span> </span>}
+                            {<span class="label label-success">@item</span><span> </span>}
 
                         </div>
-
                         <span class='actions'>
                             <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserId, siteurl = Model.ElementAt(j).Url }) ">
                                 <i class='fa fa-eye'></i>
                             </a>
-                            @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin") || Model.ElementAt(j).UserId == User.Identity.GetUserId())
-                    {
-                    <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
-                        <i class='fa fa-pencil'></i>
-                    </a>
-                    }
                             @if (ViewBag.Email == User.Identity.Name || User.IsInRole("Admin"))
-                    {
-                        using (Ajax.BeginForm("DeleteSite", "Home", new { siteid = Model.ElementAt(j).SiteId }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @id = "ajax-del-" + j }))
-                        {
-                    <a id="deletebutton-@j" style="cursor:pointer;"><i class='fa fa-trash'></i></a>
-                        }
-                    <script>
-                            $(function () {
-                                $('#deletebutton-@j').click(function () {
-                                    $('#ajax-del-@j').submit();
-                                });
-                            });
-                    </script>
-
-                    }
+                            {
+                                <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                                    <i class='fa fa-pencil'></i>
+                                </a>
+                                <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#site-table" href="@Url.Action("DeleteSite", "Home",new { siteid = Model.ElementAt(j).SiteId })">
+                                    <i class='fa fa-trash'></i>
+                                </a>
+                            }
                         </span>
                     </div>
                 </div>
-                }
-            </div>
+            }
+        </div>
 
-        }
     }
+}
 
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
