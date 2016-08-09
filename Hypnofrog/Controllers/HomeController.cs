@@ -22,9 +22,11 @@ using Hypnofrog.SearchLucene;
 
 namespace Hypnofrog.Controllers
 {
+    [Authorize]
     [Culture]
     public class HomeController : Controller
     {
+        [AllowAnonymous]
         public ActionResult ChangeCulture(string lang)
         {
             string returnUrl = Request.UrlReferrer.AbsolutePath;
@@ -47,7 +49,7 @@ namespace Hypnofrog.Controllers
             return Redirect(returnUrl);
         }
 
-
+        [AllowAnonymous]
         public ActionResult Index()
         {
             using (var db = new Context())
@@ -63,7 +65,8 @@ namespace Hypnofrog.Controllers
                 }
             }
         }
-        
+
+        [AllowAnonymous]
         public ActionResult Search(string searchstring)
         {
             using (var db = new Context())
@@ -218,6 +221,7 @@ namespace Hypnofrog.Controllers
             return RedirectToAction("AllUsers");
         }
 
+        [AllowAnonymous]
         [Route("AllUsers")]
         public ActionResult AllUsers()
         {
@@ -584,6 +588,7 @@ namespace Hypnofrog.Controllers
             db.SaveChanges();
         }
 
+        [AllowAnonymous]
         [Route("User/{username}/{siteurl}")]
         public ActionResult PreviewSite(string username, string siteurl)
         {
@@ -645,8 +650,8 @@ namespace Hypnofrog.Controllers
         {
             return db.Comments.Where(x => x.SiteId == siteid).OrderByDescending(x => x.CreationTime).ToList();
         }
-        
 
+        [AllowAnonymous]
         [Route("User/{userid}")]
         public ActionResult UserProfile(string userid)
         {
@@ -761,19 +766,20 @@ namespace Hypnofrog.Controllers
 
         public PartialViewResult ShowPage(int pageid = 0)
         {
-            using (var db = new Context())
-            {
-                Page page = db.Pages.Where(x => x.PageId == pageid).Include(x => x.Contents).FirstOrDefault();
-                return PartialView(String.Format("_RedactPage{0}", page.TemplateType), page);
-            }
+            return _Show(pageid, "_RedactPage");
         }
 
         public PartialViewResult PreviewShowPage(int pageid = 0)
         {
+            return _Show(pageid, "_PreviewPage");
+        }
+
+        private PartialViewResult _Show(int pageid, string templ)
+        {
             using (var db = new Context())
             {
                 Page page = db.Pages.Where(x => x.PageId == pageid).Include(x => x.Contents).FirstOrDefault();
-                return PartialView(String.Format("_PreviewPage{0}", page.TemplateType), page);
+                return PartialView(String.Format("{1}{0}", page.TemplateType, templ), page);
             }
         }
 
@@ -809,6 +815,41 @@ namespace Hypnofrog.Controllers
             var contents = db.Contents.Where(x => x.PageId == pageId);
             foreach (var elem in contents)
                 db.Contents.Remove(elem);
+        }
+        
+        public PartialViewResult Settings(int siteid)
+        {
+            using(var db = new Context())
+            {
+                ViewBag.Tags = GetAllTags();
+                var site = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+                if (site.UserId != User.Identity.GetUserName() && !User.IsInRole("Admin")) throw new HttpException(404, "Not your site!");
+                Session["sitesettings"] = site.SiteId;
+                ViewBag.CurrentTags = site.Tags;
+                return PartialView("_Settings", site);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Settings(Site site, string url)
+        {
+            using (var db = new Context()) {
+                int siteid = (int)Session["sitesettings"];
+                ConfirmChanges(site, url, siteid, db);
+                string userid = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault().UserId;
+                return RedirectToAction("UserProfile","Home", new { userid = userid });
+            }
+        }
+
+        private void ConfirmChanges(Site site, string url, int siteid, Context db)
+        {
+            Site oldsite = db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault();
+            oldsite.Url = url == "" ? oldsite.Url : url;
+            oldsite.Tags = site.Tags == "" ? oldsite.Tags : site.Tags;
+            oldsite.Description = site.Description == "" ? oldsite.Description : site.Description;
+            oldsite.HasComments = site.HasComments;
+            oldsite.Title = site.Title == "" ? oldsite.Title : site.Title;
+            db.SaveChanges();
         }
     }
 }
