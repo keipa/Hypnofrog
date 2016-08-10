@@ -21,40 +21,34 @@ namespace Hypnofrog.ViewModels
 
         public SiteViewModel() { }
 
-        public SiteViewModel(string username, string siteurl, bool preview, string currentuser, bool isadmin)
+        public SiteViewModel(string username, string siteurl, string currentuser, bool isadmin)
         {
             Site = MainService.SiteByUrlAndName(siteurl, username);
-            Titles = MainService.GetSiteTitles(Site);
-            Ids = MainService.GetSiteIds(Site);
-            Preview = preview;
-            IsAdmin = MainService.IsAdmin(isadmin, currentuser, username);
-            Layout = MainService.GetSiteLayout(Site);
-            Pages = MainService.GenerateSitePages(Site, isadmin, currentuser, username);
-            foreach(var page in Pages)
-            {
-                page.SiteUrl = siteurl;
-                page.UserName = username;
-            }
-            var user = MainService.GetUserByName(currentuser);
-            UserAvatar = MainService.GetUserAvatar(user);
+            Preview = true;
+            GetSiteSettings(this, Site, isadmin, currentuser);
         }
 
         public SiteViewModel(int siteid, string currentuser, bool isadmin)
         {
             Site = MainService.SiteById(siteid);
-            Titles = MainService.GetSiteTitles(Site);
-            Ids = MainService.GetSiteIds(Site);
             Preview = false;
-            IsAdmin = MainService.IsAdmin(isadmin, currentuser, Site.UserId);
-            Layout = MainService.GetSiteLayout(Site);
-            Pages = MainService.GenerateSitePages(Site, isadmin, currentuser, Site.UserId);
-            foreach (var page in Pages)
+            GetSiteSettings(this, Site, isadmin, currentuser);
+        }
+
+        private static void GetSiteSettings(SiteViewModel model, Site site, bool isadmin, string currentuser)
+        {
+            model.Titles = MainService.GetSiteTitles(site);
+            model.Ids = MainService.GetSiteIds(site);
+            model.IsAdmin = MainService.IsAdmin(isadmin, currentuser, site.UserId);
+            model.Layout = MainService.GetSiteLayout(site);
+            model.Pages = MainService.GenerateSitePages(site, isadmin, currentuser, site.UserId);
+            foreach (var page in model.Pages)
             {
-                page.SiteUrl = Site.Url;
-                page.UserName = Site.UserId;
+                page.SiteUrl = site.Url;
+                page.UserName = site.UserId;
             }
             var user = MainService.GetUserByName(currentuser);
-            UserAvatar = MainService.GetUserAvatar(user);
+            model.UserAvatar = MainService.GetUserAvatar(user);
         }
     }
 }

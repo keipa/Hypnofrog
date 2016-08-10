@@ -29,12 +29,12 @@
                 <img src="@Model.Avatar.Path" class="img-circle avatar">
             </div>
             <div class="span8 col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                <h3>@ViewBag.Email</h3>
+                <h3>@Model.Email // @Model.Name</h3>
                 <h6>@Resources.Resource.rating @Model.Rate</h6>
                 <h6>@Resources.Resource.Achievments @Model.AchivmentsCount / 8</h6>
                 <h6>@Resources.Resource.sitesadded @Model.Sites.Count</h6>
             </div>
-            @if (Model.Email == User.Identity.Name)
+            @if (Model.Name == User.Identity.Name)
             {
                 <div class="span2 col-lg-2 col-md-2 col-sm-2 col-xs-2">
                     <div class="btn-group">

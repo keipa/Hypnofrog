@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Hypnofrog.Controllers
 {
-    public class ErrorController : BaseController
+    public class ErrorController : Controller
     {
         public ActionResult NotFound()
         {

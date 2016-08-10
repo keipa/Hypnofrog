@@ -16,7 +16,7 @@ namespace Hypnofrog.Controllers
 {
     [Authorize]
     [Culture]
-    public class AccountController : BaseController
+    public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

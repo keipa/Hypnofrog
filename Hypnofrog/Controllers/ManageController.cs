@@ -12,7 +12,7 @@ using Hypnofrog.Models;
 namespace Hypnofrog.Controllers
 {
     [Authorize]
-    public class ManageController : BaseController
+    public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

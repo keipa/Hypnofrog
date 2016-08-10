@@ -26,7 +26,7 @@ namespace Hypnofrog.Controllers
 {
     [Authorize]
     [Culture]
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
         [AllowAnonymous]
         public ActionResult ChangeCulture(string lang)
@@ -70,7 +70,7 @@ namespace Hypnofrog.Controllers
         [Route("User/{username}/{siteurl}")]
         public ActionResult PreviewSite(string username, string siteurl)
         {
-            var model = new SiteViewModel(username, siteurl, true, User.Identity.GetUserName(), User.IsInRole("Admin"));
+            var model = new SiteViewModel(username, siteurl, User.Identity.GetUserName(), User.IsInRole("Admin"));
             return View(model);
             //Site model = null;
             //using (var db = new Context())
