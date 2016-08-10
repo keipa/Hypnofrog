@@ -347,6 +347,7 @@
     <Compile Include="Services\MainService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AchievmentChecker.cs" />
+    <Compile Include="ViewModels\LiteSiteViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
     <Compile Include="ViewModels\SiteViewModel.cs" />
@@ -357,6 +358,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="404.html" />
+    <Content Include="app\app.js" />
+    <Content Include="app\controller\IndexCtrl.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />

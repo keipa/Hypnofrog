@@ -5,22 +5,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Lucene.Net.Support;
 
 namespace Hypnofrog.ViewModels
 {
     public class MainPageViewModel
     {
-        public List<Site> Sites { get; set; }
-        public ApplicationUser FirstUser { get; set; }
-        public string FirstAvatar { get; set; }
-        public string Tags { get; set; }
+        public List<LiteSiteViewModel> Sites { get; private set; }
+        public string TopUserName { get; private set; }
+        public string FirstAvatar { get; private set; }
+        public string Tags { get; private set; }
 
         public MainPageViewModel()
         {
-            FirstUser = MainService.GetTopUser();
+            //TopUserName = MainService.GetTopUser().UserName;
+            TopUserName = "qwertyADMIN";
             FirstAvatar = MainService.GetTopUserAvatar();
-            Sites = MainService.GetTopThreeSites();
+            Sites = ConvertSitesToLite(MainService.GetTopThreeSites());
             Tags = MainService.GetMainTags();
         }
+
+        private static List<LiteSiteViewModel> ConvertSitesToLite(IEnumerable<Site> sites)
+        {
+            List<LiteSiteViewModel> litelist = new EquatableList<LiteSiteViewModel>();
+            litelist.AddRange(sites.Select(site => new LiteSiteViewModel(site)));
+            return litelist;
+        }
+
+
     }
+
+
 }

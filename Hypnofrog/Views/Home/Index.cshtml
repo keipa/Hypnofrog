@@ -9,77 +9,63 @@
 <link href="~/Content/userprofilestyle.css" rel="stylesheet" />
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
 <link href="~/Content/userprofilestyle.css" rel="stylesheet" />
+<script src="~/Scripts/angular.min.js"></script>
+
 
 <hr />
 
 
 <style>
     body {
-    padding-top: 50px;
-}
-    </style>
-<div class="maincontainer" style="display:flex;">
-    <a href="@Url.Action("UserProfile",  new { userid = Model.FirstUser.UserName })" class="topdesignrcontainer" style="position:relative;width:300px;">
+        padding-top: 50px;
+    }
+</style>
+<div class="container" ng-app="app" ng-controller="IndexCtrl">
+    <div class="maincontainer" style="display:flex;">
+        <a href="/user/{{model.TopUserName}}" class="topdesignrcontainer" style="position:relative;width:300px;">
         <div class="numberone" style="position: absolute;top: 50%;color :white;font-family: inherit;font-size: 215px;left:50%;z-index :1000;transform: translate(-50%, -50%);">#1</div>
-        <img src="@Model.FirstAvatar" style="width:300px;height:300px;">
-    </a>
-    <div class="tagcloud" style="width: 100%;position: relative;">
+        <img src="{{model.FirstAvatar}}" style="width:300px;height:300px;">
+        </a>
+        <div class="tagcloud" style="width: 100%;position: relative;">
 
-        <canvas id="my_canvas" width="400px" height="300px" style="position: absolute;left: 50%;right: 50%;top: 50%;transform: translate(-50%, -50%);"></canvas>
+            <canvas id="my_canvas" width="400px" height="300px" style="position: absolute;left: 50%;right: 50%;top: 50%;transform: translate(-50%, -50%);"></canvas>
+
+        </div>
 
     </div>
 
-</div>
 
-<hr/>
+    <p>
+        {{model | json}}
+    </p>
+    <hr />
 
 
     @using (Html.BeginForm("Search", "Home", FormMethod.Post))
-    {<div class="input-group">
-        <input type="text" class="form-control" placeholder="@Resources.Resource.isearch" name="searchstring">
-        <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
-        </span>
-    </div>
+    {
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="@Resources.Resource.isearch" name="searchstring">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
+            </span>
+        </div>
     }
-    
-<hr />
-<h2>@Resources.Resource.TopSites</h2>
-<hr />
+
+    <hr />
+    <h2>@Resources.Resource.TopSites</h2>
+    <hr />
 
 
-<div id="site-table">
-    @{ Html.RenderPartial("_HomePageTopSiteTable", Model.Sites);}
+    @*<div id="site-table">
+            @{ Html.RenderPartial("_HomePageTopSiteTable", Model.Sites);}
+        </div>*@
 </div>
-
 
 
 @Scripts.Render("~/bundles/wordcloud")
 
 @section scripts{
-    <script>
-        var tags = '@Model.Tags';
-        tags = tags.split(';')
-        for (i = 0; i < tags.length; i++) {
-            tags[i] = tags[i].split(',');
-            tags[i][1] = parseInt(tags[i][1])
-        }
-        WordCloud(document.getElementById('my_canvas'), {
-            list: tags, fontFamily: 'Times, serif', color: function (word, weight) {
-                return (word === tags[0][0]) ? '#f02222' : '#000000';
-            },
-            gridSize: Math.round(16 * $('my_canvas').width() / 1024),
-            weightFactor: function (size) {
-                return size * 15    ;
-            },
-            rotateRatio: 0.5,
-            backgroundColor: '#ffffff'
-        });
-
-    </script>
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
     <script src="~/Scripts/star-rating.js"></script>
     <script src="~/Scripts/star-rating.min.js"></script>
     <script src="~/Content/themes/krajee-svg/theme.js"></script>
-
 }

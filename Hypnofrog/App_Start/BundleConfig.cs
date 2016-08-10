@@ -24,6 +24,9 @@ namespace Hypnofrog
             "~/Content/themes/krajee-svg/theme.css",
              "~/Content/star-rating.min.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/AngularCustom")
+                .IncludeDirectory("~/app", "*.js", true));
+
             bundles.Add(new ScriptBundle("~/bundles/starrating").Include(
             "~/Scripts/star-rating.js",
             "~/Content/themes/krajee-svg/theme.js",

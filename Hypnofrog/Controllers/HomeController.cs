@@ -54,7 +54,17 @@ namespace Hypnofrog.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View(new MainPageViewModel());
+            var model = new MainPageViewModel();
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult IndexVM()
+        {
+            var model = new MainPageViewModel();
+            var json = new JavaScriptSerializer().Serialize(model);
+
+            return Content(json.ToString(), "application/json");
         }
 
         [AllowAnonymous]

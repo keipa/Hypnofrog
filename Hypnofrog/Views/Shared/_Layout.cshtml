@@ -96,7 +96,10 @@
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/dropzonescripts")
     @Scripts.Render("~/bundles/signalr")
-    <script src="/signalr/hubs"></script>
+    @Scripts.Render("~/bundles/AngularCustom")
+
+
+<script src="/signalr/hubs"></script>
 
 
     <script type="text/javascript">

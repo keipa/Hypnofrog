@@ -22,6 +22,7 @@ namespace Hypnofrog.Services
             return _GetTopUser();
         }
 
+
         public static string GetTopUserAvatar()
         {
             var topuser = _GetTopUser();
