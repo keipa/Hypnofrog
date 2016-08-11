@@ -424,6 +424,7 @@
     <Content Include="Content\themes\krajee-uni\theme.js" />
     <Content Include="Content\themes\krajee-uni\theme.min.css" />
     <Content Include="Content\themes\krajee-uni\theme.min.js" />
+    <Content Include="Content\index.css" />
     <Content Include="Content\userprofilestyle.css" />
     <Content Include="Content\userslist.css" />
     <Content Include="Content\verticalmenu.css" />

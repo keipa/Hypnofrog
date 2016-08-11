@@ -4,13 +4,9 @@
 }
 
 <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
-<link href="~/Content/star-rating.css" rel="stylesheet" />
-<link href="~/Content/star-rating.min.css" rel="stylesheet" />
-<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
-<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
 <script src="~/Scripts/angular.min.js"></script>
-
+<link href="~/Content/index.css" rel="stylesheet" />
 
 <hr />
 
@@ -23,33 +19,30 @@
 <div class="container" ng-app="app" ng-controller="IndexCtrl">
     <div class="maincontainer" style="display:flex;">
         <a href="/user/{{  model.TopUserName  }}" class="topdesignrcontainer" style="position:relative;width:300px;">
-        <div class="numberone" style="position: absolute;top: 50%;color :white;font-family: inherit;font-size: 215px;left:50%;z-index :1000;transform: translate(-50%, -50%);">#1</div>
-        <img src="{{  model.FirstAvatar  }}" style="width:300px;height:300px;">
+            <div class="numberone" style="position: absolute;top: 50%;color :white;font-family: inherit;font-size: 215px;left:50%;z-index :1000;transform: translate(-50%, -50%);">#1</div>
+            <img src="{{  model.FirstAvatar  }}" style="width:300px;height:300px;">
         </a>
         <div class="tagcloud" style="width: 100%;position: relative;">
-
             <canvas id="my_canvas" width="400px" height="300px" style="position: absolute;left: 50%;right: 50%;top: 50%;transform: translate(-50%, -50%);"></canvas>
-
         </div>
-
     </div>
 
 
-    <p>
+    @*<p>
         {{model | json}}
-    </p>
+    </p>*@
     <hr />
 
 
     @*@using (Html.BeginForm("Search", "Home", FormMethod.Post))
-    {
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="@Resources.Resource.isearch" name="searchstring">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
-            </span>
-        </div>
-    }*@
+        {*@
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="@Resources.Resource.isearch" name="searchstring">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
+                </span>
+            </div>
+        @* } *@
 
     <hr />
     <h2>@Resources.Resource.TopSites</h2>
@@ -60,85 +53,49 @@
 
 
 
-    <link href="~/Content/star-rating.css" rel="stylesheet" />
-    <link href="~/Content/star-rating.min.css" rel="stylesheet" />
-    <link href="~/Content/userprofilestyle.css" rel="stylesheet" />
-
 
     @Scripts.Render("~/bundles/jqueryval")
 
-   
+    <div class='courses cards'>
+        <div class='course' ng-repeat="site in model.Sites">
+            <a href="{{site.Userid}}/{{site.Url}}">
+                <div class="imageratingcontainer" style="position: relative; z-index: 1000">
+                    <div id="results" style="text-align: center; color: white; background-color: cornflowerblue;"></div>
+                    <div class='blur asset'>
+                        <img src="{{site.Imagepath}}">
+                    </div>
+                </div>
 
-            <div class='courses cards' >
-                    <div class='course' ng-repeat="site in model.Sites">
-                        <div class="imageratingcontainer" style="position: relative; z-index: 1000">
-                          
-                            <input id="input" class="rating rating-loading" data-readonly="false"  data-show-clear="false"  data-show-caption="false" value="{{  parseInt(site.Rating)  }}" data-min="0" data-max="5" data-step="1" data-size="xs" />
-                            <div id="results" style="text-align: center;color: white;background-color: cornflowerblue;"></div>
-                            <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
-                            <script src="~/Scripts/star-rating.js"></script>
-                            <script src="~/Scripts/star-rating.min.js"></script>
-                            <script src="~/Content/themes/krajee-svg/theme.js"></script>
-                            @*<script type="text/javascript">
-                                $('#input-'+String($index)).on('rating.change', function (event, value, caption) {
-                                    $('#results-' + String($index)).load("http://localhost:61065/Home/UpdateRating?userid=" + model.CurrentUserid + "&siteid=" + site.Siteid + "&value=" + value);
-                                });
-                            </script>*@
-                            <div class='blur asset'>
+                <div class='details'>
+
+                    <div class='description'>
+                        <span>@Resources.Resource.Description</span><br>
+                        <span>{{site.Description}}</span>
+                    </div>
+
+                    <div class='title'>
+                        <span>@Resources.Resource.rating</span><br>
+                        <span>{{site.Rating}}</span>
+                    </div>
+
+                    <div class='tagstring'>
+                        <span>@Resources.Resource.Tags</span><br>
+                        <span class="label label-success" ng-repeat="tag in site.Tags">{{tag}}</span><span> </span>
+                    </div>
+
+                </div>
+            </a>
+        </div>
+    </div>
 
 
-                                <img src="{{site.Imagepath}}">
-                            </div>
-                        </div>
-
-                        <div class='details'>
-                            @*<div class='title'>
-                                <span>@Resources.Resource.Name</span><br>
-                                <span>{{site.Name}}</span>
-                            </div>*@
-                           
-                            <div class='description'>
-                                <span>@Resources.Resource.Description</span><br>
-                                <span>{{site.Description}}</span>
-                            </div>
-                            <div class='language'>
-
-                                @*@if (Model.ElementAt(j).Tags.Split(',').Count() != 1 || Model.ElementAt(j).Tags.Split(',')[0] != "")
-                                {
-                                    <span>@Resources.Resource.Tags</span><br>
-                                }*@
-                                    
-                                <span>@Resources.Resource.Tags</span><br>
-                                    <span class="label label-success" ng-repeat="tag in site.Tags">{{tag}}</span><span> </span>
-                            </div>
-
-                            @*<span class='actions'>
-                                <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserId, siteurl = Model.ElementAt(j).Url }) ">
-                                    <i class='fa fa-eye'></i>
-                                </a>
-                                @if (User.IsInRole("Admin") || Model.ElementAt(j).UserId == User.Identity.GetUserName())
-                                {
-                                    <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
-                                        <i class='fa fa-pencil'></i>
-                                    </a>
-                                }
-                            </span>*@
-                        </div>
-                    </div>           
-            </div>
-                                        
-                                    
     <script type="text/javascript">
-    $(function () {
-        $('#deletebutton').click(function () {
-            $('#ajax-del').submit();
+        $(function () {
+            $('#deletebutton').click(function () {
+                $('#ajax-del').submit();
+            });
         });
-    });
     </script>
-
-
-
-
 
 </div>
 
