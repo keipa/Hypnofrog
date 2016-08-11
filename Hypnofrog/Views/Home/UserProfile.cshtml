@@ -22,7 +22,10 @@
 </style>
 
 <br>
-<div class="container-fluid well span6">
+<div class="container-fluid well span6" ng-app="app" ng-controller="UserCtrl" ng-init="init('@Model.Name')">
+    <p>
+            {{model | json}}
+        </p>
     <div class="row-fluid">
         <div class="row">
             <div class="span2 col-lg-2 col-md-3 col-sm-4 col-xs-4">
@@ -44,7 +47,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="@Url.Action("Famehall", "Home")"><span class="fa fa-trophy fa-3 "></span> @Resources.Resource.Famehall</a></li>
                             <li><a href="@Url.Action("Index", "Manage")"><span class="fa fa-cog fa-3 "></span> @Resources.Resource.accountsettings</a></li>
-                            <li><a href="@Url.Action("Delete", new {id = User.Identity.GetUserId() })"><span class="fa fa-trash fa-3"></span> @Resources.Resource.deleteaccount</a></li>
+                            <li><a href="@Url.Action("Delete", new {id = User.Identity.GetUserId()})"><span class="fa fa-trash fa-3"></span> @Resources.Resource.deleteaccount</a></li>
                         </ul>
                     </div>
                 </div>

@@ -1,29 +1,28 @@
-﻿@model Hypnofrog.ViewModels.MainPageViewModel
+﻿@using Resources
+@model Hypnofrog.ViewModels.MainPageViewModel
 @{
     ViewBag.Title = "Hypnofrog";
 }
 
-<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+<link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script src="~/Scripts/angular.min.js"></script>
-<link href="~/Content/index.css" rel="stylesheet" />
+<link href="~/Content/index.css" rel="stylesheet"/>
 
-<hr />
+<hr/>
 
 
 <style>
-    body {
-        padding-top: 50px;
-    }
+    body { padding-top: 50px; }
 </style>
 <div class="container" ng-app="app" ng-controller="IndexCtrl">
-    <div class="maincontainer" style="display:flex;">
-        <a href="/user/{{  model.TopUserName  }}" class="topdesignrcontainer" style="position:relative;width:300px;">
-            <div class="numberone" style="position: absolute;top: 50%;color :white;font-family: inherit;font-size: 215px;left:50%;z-index :1000;transform: translate(-50%, -50%);">#1</div>
-            <img src="{{  model.FirstAvatar  }}" style="width:300px;height:300px;">
+    <div class="maincontainer" style="display: flex;">
+        <a href="/user/{{  model.TopUserName  }}" class="topdesignrcontainer" style="position: relative; width: 300px;">
+            <div class="numberone" style="color: white; font-family: inherit; font-size: 215px; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 1000;">#1</div>
+            <img src="{{  model.FirstAvatar  }}" style="height: 300px; width: 300px;">
         </a>
-        <div class="tagcloud" style="width: 100%;position: relative;">
-            <canvas id="my_canvas" width="400px" height="300px" style="position: absolute;left: 50%;right: 50%;top: 50%;transform: translate(-50%, -50%);"></canvas>
+        <div class="tagcloud" style="position: relative; width: 100%;">
+            <canvas id="my_canvas" width="400px" height="300px" style="left: 50%; position: absolute; right: 50%; top: 50%; transform: translate(-50%, -50%);"></canvas>
         </div>
     </div>
 
@@ -31,56 +30,53 @@
     @*<p>
         {{model | json}}
     </p>*@
-    <hr />
+    <hr/>
 
 
     @*@using (Html.BeginForm("Search", "Home", FormMethod.Post))
         {*@
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="@Resources.Resource.isearch" name="searchstring">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="@Resource.isearch" name="searchstring">
+        <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">@Resource.Search</button>
                 </span>
-            </div>
-        @* } *@
+    </div>
+    @* } *@
 
-    <hr />
-    <h2>@Resources.Resource.TopSites</h2>
-    <hr />
-
-
-
-
-
+    <hr/>
+    <h2>@Resource.TopSites</h2>
+    <hr/>
 
 
     @Scripts.Render("~/bundles/jqueryval")
 
-    <div class='courses cards'>
-        <div class='course' ng-repeat="site in model.Sites">
+    <div class="courses cards">
+        <div class="course" ng-repeat="site in model.Sites">
             <a href="{{site.Userid}}/{{site.Url}}">
                 <div class="imageratingcontainer" style="position: relative; z-index: 1000">
-                    <div id="results" style="text-align: center; color: white; background-color: cornflowerblue;"></div>
-                    <div class='blur asset'>
+                    <div id="results" style="background-color: cornflowerblue; color: white; text-align: center;"></div>
+                    <div class="blur asset">
                         <img src="{{site.Imagepath}}">
                     </div>
                 </div>
 
-                <div class='details'>
+                <div class="details">
 
-                    <div class='description'>
-                        <span>@Resources.Resource.Description</span><br>
+                    <div class="description">
+                        <span>@Resource.Description</span><br>
                         <span>{{site.Description}}</span>
                     </div>
 
-                    <div class='title'>
-                        <span>@Resources.Resource.rating</span><br>
+                    <div class="title">
+                        <span>@Resource.rating</span><br>
                         <span>{{site.Rating}}</span>
                     </div>
 
-                    <div class='tagstring'>
-                        <span>@Resources.Resource.Tags</span><br>
-                        <span class="label label-success" ng-repeat="tag in site.Tags">{{tag}}</span><span> </span>
+                    <div class="tagstring">
+                        <span>@Resource.Tags</span><br>
+                        <span ng-repeat="tag in site.Tags">
+                            <span class="label label-success">{{tag}}</span><span> </span>
+                        </span>
                     </div>
 
                 </div>
@@ -90,10 +86,11 @@
 
 
     <script type="text/javascript">
-        $(function () {
-            $('#deletebutton').click(function () {
-                $('#ajax-del').submit();
-            });
+        $(function() {
+            $('#deletebutton')
+                .click(function() {
+                    $('#ajax-del').submit();
+                });
         });
     </script>
 
@@ -101,4 +98,3 @@
 
 
 @Scripts.Render("~/bundles/wordcloud")
-

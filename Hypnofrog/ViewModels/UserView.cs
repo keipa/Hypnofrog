@@ -2,10 +2,8 @@
 using Hypnofrog.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Hypnofrog.ViewModels
 {
@@ -30,14 +28,14 @@ namespace Hypnofrog.ViewModels
 
         public static IEnumerable<UserView> GetUserViews(IEnumerable<Models.ApplicationUser> users)
         {
-            List<UserView> result = new List<UserView>();
+            var result = new List<UserView>();
                 using (var udb = new ApplicationDbContext())
                 {
-                    var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(udb));
+                    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(udb));
                     foreach (var user in users)
                         try
                         {
-                            result.Add(new UserView(user, udb.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(udb, user.UserName), UserManager.IsInRole(user.Id, "Admin")));
+                            result.Add(new UserView(user, udb.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(udb, user.UserName), userManager.IsInRole(user.Id, "Admin")));
                         }
                         catch
                         {
@@ -49,11 +47,10 @@ namespace Hypnofrog.ViewModels
 
         private static double GetProfilerRate(ApplicationDbContext db, string username)
         {
-            List<Site> sites = new List<Site>();
-            double average = 0.0;
+            var sites = new List<Site>();
             sites = db.Sites.Where(x => x.UserId == username).ToList();
-            foreach (var item in sites) average += item.Rate;
-            if (sites.Count() == 0) return 0.0;
+            var average = sites.Sum(item => item.Rate);
+            if (!sites.Any()) return 0.0;
             average = average / sites.Count();
             return average;
         }

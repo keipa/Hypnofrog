@@ -361,6 +361,8 @@
     <Content Include="404.html" />
     <Content Include="app\app.js" />
     <Content Include="app\controller\IndexCtrl.js" />
+    <Content Include="app\controller\AllUsersCtrl.js" />
+    <Content Include="app\controller\UserCtrl.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />

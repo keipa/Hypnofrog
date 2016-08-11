@@ -209,12 +209,10 @@ html {
         padding: 20px;
     }
 
-        /*.courses .course .details > div span {
-            display: block;
-        }*/
+
 
             .courses .course .details > div span:first-child {
-                color: #4a4f51;
+
                 text-transform: uppercase;
                 font-size: 12px;
                 margin-bottom: 5px;

@@ -1,58 +1,44 @@
-﻿@model IEnumerable<Hypnofrog.ViewModels.UserView>
-@using Microsoft.AspNet.Identity
-@{ 
+﻿@using Resources
+@model IEnumerable<Hypnofrog.ViewModels.UserView>
+@{
     ViewBag.Title = "All Users";
 }
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<script src="~/Scripts/angular.min.js"></script>
 
-<h2>@Resources.Resource.Users</h2>
-<br />
+<h2>@Resource.Users</h2>
+<br/>
 
-<div class="users-container">
+<div class="users-container" ng-app="app" ng-controller="AllUsersCtrl">
     <ul class="newlist users-list">
         <li>
             <ul id="users-list">
-                @foreach (var elem in Model)
-            {
-                    <li>
-                        <div class="user-main-level">
-                            <div class="user-avatar">
-                                <a href="@Url.Action("UserProfile",  new { userid = elem.UserName })">
-                                    <img src="@elem.UserAvatar" />
+                <li ng-repeat="user in model" ng-init="user.deleted = false" ng-show="!user.deleted">
+                    <div class="user-main-level">
+                        <div class="user-avatar">
+                            <a href="/user/{{user.UserName}}">
+                                <img src="{{user.UserAvatar}}"/>
+                            </a>
+                        </div>
+                        <div class="user-box">
+                            <div class="user-head">
+                                <span><a href="/user/{{user.UserName}}">{{user.UserName}}</a></span>
+                                <a ng-if="currentuser.UserName != user.UserName && currentuser.IsAdmin" ng-click="user.deleted = true" href="/Home/Delete/{{user.UserId}}" data-ajax="true" data-ajax-mode="replace">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                                <a ng-if="currentuser.IsAdmin && !user.IsAdmin" href="/Home/UpInRole/{{user.UserId}}" ng-click="user.IsAdmin=true" data-ajax="true" data-ajax-mode="replace">
+                                    <i class="fa fa-level-up"></i>
+                                </a>
+                                <a ng-if="currentuser.IsAdmin && user.IsAdmin && currentuser.UserName != user.UserName" ng-click="user.IsAdmin=false" href="/Home/DownInRole/{{user.UserId}}" data-ajax="true" data-ajax-mode="replace">
+                                    <i class="fa fa-level-down"></i>
                                 </a>
                             </div>
-                            <div class="user-box">
-                                <div class="user-head">
-                                    <span><a href="@Url.Action("UserProfile",  new { userid = elem.UserName })">@elem.UserName</a></span>
-                                    @if (User.Identity.Name == elem.UserName || User.IsInRole("Admin"))
-                                    {
-                                        <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("Delete", new { id = elem.UserId })">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                    }
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        if (!elem.IsAdmin)
-                                        {
-                                            <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("UpInRole", new { id = elem.UserId })">
-                                                <i class="fa fa-level-up"></i>
-                                            </a>
-                                        }
-                                        else if(elem.UserName != User.Identity.GetUserName())
-                                        {
-                                            <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("DownInRole", new { id = elem.UserId })">
-                                                <i class="fa fa-level-down"></i>
-                                            </a>
-                                        }
-                                    }
-                                </div>
-                                <div class="user-content">
-                                    Rating: @elem.Rating
-                                </div>
+                            <div class="user-content">
+                                @Resource.rating {{user.Rating}}
                             </div>
                         </div>
-                    </li>
-                }
+                    </div>
+                </li>
             </ul>
         </li>
     </ul>

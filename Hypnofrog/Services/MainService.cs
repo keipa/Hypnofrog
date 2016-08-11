@@ -252,6 +252,12 @@ namespace Hypnofrog.Services
             return UserView.GetUserViews(list_of_users).ToList();
         }
 
+        internal static UserView GetCurrentUser(string username, bool isadmin, string userid)
+        {
+            return new UserView() {IsAdmin =  isadmin, UserName = username, UserId =  userid};
+        }
+
+
         private static void AddOrUpdateTags(string newtags)
         {
             foreach (var item in newtags.Split(','))

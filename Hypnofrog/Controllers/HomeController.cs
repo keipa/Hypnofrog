@@ -80,6 +80,16 @@ namespace Hypnofrog.Controllers
         }
 
         [AllowAnonymous]
+        [Route("UserVM/{userid}")]
+        public ActionResult UserProfileVM(string userid)
+        {
+            var model = new UserProfileViewModel(userid);
+            var json = new JavaScriptSerializer().Serialize(model);
+            return Content(json.ToString(), "application/json");
+        }
+
+
+        [AllowAnonymous]
         [Route("User/{username}/{siteurl}")]
         public ActionResult PreviewSite(string username, string siteurl)
         {
@@ -211,6 +221,27 @@ namespace Hypnofrog.Controllers
         {
             return View(MainService.GetAllUsers());
         }
+
+
+        [AllowAnonymous]
+        [Route("AllUsersVM")]
+        public ActionResult AllUsersVM()
+        {
+            var model = MainService.GetAllUsers();
+            var json = new JavaScriptSerializer().Serialize(model);
+            return Content(json.ToString(), "application/json");
+        }
+
+
+        [AllowAnonymous]
+        [Route("WhoamiVM")]
+        public ActionResult Whoami()
+        {
+            var model = MainService.GetCurrentUser(User.Identity.Name, User.IsInRole("Admin"), User.Identity.GetUserId());
+            var json = new JavaScriptSerializer().Serialize(model);
+            return Content(json.ToString(), "application/json");
+        }
+
 
         public void UpInRole(string id)
         {
