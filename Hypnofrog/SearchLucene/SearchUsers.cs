@@ -14,7 +14,6 @@ namespace Hypnofrog.SearchLucene
 {
     public class SearchUsers
     {
-        private string _luceneDir = "indexes";
         private RAMDirectory _directory;
 
         public SearchUsers()

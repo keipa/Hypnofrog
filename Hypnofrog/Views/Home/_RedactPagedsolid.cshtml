@@ -1,6 +1,6 @@
 ﻿@model Hypnofrog.ViewModels.PageViewModel
 @{
-    //Session["PageId"] = Model.PageId;
+    Session["PageId"] = Model.PageId;
     ViewBag.Style = Model.Style;
 }
 <link href="~/Content/@Model.Style-theme.css" rel="stylesheet" />
@@ -13,10 +13,10 @@
         <i class="fa fa-floppy-o icons" id="Savebtn" onclick="dosmth();"></i>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-6 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-        @Html.TextAreaFor(model => model.Page.Title, new { @id = "title" })
+        @Html.TextAreaFor(model => model.Title, new { @id = "title" })
     </div>
     <div class="col-md-1 col-sm-1 col-xs-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-        <a href="@Url.Action("DeletePage", "Home", new { pageid  = Model.Page.PageId }) ">
+        <a href="@Url.Action("DeletePage", "Home", new { pageid  = Model.PageId }) ">
             <i class="icons fa fa-trash-o"></i>
         </a>
     </div>
@@ -24,10 +24,10 @@
 
 <div class="row">
     <div class="col-md-6 col-xs-6 col-sm-6">
-        @Html.TextArea("HtmlContent[0]", Model.Page.Contents.ElementAt(0).HtmlContent.ToString(), new { @id = "edit2" })
+        @Html.TextArea("HtmlContent[0]", Model.Contents.ElementAt(0).HtmlContent.ToString(), new { @id = "edit2" })
     </div>
     <div class="col-md-6  col-sm-6 col-xs-6">
-        @Html.TextArea("HtmlContent[1]", Model.Page.Contents.ElementAt(1).HtmlContent.ToString(), new { @id = "edit3" })
+        @Html.TextArea("HtmlContent[1]", Model.Contents.ElementAt(1).HtmlContent.ToString(), new { @id = "edit3" })
     </div>
 </div>
 

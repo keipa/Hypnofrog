@@ -53,7 +53,7 @@
     </div>
 </div>
 
-@if (Model.Email == User.Identity.Name)
+@if (Model.Name == User.Identity.GetUserName())
 {
     <a type="button" href="@Url.Action("Creating", "Home")" class="btn btn-success modal-link">@Resources.Resource.addsite</a>
 }

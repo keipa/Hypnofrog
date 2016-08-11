@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Hypnofrog.DBModels;
+using Hypnofrog.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +18,37 @@ namespace Hypnofrog.ViewModels
         public string Template { get; set; }
         public string Url { get; set; }
         public bool CommentsAvailable { get; set; }
+        public string Tags { get; set; }
+        public string CurrentTags { get; set; }
+
+        public SettingsModel()
+        {
+            isActive = false;
+            Color = "dark";
+            Menu = "without";
+            Template = "solid";
+            CommentsAvailable = false;
+            Url = SettingsModel.CreatePhoto("dark", "without", "solid");
+            Tags = MainService.GetMainTags();
+        }
+
+        public SettingsModel(string menutype)
+        {
+            Color = "dark";
+            Template = "solid";
+            Url = SettingsModel.CreatePhoto("dark", menutype, "solid");
+        }
+
+        public SettingsModel(int siteid)
+        {
+            Site site = MainService.GetSite(siteid);
+            Name = site.Title;
+            Description = site.Description;
+            CurrentTags = site.Tags;
+            Tags = MainService.GetMainTags();
+            CommentsAvailable = site.HasComments;
+            Url = site.Url;
+        }
 
         public static string CreatePhoto(string Color, string Menu, string Template)
         {

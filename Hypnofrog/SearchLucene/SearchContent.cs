@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lucene.Net.Analysis.Standard;
@@ -21,7 +18,6 @@ namespace Hypnofrog.SearchLucene
 {
     public class SearchContent
     {
-        private string _luceneDir = "indexes";
         private RAMDirectory _directory;
 
         public SearchContent()

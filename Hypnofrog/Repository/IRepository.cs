@@ -12,6 +12,8 @@ namespace Hypnofrog.Repository
     {
         IQueryable<ApplicationUser> UsersList { get; }
         bool RemoveUsers(string userId);
+        bool UserUpInRole(string id);
+        bool UserDownInRole(string id);
 
         IQueryable<Site> SitesList { get; }
         bool CreateSite(Site site);
@@ -28,7 +30,7 @@ namespace Hypnofrog.Repository
 
         IQueryable<Content> ContentList { get; }
         bool CreateContent(Content content);
-        bool UpdateContent(Content content);
+        bool UpdateContent(int contentid, string newcontent);
         bool RemoveContent(int contentId);
 
         IQueryable<Comment> CommentList { get; }

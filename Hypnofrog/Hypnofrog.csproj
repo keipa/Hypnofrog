@@ -348,6 +348,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AchievmentChecker.cs" />
     <Compile Include="ViewModels\LiteSiteViewModel.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
     <Compile Include="ViewModels\SiteViewModel.cs" />

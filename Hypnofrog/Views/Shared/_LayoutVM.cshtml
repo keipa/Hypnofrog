@@ -14,18 +14,23 @@
     <link href="~/Content/verticalmenu.css" rel="stylesheet" />
 </head>
 <body style="padding-top:0;">
+    @{
+        var model = (Hypnofrog.ViewModels.SiteViewModel)ViewBag.Model;
+    }
     <div id="loadingDiv" class="loader"></div>
     <div id="wrapper">
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav" id="menu-bar">
-                @if (ViewBag.RedactorEnable == true)
-            {
-                    <li class = "sidebar-brand">@Html.ActionLink((string)ViewBag.Title, "Index", "Home")</li>
-                    for (int i = 0; i < ((List<string>)ViewBag.PageTitles).Count(); i++)
+                @if (model != null)
+                {
+                    <li class="sidebar-brand">
+                        @Html.ActionLink(model.Title, "Index", "Home")
+                    </li>
+                    for (int i = 0; i < model.Titles.Count(); i++)
                     {
-                        <li>@Ajax.ActionLink(Html.Raw(((List<string>)ViewBag.PageTitles)[i]).ToString(), ViewBag.Preview == true ? "PreviewShowPage" : "ShowPage", new { pageid = ((List<int>)ViewBag.PageIds)[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
+                        <li>@Ajax.ActionLink(Html.Raw(model.Titles[i]).ToString(), model.Preview == true ? "PreviewShowPage" : "ShowPage", new { pageid = model.Ids[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
                     }
-                    if (ViewBag.Preview != true)
+                    if (model.Preview != true)
                     {
                         <li>
                             <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">@Resources.Resource.addpage</a>
@@ -34,7 +39,7 @@
                 }
                 else
                 {
-                    <li class = "sidebar-brand">@Html.ActionLink("Hypnofrog", "Index", "Home")</li>
+                    <li class="sidebar-brand">@Html.ActionLink("Hypnofrog", "Index", "Home")</li>
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
@@ -87,7 +92,7 @@
         $(function () {
             var chat = $.connection.chatHub;
             chat.client.broadcastMessage = function (text, link) {
-                if (text != 'Congratulation! You got an achievment: ' && text!='Поздравляем! Вы заработали достижение : ') {
+                if (text != 'Congratulation! You got an achievment: ' && text != 'Поздравляем! Вы заработали достижение : ') {
                     var notification = new Notification('', {
                         body: text,
                         icon: 'http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif',
@@ -112,4 +117,3 @@
     </div>
 </body>
 </html>
-

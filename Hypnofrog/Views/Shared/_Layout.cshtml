@@ -13,65 +13,67 @@
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
 <body>
+    @{
+        var model = (Hypnofrog.ViewModels.SiteViewModel)ViewBag.Model;
+    }
     <div id="loadingDiv" class="loader"></div>
     <div class="row">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @if (ViewBag.RedactorEnable != true)
-                {
-                    @Html.ActionLink("Hypnofrog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                }
-                else
-                {
-                    @Html.ActionLink((string)ViewBag.Title, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                }
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @if (ViewBag.RedactorEnable == true)
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @if (model == null)
                     {
-                        for (int i = 0; i < ((List<string>)ViewBag.PageTitles).Count(); i++)
-                        {
-                    <li>@Ajax.ActionLink(Html.Raw(((List<string>)ViewBag.PageTitles)[i]).ToString(), ViewBag.Preview == true ? "PreviewShowPage" : "ShowPage", new { pageid = ((List<int>)ViewBag.PageIds)[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
-                        }
-                        if (ViewBag.Preview != true)
-                        {
-                    <li>
-                        <a href="@Url.Action("CreatingPage", "Home")" class="modal-link">@Resources.Resource.addpage</a>
-                    </li>
-                        }
-
+                        @Html.ActionLink("Hypnofrog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                     }
                     else
                     {
-                        if (User.IsInRole("Admin"))
+                        @Html.ActionLink(model.Title, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        @if (model != null)
                         {
-                    <li>@Html.ActionLink(@Resources.Resource.admin, "Admin", "Home")</li>
+                            for (int i = 0; i < model.Titles.Count(); i++)
+                            {
+                                <li>@Ajax.ActionLink(Html.Raw(model.Titles[i]).ToString(), model.Preview == true ? "PreviewShowPage" : "ShowPage", new { pageid = model.Ids[i] }, new AjaxOptions() { UpdateTargetId = "page-redactor" })</li>
+                            }
+                            if (model.Preview != true)
+                            {
+                                <li>
+                                    <a href="@Url.Action("CreatingPage", "Home", new { siteid = model.SiteId})" class="modal-link">@Resources.Resource.addpage</a>
+                                </li>
+                            }
                         }
                         else
                         {
-                    <li>@Html.ActionLink(@Resources.Resource.Users, "Users", "Home")</li>
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li>@Html.ActionLink(@Resources.Resource.admin, "Admin", "Home")</li>
+                            }
+                            else
+                            {
+                                <li>@Html.ActionLink(@Resources.Resource.Users, "Users", "Home")</li>
+                            }
                         }
-                    }
-                </ul>
-                <ul class="nav navbar-nav navbar-left">
-                    <li>
-                        @Html.ActionLink(@Resources.Resource.Search, "Search", "Home")
-                    </li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+                    </ul>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            @Html.ActionLink(@Resources.Resource.Search, "Search", "Home")
+                        </li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
 
 
 
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <div class="row">
         <div class="container body-content" id="rendbody">
@@ -108,7 +110,7 @@
         $(function () {
             var chat = $.connection.chatHub;
             chat.client.broadcastMessage = function (text, link) {
-                if (text != 'Congratulation! You got an achievment: ' && text!='Поздравляем! Вы заработали достижение : ') {
+                if (text != 'Congratulation! You got an achievment: ' && text != 'Поздравляем! Вы заработали достижение : ') {
                     var notification = new Notification('', {
                         body: text,
                         icon: 'http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif',

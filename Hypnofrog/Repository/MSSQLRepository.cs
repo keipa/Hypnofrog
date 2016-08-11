@@ -5,12 +5,20 @@ using System.Web;
 using Hypnofrog.DBModels;
 using Hypnofrog.Models;
 using System.Data.Entity;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Hypnofrog.Repository
 {
     public class MSSQLRepository : IRepository
     {
-        private ApplicationDbContext dbc = new ApplicationDbContext();
+        private ApplicationDbContext dbc;
+
+        public MSSQLRepository()
+        {
+            dbc = DependencyResolver.Current.GetService<ApplicationDbContext>();
+        }
 
         public IQueryable<Achievement> AchievementList
         {
@@ -98,7 +106,7 @@ namespace Hypnofrog.Repository
 
         public bool CreateAvatar(Avatar avatar)
         {
-            if(avatar != null)
+            if (avatar != null)
             {
                 dbc.Avatars.Add(avatar);
                 dbc.SaveChanges();
@@ -166,7 +174,15 @@ namespace Hypnofrog.Repository
         {
             if (tag != null)
             {
-                dbc.Tags.Add(tag);
+                Tag oldtag = dbc.Tags.Where(x => x.Name == tag.Name).FirstOrDefault();
+                if (oldtag == null)
+                {
+                    dbc.Tags.Add(tag);
+                }
+                else
+                {
+                    oldtag.Repeats += 1;
+                }
                 dbc.SaveChanges();
                 return true;
             }
@@ -235,7 +251,7 @@ namespace Hypnofrog.Repository
 
         public bool RemoveUsers(string userId)
         {
-            var user = dbc.Users.Where(x => x.Id == userId).Include(x=>x.Roles).FirstOrDefault();
+            var user = dbc.Users.Where(x => x.Id == userId).Include(x => x.Roles).FirstOrDefault();
             if (user != null)
             {
                 dbc.Users.Remove(user);
@@ -257,12 +273,12 @@ namespace Hypnofrog.Repository
             return false;
         }
 
-        public bool UpdateContent(Content content)
+        public bool UpdateContent(int contentid, string newcontent)
         {
-            var oldcontent = dbc.Contents.Where(x => x.ContentId == content.ContentId).FirstOrDefault();
+            var oldcontent = dbc.Contents.Where(x => x.ContentId == contentid).FirstOrDefault();
             if (oldcontent != null)
             {
-                oldcontent = content;
+                oldcontent.HtmlContent = newcontent;
                 dbc.SaveChanges();
                 return true;
             }
@@ -288,6 +304,31 @@ namespace Hypnofrog.Repository
             {
                 oldsite = site;
                 dbc.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool UserUpInRole(string id)
+        {
+            var user = dbc.Users.Where(x => x.Id == id);
+            if (user != null)
+            {
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbc));
+                UserManager.AddToRole(id, "Admin");
+                return true;
+            }
+            return false;
+        }
+
+        public bool UserDownInRole(string id)
+        {
+            var user = dbc.Users.Where(x => x.Id == id);
+            if (user != null)
+            {
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbc));
+                UserManager.RemoveFromRole(id, "Admin");
+                UserManager.AddToRole(id, "User");
                 return true;
             }
             return false;
