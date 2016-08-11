@@ -28,6 +28,13 @@ namespace Hypnofrog.Controllers
     [Culture]
     public class HomeController : Controller
     {
+        private MainService main { get; set; }
+
+        public HomeController()
+        {
+            main = DependencyResolver.Current.GetService<MainService>();
+        }
+
         [AllowAnonymous]
         public ActionResult ChangeCulture(string lang)
         {
@@ -62,8 +69,6 @@ namespace Hypnofrog.Controllers
         public ActionResult UserProfile(string userid)
         {
             return View(new UserProfileViewModel(userid));
-            //Session["username"] = userid;
-            //ViewBag.Achievment = CheckAchievments(db);
         }
 
         [AllowAnonymous]
@@ -72,13 +77,6 @@ namespace Hypnofrog.Controllers
         {
             var model = new SiteViewModel(username, siteurl, User.Identity.GetUserName(), User.IsInRole("Admin"));
             return View(model);
-            //Site model = null;
-            //using (var db = new Context())
-            //    model = ConfigureModelToPreview(siteurl, db);
-            //ViewBag.PageTitles = FromPageTitles(model);
-            //ViewBag.PageIds = FromPageIds(model);
-            //Session["siteid"] = model.SiteId;
-            //return View("PreviewSite", model);
         }
 
         [Route("EditSite/{siteid}")]
@@ -87,6 +85,154 @@ namespace Hypnofrog.Controllers
             if (siteid == 0) return View("Error");
             var model = new SiteViewModel(siteid, User.Identity.GetUserName(), User.IsInRole("Admin"));
             return View(model);
+        }
+
+        [ValidateInput(false)]
+        public void SavePage(PageViewModel model, List<string> HtmlContent)
+        {
+            int pageid = (int)Session["PageId"];
+            MainService.SavePageTitleAndContent(pageid, model.Title, HtmlContent);
+        }
+
+        [HttpPost]
+        public ActionResult CreateSite(string inputData)
+        {
+            int siteId = MainService.CreateSite(inputData, User.Identity.GetUserName());
+            return RedirectToAction("EditSite", new { siteid = siteId });
+        }
+
+        public ActionResult Creating()
+        {
+            return PartialView("_ViewConfig", new SettingsModel() { UserId = User.Identity.GetUserId() });
+        }
+
+        public ActionResult CreatingPage(int siteid = 0)
+        {
+            string menutype = MainService.GetSiteMenu(siteid);
+            Session["menu"] = menutype;
+            Session["siteid"] = siteid;
+            return PartialView("_ViewConfigPage", new SettingsModel(menutype));
+        }
+
+        public PartialViewResult ChangeTemplate(SettingsModel model)
+        {
+            ReChangeSession(model);
+            string url = SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"], (string)Session["template"]);
+            return PartialView("_ColorTemplate", url);
+        }
+
+        private void ReChangeSession(SettingsModel model)
+        {
+            Session["color"] = model.Color ?? (string)Session["color"];
+            Session["menu"] = model.Menu ?? (string)Session["menu"];
+            Session["template"] = model.Template ?? (string)Session["template"];
+        }
+
+        [HttpPost]
+        public ActionResult LoadAction()
+        {
+            if (Request != null && Request.IsAjaxRequest())
+            {
+                System.Threading.Thread.Sleep(3000);
+                return Content(bool.TrueString);
+            }
+            return Content(bool.FalseString);
+        }
+
+        [HttpPost]
+        public ActionResult AddPage(string inputData)
+        {
+            int siteid = (int)Session["siteid"];
+            if(!MainService.CreatePage(inputData, siteid))
+                throw new HttpException(500, "Sorry, but smth wrong with server.");
+            return RedirectToAction("EditSite", new { siteid = siteid });
+        }
+
+        public PartialViewResult ShowPage(int pageid = 0)
+        {
+            return _Show(pageid, "_RedactPage");
+        }
+
+        public PartialViewResult PreviewShowPage(int pageid = 0)
+        {
+            return _Show(pageid, "_PreviewPage");
+        }
+
+        private PartialViewResult _Show(int pageid, string templ)
+        {
+            var page = new PageViewModel(pageid);
+            return PartialView(String.Format("{1}{0}", page.TemplateType, templ), page);
+        }
+
+        [HttpGet]
+        public PartialViewResult Settings(int siteid)
+        {
+            Session["currentsite"] = siteid;
+            var model = new SettingsModel(siteid);
+            return PartialView("_Settings", model);
+        }
+
+        public void SettingsConf(SettingsModel site)
+        {
+            int siteid = (int)Session["currentsite"];
+            if (!MainService.SiteConfirm(siteid, site))
+                throw new HttpException(500, "Sorry, but smth wrong with server.");
+        }
+
+        public void DeleteSite(int siteid)
+        {
+            if (!MainService.RemoveSite(siteid))
+                throw new HttpException(404, "Some components of this site is removed recently.");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Admin()
+        {
+            return RedirectToAction("AllUsers");
+        }
+
+        [AllowAnonymous]
+        public ActionResult Users()
+        {
+            return RedirectToAction("AllUsers");
+        }
+
+        [AllowAnonymous]
+        [Route("AllUsers")]
+        public ActionResult AllUsers()
+        {
+            return View(MainService.GetAllUsers());
+        }
+
+        public void UpInRole(string id)
+        {
+            if (!MainService.UpInRole(id))
+                throw new HttpException(404, "This user is admin.");
+        }
+
+        public void DownInRole(string id)
+        {
+            if(!MainService.DownInRole(id))
+                throw new HttpException(404, "This user already has role \"User\".");
+        }
+
+        public ActionResult DeletePage(int pageid = 0)
+        {
+            int siteid = MainService.DeletePageOrSite(pageid);
+            if (siteid > 0)
+            {
+                return RedirectToAction("EditSite", new { siteid = siteid });
+            }
+            else
+            {
+                return RedirectToAction("UserProfile", new { userid = User.Identity.GetUserName() });
+            }
+        }
+
+        public void Delete(string id = "")
+        {
+            if (!MainService.RemoveUser(id))
+                throw new HttpException(404, "This user is removed resently.");
         }
 
         //private void SetIndexParameters(Context db, ApplicationDbContext udb)
@@ -379,44 +525,6 @@ namespace Hypnofrog.Controllers
         //    ViewBag.Answer = firstRate;
         //    db.RateLog.Add(rate);
         //    return rate;
-        //}
-
-        //[HttpPost]
-        //public ActionResult CreateSite(string inputData)
-        //{
-        //    string[] param = inputData.Split(';');
-        //    param[0] = param[0] == "" ? "Мой сайт" : param[0];
-        //    param[1] = param[1] == "" ? "Описание сайта" : param[1];
-        //    var dbsite = new Site { };
-        //    var page = new Page();
-        //    using (var db = new Context())
-        //        SavingSitetoDatabase(param, out dbsite, out page, db);
-        //    return RedirectToAction("EditSite", new { siteid = dbsite.SiteId });
-        //}
-
-        //private void SavingSitetoDatabase(string[] param, out Site dbsite, out Page page, Context db)
-        //{
-        //    var site = new Site
-        //    {
-        //        CreationTime = DateTime.Now,
-        //        HasComments = param[3] == "true",
-        //        Title = param[0],
-        //        Description = param[1],
-        //        Iscomplited = false,
-        //        MenuType = param[5],
-        //        UserId = User.Identity.GetUserName(),
-        //        Rate = 0.0,
-        //        Tags = param[7]
-        //    };
-        //    db.Sites.Add(site);
-        //    dbsite = site;
-        //    page = new Page { SiteId = site.SiteId, Color = param[4], TemplateType = param[6], Title = "Page Title" };
-        //    db.Pages.Add(page);
-        //    AddUpdateNewTags(param[7], db);
-        //    CreatePageContent(page.PageId, param[6], db);
-        //    db.SaveChanges();
-        //    site.Url = param[2] == "" ? site.SiteId.ToString() : param[2];
-        //    db.SaveChanges();
         //}
 
         //private void AddUpdateNewTags(string newtags, Context db)

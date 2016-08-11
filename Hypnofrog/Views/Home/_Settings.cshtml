@@ -1,4 +1,4 @@
-﻿@model Hypnofrog.DBModels.Site
+﻿@model Hypnofrog.ViewModels.SettingsModel
 @{
     Layout = null;
 }
@@ -21,7 +21,7 @@
     <div class="confirm">
         <h3>@Resources.Resource.sitesettings</h3>
         <p></p>
-        @using (Html.BeginForm("Settings", "Home", FormMethod.Post, new { @style = "margin: 25px 10px 40px 30px;" }))
+        @using (Ajax.BeginForm("SettingsConf", "Home", new { }, new AjaxOptions() { }, new { @style = "margin: 25px 10px 40px 30px;" }))
         {
             <div class="form-group">
                 <div class="row">
@@ -33,7 +33,7 @@
                                 </label>
                             </div>
                             <div class="col-md-10">
-                                @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = Resources.Resource.Name, @id = "sitename" })
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @placeholder = Resources.Resource.Name, @id = "sitename" })
                             </div>
                         </div>
                         <br />
@@ -50,20 +50,20 @@
                         <br />
                         <div class="row">
                             <div class="btn-group col-md-12 checkbox col-lg-offset-1">
-                                <label>@Html.CheckBoxFor(x => x.HasComments, new { @id = "chbox" }) @Resources.Resource.comments</label>
+                                <label>@Html.CheckBoxFor(x => x.CommentsAvailable, new { @id = "chbox" }) @Resources.Resource.comments</label>
                             </div>
                         </div>
                         <label for="basic-url">@Resources.Resource.Tags</label>
-                        @Html.TextAreaFor(x=>x.Tags, new { @class="tag-editor-hidden-src", @id="tagsarea"})
+                        @Html.TextAreaFor(x=>x.CurrentTags, new { @class="tag-editor-hidden-src", @id="tagsarea"})
                         <label for="basic-url">URL для доступа к сайту</label>
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">/users/@User.Identity.Name</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" name="url">
+                            <span class="input-group-addon" id="basic-addon3">/users/@User.Identity.Name/</span>
+                            @Html.TextBoxFor(x=>x.Url, new { @class="form-control", @id="basic-url", @aria_describedby="basic-addon3"})
                         </div>
                     </div>
                 </div>
             </div>
-                <button id="approve-btn">@Resources.Resource.cancel</button>
+                <button id="approve-btn" type="button">@Resources.Resource.cancel</button>
                 <button id="confirm-btn" type="submit">@Resources.Resource.confirm</button>
         }
     </div>
@@ -72,12 +72,12 @@
 
 
 <script type="text/javascript">
-    var tags = '@ViewBag.Tags';
+    var tags = '@Model.Tags';
     tags = tags.split(';')
     for (i = 0; i < tags.length; i++) {
         tags[i] = tags[i].split(',')[0];
     }
-    var inittags = '@Model.Tags';
+    var inittags = '@Model.CurrentTags';
     inittags = inittags.split(',');
     $('#tagsarea').tagEditor({
         initialTags: inittags,
@@ -91,6 +91,9 @@
 
     $(function () {
         $('#approve-btn').click(function () {
+            $('#modal-container').modal('hide');
+        });
+        $('#confirm-btn').click(function () {
             $('#modal-container').modal('hide');
         });
     });

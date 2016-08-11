@@ -13,6 +13,9 @@
     @Styles.Render("~/bundles/froala-plugins-css")
 </head>
 <body>
+    @{
+        var model = (Hypnofrog.ViewModels.SiteViewModel)ViewBag.Model;
+    }
     <div id="loadingDiv" class="loader"></div>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -22,13 +25,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if (ViewBag.RedactorEnable != true)
+                @if (model == null)
                 {
                     @Html.ActionLink("Hypnofrog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 else
                 {
-                    @Html.ActionLink((string)ViewBag.Title, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink(model.Title, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 }
             </div>
             <div class="navbar-collapse collapse">

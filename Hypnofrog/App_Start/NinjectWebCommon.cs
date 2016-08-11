@@ -12,6 +12,7 @@ namespace Hypnofrog.App_Start
     using Ninject.Web.Common;
     using Models;
     using Repository;
+    using Services;
 
     public static class NinjectWebCommon 
     {
@@ -49,8 +50,9 @@ namespace Hypnofrog.App_Start
         
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<MainService>().ToMethod(x => new MainService());
             kernel.Bind<ApplicationDbContext>().ToMethod(x => new ApplicationDbContext());
-            kernel.Bind<IRepository>().To<MSSQLRepository>().InRequestScope();
+            kernel.Bind<IRepository>().To<MSSQLRepository>();
         }        
     }
 }

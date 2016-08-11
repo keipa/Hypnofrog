@@ -1,22 +1,17 @@
 ﻿@model Hypnofrog.ViewModels.SiteViewModel
 @using Microsoft.AspNet.Identity
 @{
-    ViewBag.Admin = Model.IsAdmin;
-    ViewBag.Preview = true;
-    ViewBag.RedactorEnable = true;
-    ViewBag.Title = Model.Site.Title;
-    ViewBag.SiteId = Model.Site.SiteId;
-    ViewBag.PageTitles = Model.Titles;
-    ViewBag.PageIds = Model.Ids;
+    ViewBag.Model = Model;
+    ViewBag.Title = Model.Title;
     Layout = Model.Layout;
 }
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
 
 <div id="page-redactor" class="fr-view">
-    @{Html.RenderPartial(String.Format("_PreviewPage{0}", Model.Pages.ElementAt(0).Page.TemplateType), Model.Pages.FirstOrDefault());}
+    @{Html.RenderPartial(String.Format("_PreviewPage{0}", Model.Pages.ElementAt(0).TemplateType), Model.Pages.FirstOrDefault());}
 </div>
-@if (Model.Site.HasComments)
+@if (Model.HasComments)
 {
     <hr />
     <div class="comments-container">
@@ -56,7 +51,7 @@
             }
             <li>
                 <ul id="comments-list">
-                    @{Html.RenderPartial("_Comments", Model.Site.Comments);}
+                    @{Html.RenderPartial("_Comments", Model.Comments);}
                 </ul>
             </li>
         </ul>

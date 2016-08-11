@@ -10,7 +10,8 @@ namespace Hypnofrog.ViewModels
 {
     public class SiteViewModel
     {
-        public Site Site { get; set; }
+        public int SiteId { get; set; }
+        public string Title { get; set; }
         public List<string> Titles { get; set; }
         public List<int> Ids { get; set; }
         public bool Preview { get; set; }
@@ -18,35 +19,42 @@ namespace Hypnofrog.ViewModels
         public string Layout { get; set; }
         public List<PageViewModel> Pages { get; set; }
         public Avatar UserAvatar { get; set; }
+        public bool HasComments { get; set; }
+        public List<CommentViewModel> Comments { get; set; }
 
         public SiteViewModel() { }
 
         public SiteViewModel(string username, string siteurl, string currentuser, bool isadmin)
         {
-            Site = MainService.SiteByUrlAndName(siteurl, username);
+            var site = MainService.SiteByUrlAndName(siteurl, username);
             Preview = true;
-            GetSiteSettings(this, Site, isadmin, currentuser);
+            HasComments = site.HasComments;
+            if (HasComments)
+            {
+                foreach(var elem in site.Comments)
+                {
+                    Comments.Add(new CommentViewModel(elem));
+                }
+            }
+            GetSiteSettings(this, site, isadmin, currentuser);
         }
 
         public SiteViewModel(int siteid, string currentuser, bool isadmin)
         {
-            Site = MainService.SiteById(siteid);
-            Preview = false;
-            GetSiteSettings(this, Site, isadmin, currentuser);
+            var site = MainService.SiteById(siteid);
+            HasComments = Preview = false;
+            GetSiteSettings(this, site, isadmin, currentuser);
         }
 
         private static void GetSiteSettings(SiteViewModel model, Site site, bool isadmin, string currentuser)
         {
+            model.SiteId = site.SiteId;
+            model.Title = site.Title;
             model.Titles = MainService.GetSiteTitles(site);
             model.Ids = MainService.GetSiteIds(site);
             model.IsAdmin = MainService.IsAdmin(isadmin, currentuser, site.UserId);
             model.Layout = MainService.GetSiteLayout(site);
             model.Pages = MainService.GenerateSitePages(site, isadmin, currentuser, site.UserId);
-            foreach (var page in model.Pages)
-            {
-                page.SiteUrl = site.Url;
-                page.UserName = site.UserId;
-            }
             var user = MainService.GetUserByName(currentuser);
             model.UserAvatar = MainService.GetUserAvatar(user);
         }

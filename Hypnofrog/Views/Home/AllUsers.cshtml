@@ -26,11 +26,24 @@
                                     <span><a href="@Url.Action("UserProfile",  new { userid = elem.UserName })">@elem.UserName</a></span>
                                     @if (User.Identity.Name == elem.UserName || User.IsInRole("Admin"))
                                     {
-                                        <a href="@Url.Action("Delete", new { id = elem.UserId })"><i class="fa fa-trash-o"></i></a>
+                                        <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("Delete", new { id = elem.UserId })">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
                                     }
-                                    @if (User.IsInRole("Admin") && !elem.IsAdmin)
+                                    @if (User.IsInRole("Admin"))
                                     {
-                                        <a href="@Url.Action("UpInRole",new { id = elem.UserId})"><i class="fa fa-level-up"></i></a>
+                                        if (!elem.IsAdmin)
+                                        {
+                                            <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("UpInRole", new { id = elem.UserId })">
+                                                <i class="fa fa-level-up"></i>
+                                            </a>
+                                        }
+                                        else if(elem.UserName != User.Identity.GetUserName())
+                                        {
+                                            <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("DownInRole", new { id = elem.UserId })">
+                                                <i class="fa fa-level-down"></i>
+                                            </a>
+                                        }
                                     }
                                 </div>
                                 <div class="user-content">

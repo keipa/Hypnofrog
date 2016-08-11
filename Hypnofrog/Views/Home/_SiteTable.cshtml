@@ -91,7 +91,7 @@
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>
                                 </a>
-                                <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#site-table" href="@Url.Action("DeleteSite", "Home",new { siteid = Model.ElementAt(j).SiteId })">
+                                <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("DeleteSite", "Home",new { siteid = Model.ElementAt(j).SiteId })">
                                     <i class='fa fa-trash'></i>
                                 </a>
                             }
