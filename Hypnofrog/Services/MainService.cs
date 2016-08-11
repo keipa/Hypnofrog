@@ -10,6 +10,11 @@ using System.Data.Entity;
 using Hypnofrog.ViewModels;
 using System.Web.Security;
 using System.Web.Mvc;
+using System.Text.RegularExpressions;
+using Hypnofrog.SearchLucene;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using System.IO;
 
 namespace Hypnofrog.Services
 {
@@ -20,6 +25,62 @@ namespace Hypnofrog.Services
         public MainService()
         {
             Repository = DependencyResolver.Current.GetService<IRepository>();
+        }
+
+        internal static List<CommentViewModel> SearchComments(string searchString)
+        {
+            var site_searcher = new SearchComments();
+            site_searcher.ClearLuceneIndex();
+            site_searcher.AddUpdateLuceneIndex(Repository.CommentList.ToList());
+            return site_searcher.Search(searchString).ToList();
+        }
+
+        internal static List<SiteViewModel> FromContentToSites(List<Content> contents, string currentuser, bool isadmin)
+        {
+            List<SiteViewModel> list = new List<SiteViewModel>();
+            foreach (var elem in contents)
+            {
+                list.Add(new SiteViewModel(GetSiteIdByContent(elem.ContentId), currentuser, isadmin));
+            }
+            return list;
+        }
+
+        private static int GetSiteIdByContent(int contentId)
+        {
+            var pageid = Repository.ContentList.Where(x => x.ContentId == contentId).FirstOrDefault().PageId;
+            return (int)Repository.PageList.Where(x => x.PageId == pageid).FirstOrDefault().SiteId;
+        }
+
+        internal static List<Content> SearchContent(string searchString)
+        {
+            var site_searcher = new SearchContent();
+            site_searcher.ClearLuceneIndex();
+            site_searcher.AddUpdateLuceneIndex(Repository.ContentList.ToList());
+            return site_searcher.Search(searchString).ToList();
+        }
+
+        internal static List<UserView> SearchUsers(string searchString)
+        {
+            var site_searcher = new SearchUsers();
+            site_searcher.ClearLuceneIndex();
+            site_searcher.AddUpdateLuceneIndex(Repository.UsersList.ToList());
+            return site_searcher.Search(searchString).ToList();
+        }
+
+        internal static List<SiteViewModel> SearchSites(string searchString, string currentuser, bool isadmin)
+        {
+            var site_searcher = new SearchSites();
+            site_searcher.ClearLuceneIndex();
+            site_searcher.AddUpdateLuceneIndex(Repository.SitesList.ToList());
+            return site_searcher.Search(searchString, currentuser, isadmin).ToList();
+        }
+
+        internal static IEnumerable<SiteViewModel> FromSitesToVM(List<Site> sites, string currentuser, bool isadmin)
+        {
+            List<SiteViewModel> viewmodels = new List<SiteViewModel>();
+            foreach (var elem in sites)
+                viewmodels.Add(new SiteViewModel(elem.SiteId, currentuser, isadmin));
+            return viewmodels;
         }
 
         public static ApplicationUser GetTopUser()
@@ -54,7 +115,10 @@ namespace Hypnofrog.Services
 
         internal static Site GetSite(int? siteId)
         {
-            return Repository.SitesList.Where(x => x.SiteId == siteId).FirstOrDefault();
+            var site = Repository.SitesList.Where(x => x.SiteId == siteId).Include(x => x.Comments).FirstOrDefault();
+            var pages = Repository.PageList.Where(x => x.SiteId == site.SiteId).Include(x => x.Contents).ToList();
+            site.Pages = pages;
+            return site;
         }
 
         public static List<int> GetSiteIds(Site site)
@@ -90,7 +154,11 @@ namespace Hypnofrog.Services
 
         public static List<string> GetSiteTitles(Site site)
         {
-            return site.Pages.Select(x => x.Title).ToList();
+            var titles = site.Pages.Select(x => x.Title).ToList();
+            List<string> valid_titles = new List<string>();
+            foreach (var elem in titles)
+                valid_titles.Add(Regex.Replace(elem ?? "Empty", "<[^>]+>", string.Empty));
+            return valid_titles;
         }
 
         public static ApplicationUser GetUserByName(string username)
@@ -104,9 +172,15 @@ namespace Hypnofrog.Services
             return Repository.AvatarList.Where(x => x.UserId == user.UserName).FirstOrDefault();
         }
 
+        public static Avatar GetUserAvatar(string username)
+        {
+            return Repository.AvatarList.Where(x => x.UserId == username).FirstOrDefault();
+        }
+
         internal static void SavePageTitleAndContent(int pageid, string title, List<string> htmlContent)
         {
             var page = GetPageById(pageid);
+            page.Title = title;
             var list_content = page.Contents.ToList();
             for (int i = 0; i < page.Contents.Count(); i++)
             {
@@ -179,9 +253,174 @@ namespace Hypnofrog.Services
             return Repository.UpdateSite(site);
         }
 
+        internal static bool RemoveSite(Site site)
+        {
+            return _RemoveSite(site);
+        }
+
         internal static bool RemoveSite(int siteid)
         {
             Site site = GetSite(siteid);
+            return _RemoveSite(site);
+        }
+
+        internal static Dictionary<string, bool> GetKeyValueAchievments(List<string> allachievments, List<string> alldesc, List<string> userachievments)
+        {
+            Dictionary<string, bool> achievments = new Dictionary<string, bool>();
+            for (int i = 0; i < allachievments.Count() - 1; i++)
+                if (userachievments.Contains(allachievments[i]))
+                    achievments.Add(allachievments[i] + ":" + alldesc[i], true);
+                else
+                    achievments.Add(allachievments[i] + ":" + alldesc[i], false);
+            return achievments;
+        }
+
+        internal static List<CommentViewModel> GetSiteComments(int siteid)
+        {
+            List<CommentViewModel> model = new List<CommentViewModel>();
+            var site = Repository.SitesList.Where(x => x.SiteId == siteid).Include(x => x.Comments).FirstOrDefault();
+            foreach(var elem in site.Comments)
+            {
+                model.Add(new CommentViewModel(elem));
+            }
+            return model;
+        }
+
+        internal static bool DeleteComment(int comid)
+        {
+            return Repository.RemoveComment(comid);
+        }
+
+        internal static void SaveAvatar(out string fName, HttpPostedFileBase file, string username, DirectoryInfo info)
+        {
+            string path;
+            ConfigureAvatarSaving(out fName, file, out path, info);
+            Cloudinary cloudinary = new Cloudinary(new Account("dldmfb5fo", "568721824454478", "ZO4nwcMQwcT88lUNUK5KHJmy_fU"));
+            var param = new ImageUploadParams()
+            {
+                File = new FileDescription(path)
+            };
+            var result = cloudinary.Upload(param);
+            SaveAvatarToDatabase(result, username);
+        }
+
+        internal static bool SaveNewComment(string newComment, int siteid, string username)
+        {
+            string useravatar = GetUserAvatar(username).Path;
+            return Repository.CreateComment(new Comment()
+            {
+                CreationTime = DateTime.Now,
+                SiteId = siteid,
+                Text = newComment,
+                UserAvatar = useravatar,
+                UserId = username
+            });
+        }
+
+        private static Rate GetRateForSite(string userid, string siteid)
+        {
+            return Repository.RateList.Where(x => x.User == userid && x.Site == siteid).FirstOrDefault();
+        }
+
+        internal static string GetRateMessage(string userid, string siteid, string value)
+        {
+            Rate rate = GetRateForSite(userid, siteid);
+            string result = GetResultForRate(userid, siteid, value, rate);
+            SaveAndcountAverage(siteid);
+            return result;
+        }
+
+        private static string GetResultForRate(string userid, string siteid, string value, Rate rate)
+        {
+            if (rate == null)
+            {
+                Repository.CreateRate(new Rate() { Value = Convert.ToInt32(value), Site = siteid, User = userid });
+                return "Thank you";
+            }
+            else if (rate.Value == Convert.ToInt32(value))
+            {
+                return "Updated.";
+            }
+            else
+            {
+                string res = rate.Value.ToString();
+                rate.Value = Convert.ToInt32(value);
+                Repository.UpdateRate(rate);
+                return "Update. Last mark: " + res;
+            }
+        }
+
+        private static void SaveAndcountAverage(string siteid)
+        {
+            
+            double average = CountingAverage(siteid);
+            int siteidd = Convert.ToInt32(siteid);
+            var site = Repository.SitesList.Where(x => x.SiteId == siteidd).FirstOrDefault();
+            site.Rate = average;
+            Repository.UpdateSite(site);
+        }
+
+        private static double CountingAverage(string siteid)
+        {
+            var sites = Repository.RateList.Where(x => x.Site == siteid).ToList();
+            double average = 0.0;
+            foreach (var item in sites)
+                average += (double)item.Value;
+            if (sites.Count() == 0)
+            {
+                return average;
+            }
+            else
+            {
+                average = average / (double)sites.Count();
+
+            }
+            return average;
+        }
+
+        internal static AchievmentChecker GetAchivmentsChecker(string userid, string username)
+        {
+            return new AchievmentChecker(Repository.SitesList.Where(x => x.UserId == username).ToList(),
+                                         Repository.RateList.Where(x => x.User == userid).OrderByDescending(x => x.Value).ToList(),
+                                         Repository.AchievementList.Where(x => x.User == userid).ToList(),
+                                         userid);
+        }
+
+        private static void ConfigureAvatarSaving(out string fName, HttpPostedFileBase file, out string path, DirectoryInfo info)
+        {
+            string pathString;
+            bool isExists;
+            SaveAvatarToStorage(out fName, file, out pathString, out isExists, info);
+            if (!isExists) Directory.CreateDirectory(pathString);
+            path = string.Format("{0}\\{1}", pathString, file.FileName);
+            file.SaveAs(path);
+        }
+
+        private static void SaveAvatarToDatabase(ImageUploadResult result, string username)
+        {
+            var useravatar = Repository.AvatarList.Where(x => x.UserId == username).FirstOrDefault();
+            if (useravatar == null)
+            {
+                Repository.CreateAvatar(new Avatar() { UserId = username, Path = result.Uri.AbsoluteUri });
+            }
+            else
+            {
+                useravatar.Path = result.Uri.AbsoluteUri;
+                Repository.UpdateAvatar(useravatar);
+            }
+        }
+
+        private static void SaveAvatarToStorage(out string fName, HttpPostedFileBase file, out string pathString, out bool isExists, DirectoryInfo info)
+        {
+            fName = file.FileName;
+            var originalDirectory = info;
+            pathString = Path.Combine(originalDirectory.ToString(), "imagepath");
+            var fileName1 = Path.GetFileName(file.FileName);
+            isExists = Directory.Exists(pathString);
+        }
+
+        private static bool _RemoveSite(Site site)
+        {
             var pages = site.Pages.ToList();
             foreach (var page in pages)
             {
@@ -195,12 +434,12 @@ namespace Hypnofrog.Services
                     return false;
             }
             var comments = site.Comments.ToList();
-            foreach(var comment in comments)
+            foreach (var comment in comments)
             {
                 if (!Repository.RemoveComment(comment.CommentId))
                     return false;
             }
-            return Repository.RemoveSite(siteid);
+            return Repository.RemoveSite(site.SiteId);
         }
 
         internal static int DeletePageOrSite(int pageid)
@@ -222,7 +461,29 @@ namespace Hypnofrog.Services
 
         internal static bool RemoveUser(string id)
         {
+            if (!ContainsUser(id))
+                return false;
+            if (!RemoveUserSites(id))
+                return false;
             return Repository.RemoveUsers(id);
+        }
+
+        private static bool ContainsUser(string id)
+        {
+            var user = Repository.UsersList.Where(x => x.Id == id).FirstOrDefault();
+            return user == null ? false : true;
+        }
+
+        private static bool RemoveUserSites(string id)
+        {
+            var user = Repository.UsersList.Where(x => x.Id == id).FirstOrDefault();
+            var sites = GetUserSites(user);
+            foreach (var site in sites)
+            {
+                if (!RemoveSite(site))
+                    return false;
+            }
+            return true;
         }
 
         internal static void RemovePage(Page page)
@@ -304,9 +565,18 @@ namespace Hypnofrog.Services
             return Repository.AchievementList.Where(x => x.User == user.Id).ToList();
         }
 
+        public static List<Achievement> GetUserAchivments(string userid)
+        {
+            return Repository.AchievementList.Where(x => x.User == userid).ToList();
+        }
+
         public static List<Site> GetUserSites(ApplicationUser user)
         {
-            return Repository.SitesList.Where(x => x.UserId == user.UserName).Include(x => x.Pages).ToList();
+            List<Site> sites = new List<Site>();
+            var lsites = Repository.SitesList.Where(x => x.UserId == user.UserName).ToList();
+            foreach (var site in lsites)
+                sites.Add(GetSite(site.SiteId));
+            return sites;
         }
 
         public static double GetRate(List<Site> sites)
@@ -347,8 +617,14 @@ namespace Hypnofrog.Services
 
         private static ApplicationUser _GetTopUser()
         {
-            var userid = Repository.SitesList.OrderByDescending(x => x.Rate).FirstOrDefault().UserId;
-            return Repository.UsersList.Where(x => x.UserName == userid).FirstOrDefault();
+            string userid = "";
+            var sites = Repository.SitesList.OrderByDescending(x => x.Rate).FirstOrDefault();
+            if (sites == null)
+                return Repository.UsersList.Where(x => x.UserName == "qwertyADMIN").FirstOrDefault();
+            else
+                userid = sites.UserId;
+            var user = Repository.UsersList.Where(x => x.UserName == userid).FirstOrDefault();
+            return user ?? Repository.UsersList.Where(x => x.UserName == "qwertyADMIN").FirstOrDefault();
         }
     }
 }

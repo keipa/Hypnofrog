@@ -18,9 +18,14 @@ namespace Hypnofrog.ViewModels
         public bool IsAdmin { get; set; }
         public string Layout { get; set; }
         public List<PageViewModel> Pages { get; set; }
-        public Avatar UserAvatar { get; set; }
+        public string UserAvatarPath { get; set; }
         public bool HasComments { get; set; }
         public List<CommentViewModel> Comments { get; set; }
+        public double Rate { get; set; }
+        public string Description { get; set; }
+        public string Tags { get; set; }
+        public string UserName { get; set; }
+        public string Url { get; set; }
 
         public SiteViewModel() { }
 
@@ -29,6 +34,7 @@ namespace Hypnofrog.ViewModels
             var site = MainService.SiteByUrlAndName(siteurl, username);
             Preview = true;
             HasComments = site.HasComments;
+            Comments = new List<CommentViewModel>();
             if (HasComments)
             {
                 foreach(var elem in site.Comments)
@@ -56,7 +62,12 @@ namespace Hypnofrog.ViewModels
             model.Layout = MainService.GetSiteLayout(site);
             model.Pages = MainService.GenerateSitePages(site, isadmin, currentuser, site.UserId);
             var user = MainService.GetUserByName(currentuser);
-            model.UserAvatar = MainService.GetUserAvatar(user);
+            if(user!=null) model.UserAvatarPath = MainService.GetUserAvatar(user).Path;
+            model.Rate = site.Rate;
+            model.Description = site.Description;
+            model.Tags = site.Tags;
+            model.UserName = site.UserId;
+            model.Url = site.Url;
         }
     }
 }

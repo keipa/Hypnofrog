@@ -13,6 +13,7 @@ using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
 using Hypnofrog.DBModels;
+using Hypnofrog.ViewModels;
 
 namespace Hypnofrog.SearchLucene
 {
@@ -40,6 +41,7 @@ namespace Hypnofrog.SearchLucene
             doc.Add(new Field("Userid", sampleData.UserId, Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("CreationTime", sampleData.CreationTime.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("Text", sampleData.Text, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("CommentId", sampleData.CommentId.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
 
             // add entry to index
@@ -118,8 +120,8 @@ namespace Hypnofrog.SearchLucene
                 UserAvatar = doc.Get("Avatar"),
                 UserId = doc.Get("Userid"),
                 Text = doc.Get("Text"),
-                CreationTime = Convert.ToDateTime(doc.Get("CreationTime"))
-
+                CreationTime = Convert.ToDateTime(doc.Get("CreationTime")),
+                CommentId = Convert.ToInt32(doc.Get("CommentId"))
             };
         }
 
@@ -148,10 +150,10 @@ namespace Hypnofrog.SearchLucene
             return query;
         }
 
-        private IEnumerable<Comment> _search(string searchQuery, string searchField = "")
+        private IEnumerable<CommentViewModel> _search(string searchQuery, string searchField = "")
         {
             // validation
-            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<Comment>();
+            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<CommentViewModel>();
 
             // set up lucene searcher
             using (var searcher = new IndexSearcher(_directory, false))
@@ -168,26 +170,36 @@ namespace Hypnofrog.SearchLucene
                     var results = _mapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();
-                    return results;
+                    List<CommentViewModel> comments = new List<CommentViewModel>();
+                    foreach(var elem in results)
+                    {
+                        comments.Add(new CommentViewModel(elem));
+                    }
+                    return comments;
                 }
                 // search by multiple fields (ordered by RELEVANCE)
                 else
                 {
                     var parser = new MultiFieldQueryParser
-                        (Lucene.Net.Util.Version.LUCENE_30, new[] { "SiteId", "Avatar", "Userid", "Text" }, analyzer);
+                        (Lucene.Net.Util.Version.LUCENE_30, new[] { "SiteId", "Avatar", "Userid", "Text", "CommentId" }, analyzer);
                     var query = parseQuery(searchQuery, parser);
                     var hits = searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
                     var results = _mapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();
-                    return results;
+                    List<CommentViewModel> comments = new List<CommentViewModel>();
+                    foreach (var elem in results)
+                    {
+                        comments.Add(new CommentViewModel(elem));
+                    }
+                    return comments;
                 }
             }
         }
 
-        public IEnumerable<Comment> Search(string input, string fieldName = "")
+        public IEnumerable<CommentViewModel> Search(string input, string fieldName = "")
         {
-            if (string.IsNullOrEmpty(input)) return new List<Comment>();
+            if (string.IsNullOrEmpty(input)) return new List<CommentViewModel>();
 
             var terms = input.Trim().Replace("-", " ").Split(' ')
                 .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*");
@@ -196,9 +208,9 @@ namespace Hypnofrog.SearchLucene
             return _search(input, fieldName);
         }
 
-        public IEnumerable<Comment> Search(string input)
+        public IEnumerable<CommentViewModel> Search(string input)
         {
-            if (string.IsNullOrEmpty(input)) return new List<Comment>();
+            if (string.IsNullOrEmpty(input)) return new List<CommentViewModel>();
 
             return _search(input);
         }

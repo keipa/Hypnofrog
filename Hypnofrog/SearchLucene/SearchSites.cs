@@ -15,6 +15,7 @@ using Lucene.Net.Util;
 using Hypnofrog.DBModels;
 using System.Data.Entity;
 using Hypnofrog.Models;
+using Hypnofrog.ViewModels;
 
 namespace Hypnofrog.SearchLucene
 {
@@ -148,10 +149,10 @@ namespace Hypnofrog.SearchLucene
             return query;
         }
 
-        private IEnumerable<Site> _search(string searchQuery, string searchField = "")
+        private IEnumerable<SiteViewModel> _search(string searchQuery, string currentuser, bool isadmin, string searchField = "")
         {
             // validation
-            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<Site>();
+            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<SiteViewModel>();
 
             // set up lucene searcher
             using (var searcher = new IndexSearcher(_directory, false))
@@ -168,12 +169,12 @@ namespace Hypnofrog.SearchLucene
                     var results = _mapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();
-                    List<Site> sites = new List<Site>();
+                    List<SiteViewModel> sites = new List<SiteViewModel>();
                     using (var db = new ApplicationDbContext())
                     {
                         foreach (var elem in results)
                         {
-                            sites.Add(db.Sites.Where(x => x.SiteId == elem.SiteId).Include(x => x.Pages).FirstOrDefault());
+                            sites.Add(new SiteViewModel(elem.SiteId, currentuser, isadmin));
                         }
                     }
                     return sites;
@@ -188,11 +189,12 @@ namespace Hypnofrog.SearchLucene
                     var results = _mapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();
-                    List<Site> sites = new List<Site>();
-                    using (var db = new ApplicationDbContext()) {
+                    List<SiteViewModel> sites = new List<SiteViewModel>();
+                    using (var db = new ApplicationDbContext())
+                    {
                         foreach (var elem in results)
                         {
-                            sites.Add(db.Sites.Where(x => x.SiteId == elem.SiteId).Include(x => x.Pages).FirstOrDefault());
+                            sites.Add(new SiteViewModel(elem.SiteId, currentuser, isadmin));
                         }
                     }
                     return sites;
@@ -200,22 +202,22 @@ namespace Hypnofrog.SearchLucene
             }
         }
 
-        public IEnumerable<Site> Search(string input, string fieldName = "")
+        public IEnumerable<SiteViewModel> Search(string input, string currentuser, bool isadmin, string fieldName = "")
         {
-            if (string.IsNullOrEmpty(input)) return new List<Site>();
+            if (string.IsNullOrEmpty(input)) return new List<SiteViewModel>();
 
             var terms = input.Trim().Replace("-", " ").Split(' ')
                 .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*");
             input = string.Join(" ", terms);
 
-            return _search(input, fieldName);
+            return _search(input, currentuser, isadmin, fieldName);
         }
 
-        public IEnumerable<Site> Search(string input)
+        public IEnumerable<SiteViewModel> Search(string input, string currentuser, bool isadmin)
         {
-            if (string.IsNullOrEmpty(input)) return new List<Site>();
+            if (string.IsNullOrEmpty(input)) return new List<SiteViewModel>();
 
-            return _search(input);
+            return _search(input, currentuser, isadmin);
         }
     }
 

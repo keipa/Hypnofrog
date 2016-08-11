@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hypnofrog.DBModels.Site>
+﻿@model IEnumerable<Hypnofrog.ViewModels.SiteViewModel>
 @using Microsoft.AspNet.Identity
 <link href="~/Content/star-rating.css" rel="stylesheet" />
 <link href="~/Content/star-rating.min.css" rel="stylesheet" />
@@ -14,12 +14,11 @@
     for (int i = 0; i < Model.Count(); i += 3)
     {
         <div class='courses cards'>
-
             @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
             {
                 <div class='course'>
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
-                        @if (User.Identity.IsAuthenticated && Model.ElementAt(j).UserId != User.Identity.GetUserName())
+                        @if (User.Identity.IsAuthenticated && Model.ElementAt(j).UserName != User.Identity.GetUserName())
                         {
                             <input id="input-@j" class="rating rating-loading" data-show-clear="false" data-show-caption="false" value="@Model.ElementAt(j).Rate" data-min="0" data-max="5" data-step="1" data-size="xs" />
                         }
@@ -34,21 +33,11 @@
                                     $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
                                 });
                             </script>
-                            @{ 
-                                string newbcolor;
-                                string newfcolor;
-                                try
-                                {
-                                    var elem = Model.ElementAt(j);
-                                    var backgroundcolor = elem.Pages.ElementAt(0).Color;
-                                     newbcolor = backgroundcolor == "orange" ? "FF7C00" : backgroundcolor == "dark" ? "0C0114" : "9AC6BC";
-                                     newfcolor = backgroundcolor == "orange" ? "A63400" : backgroundcolor == "dark" ? "BDAECD" : "37474f";
-                                }
-                                catch(Exception)
-                                {
-                                     newbcolor = "9AC6BC";
-                                     newfcolor = "37474f";
-                                }
+                            @{
+                                var elem = Model.ElementAt(j);
+                                var backgroundcolor = elem.Pages.ElementAt(0).Style;
+                                string newbcolor = backgroundcolor == "red" ? "FF7C00" : backgroundcolor == "dark" ? "0C0114" : "9AC6BC";
+                                string newfcolor = backgroundcolor == "red" ? "A63400" : backgroundcolor == "dark" ? "BDAECD" : "37474f";
                             }
                             <img src="http://dummyimage.com/400x150/@newbcolor/@newfcolor&text=@Model.ElementAt(j).Title.Replace(' ', '+')">
                         </div>
@@ -60,7 +49,7 @@
                                 <span>@Resources.Resource.Name</span><br>
                                 <span>@Model.ElementAt(j).Title</span>
                             </div>
-                            @if (Model.ElementAt(j).UserId == User.Identity.Name || User.IsInRole("Admin"))
+                            @if (Model.ElementAt(j).IsAdmin || User.IsInRole("Admin"))
                             {
                                 <div class="col-md-2">
                                     <a class="modal-link" href="@Url.Action("Settings", "Home", new { siteid = Model.ElementAt(j).SiteId })" style="cursor:pointer;">
@@ -83,10 +72,10 @@
 
                         </div>
                         <span class='actions'>
-                            <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserId, siteurl = Model.ElementAt(j).Url }) ">
+                            <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserName, siteurl = Model.ElementAt(j).Url }) ">
                                 <i class='fa fa-eye'></i>
                             </a>
-                            @if (Model.ElementAt(j).UserId == User.Identity.Name || User.IsInRole("Admin"))
+                            @if (Model.ElementAt(j).IsAdmin || User.IsInRole("Admin"))
                             {
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>
@@ -98,11 +87,11 @@
                         </span>
                     </div>
                 </div>
-            }
+                                }
         </div>
 
-    }
-}
+                                    }
+                                }
 
 
 <script src="~/Scripts/jquery.validate.min.js"></script>

@@ -10,6 +10,7 @@ namespace Hypnofrog.ViewModels
         public int CommentId { get; set; }
         public DateTime CreationTime { get; set; }
         public string Text { get; set; }
+        public int SiteId { get; set; }
 
         public CommentViewModel(Comment comment)
         {
@@ -18,6 +19,7 @@ namespace Hypnofrog.ViewModels
             CommentId = comment.CommentId;
             CreationTime = comment.CreationTime;
             Text = comment.Text;
+            SiteId = (int)comment.SiteId;
         }
     }
 }

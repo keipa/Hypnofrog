@@ -52,6 +52,9 @@
                         <li>@Html.ActionLink("Пользователи", "Users", "Home")</li>
                     }
                 }
+                <li>
+                    @Html.ActionLink(@Resources.Resource.Search, "DefSearch", "Home")
+                </li>
                 <li class="marginli"></li>
                 @Html.Partial("_LoginVMPartial")
             </ul>
