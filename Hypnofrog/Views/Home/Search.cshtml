@@ -25,9 +25,9 @@
 </style>
 <div ng-app="app" ng-controller="SearchCtrl" ng-init="init('@ViewBag.searchstring')">
 
-    <p>
+    @*<p>
         {{model | json}}
-    </p>
+    </p>*@
 
     @using (Html.BeginForm("Search", "Home", FormMethod.Post))
     {<div class="input-group">

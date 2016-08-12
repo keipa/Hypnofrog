@@ -55,9 +55,9 @@
                         </div>
                         <label for="basic-url">@Resources.Resource.Tags</label>
                         @Html.TextAreaFor(x=>x.CurrentTags, new { @class="tag-editor-hidden-src", @id="tagsarea"})
-                        <label for="basic-url">URL для доступа к сайту</label>
+                        <label for="basic-url">@Resources.Resource.urltoaccess</label>
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">/users/@User.Identity.Name/</span>
+                            <span class="input-group-addon" id="basic-addon3">/users/@Model.UserId/</span>
                             @Html.TextBoxFor(x=>x.Url, new { @class="form-control", @id="basic-url", @aria_describedby="basic-addon3"})
                         </div>
                     </div>

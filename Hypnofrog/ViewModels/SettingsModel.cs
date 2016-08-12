@@ -42,6 +42,7 @@ namespace Hypnofrog.ViewModels
         public SettingsModel(int siteid)
         {
             Site site = MainService.GetSite(siteid);
+            UserId = site.UserId;
             Name = site.Title;
             Description = site.Description;
             CurrentTags = site.Tags;
