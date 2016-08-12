@@ -45,10 +45,26 @@ namespace Hypnofrog.Services
             return list;
         }
 
+        internal static List<LiteSiteViewModel> FromContentToLiteSites(List<Content> contents, string currentuser, bool isadmin)
+        {
+            List<LiteSiteViewModel> list = new List<LiteSiteViewModel>();
+            foreach (var elem in contents)
+            {
+                list.Add(new LiteSiteViewModel(GetSiteByContent(elem.ContentId)));
+            }
+            return list;
+        }
+
+        private static Site GetSiteByContent(int contentId)
+        {
+            var pageid = Repository.ContentList.FirstOrDefault(x => x.ContentId == contentId).PageId;
+            return Repository.PageList.FirstOrDefault(x => x.PageId == pageid).Site;
+        }
+
         private static int GetSiteIdByContent(int contentId)
         {
-            var pageid = Repository.ContentList.Where(x => x.ContentId == contentId).FirstOrDefault().PageId;
-            return (int)Repository.PageList.Where(x => x.PageId == pageid).FirstOrDefault().SiteId;
+            var pageid = Repository.ContentList.FirstOrDefault(x => x.ContentId == contentId).PageId;
+            return (int)Repository.PageList.FirstOrDefault(x => x.PageId == pageid).SiteId;
         }
 
         internal static List<Content> SearchContent(string searchString)
@@ -67,7 +83,15 @@ namespace Hypnofrog.Services
             return site_searcher.Search(searchString).ToList();
         }
 
-        internal static List<SiteViewModel> SearchSites(string searchString, string currentuser, bool isadmin)
+        //internal static List<SiteViewModel> SearchSites(string searchString, string currentuser, bool isadmin)
+        //{
+        //    var site_searcher = new SearchSites();
+        //    site_searcher.ClearLuceneIndex();
+        //    site_searcher.AddUpdateLuceneIndex(Repository.SitesList.ToList());
+        //    return site_searcher.Search(searchString, currentuser, isadmin).ToList();
+        //}
+
+        internal static List<LiteSiteViewModel> SearchLiteSites(string searchString, string currentuser, bool isadmin)
         {
             var site_searcher = new SearchSites();
             site_searcher.ClearLuceneIndex();
@@ -92,7 +116,7 @@ namespace Hypnofrog.Services
         public static string GetTopUserAvatar()
         {
             var topuser = _GetTopUser();
-            var avatar = Repository.AvatarList.Where(x => x.UserId == topuser.UserName).FirstOrDefault();
+            var avatar = Repository.AvatarList.FirstOrDefault(x => x.UserId == topuser.UserName);
             return avatar.Path;
         }
 

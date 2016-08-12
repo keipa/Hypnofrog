@@ -1,1 +1,1 @@
-﻿angular.module('app', ['Hypnofrog.HomeController', 'Hypnofrog.UserController', 'Hypnofrog.AllUsersController']);
+﻿angular.module('app', ['Hypnofrog.HomeController', 'Hypnofrog.SearchController', 'Hypnofrog.AllUsersController']);

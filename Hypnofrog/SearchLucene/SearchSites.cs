@@ -149,10 +149,10 @@ namespace Hypnofrog.SearchLucene
             return query;
         }
 
-        private IEnumerable<SiteViewModel> _search(string searchQuery, string currentuser, bool isadmin, string searchField = "")
+        private IEnumerable<LiteSiteViewModel> _search(string searchQuery, string currentuser, bool isadmin, string searchField = "")
         {
             // validation
-            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<SiteViewModel>();
+            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<LiteSiteViewModel>();
 
             // set up lucene searcher
             using (var searcher = new IndexSearcher(_directory, false))
@@ -169,12 +169,12 @@ namespace Hypnofrog.SearchLucene
                     var results = _mapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();
-                    List<SiteViewModel> sites = new List<SiteViewModel>();
+                    List<LiteSiteViewModel> sites = new List<LiteSiteViewModel>();
                     using (var db = new ApplicationDbContext())
                     {
                         foreach (var elem in results)
                         {
-                            sites.Add(new SiteViewModel(elem.SiteId, currentuser, isadmin));
+                            sites.Add(new LiteSiteViewModel(elem));
                         }
                     }
                     return sites;
@@ -189,22 +189,22 @@ namespace Hypnofrog.SearchLucene
                     var results = _mapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();
-                    List<SiteViewModel> sites = new List<SiteViewModel>();
+                    List<LiteSiteViewModel> sites = new List<LiteSiteViewModel>();
                     using (var db = new ApplicationDbContext())
                     {
                         foreach (var elem in results)
                         {
-                            sites.Add(new SiteViewModel(elem.SiteId, currentuser, isadmin));
+                            sites.Add(new LiteSiteViewModel(elem));
                         }
                     }
                     return sites;
                 }
             }
         }
-
-        public IEnumerable<SiteViewModel> Search(string input, string currentuser, bool isadmin, string fieldName = "")
+            
+        public IEnumerable<LiteSiteViewModel> Search(string input, string currentuser, bool isadmin, string fieldName = "")
         {
-            if (string.IsNullOrEmpty(input)) return new List<SiteViewModel>();
+            if (string.IsNullOrEmpty(input)) return new List<LiteSiteViewModel>();
 
             var terms = input.Trim().Replace("-", " ").Split(' ')
                 .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*");
@@ -213,9 +213,9 @@ namespace Hypnofrog.SearchLucene
             return _search(input, currentuser, isadmin, fieldName);
         }
 
-        public IEnumerable<SiteViewModel> Search(string input, string currentuser, bool isadmin)
+        public IEnumerable<LiteSiteViewModel> Search(string input, string currentuser, bool isadmin)
         {
-            if (string.IsNullOrEmpty(input)) return new List<SiteViewModel>();
+            if (string.IsNullOrEmpty(input)) return new List<LiteSiteViewModel>();
 
             return _search(input, currentuser, isadmin);
         }

@@ -1,4 +1,4 @@
-﻿@model Hypnofrog.ViewModels.SearchViewModel
+﻿
 
 @{
     ViewBag.Title = "Search";
@@ -10,90 +10,99 @@
 <link href="~/Content/star-rating.min.css" rel="stylesheet" />
 <link href="~/Content/userprofilestyle.css" rel="stylesheet" />
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
-<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
+<link href="~/Content/userprofilestyle.css r"el="stylesheet" />
 <link href="~/Content/comments.css" rel="stylesheet" />
+<script src="~/Scripts/angular.min.js"></script>
 <hr>
-
-@using (Html.BeginForm("Search", "Home", FormMethod.Post))
-{<div class="input-group">
-        <input type="text" class="form-control" placeholder="Search..." name="searchstring">
-        <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
-        </span>
-    </div>
-}
-<hr />
-
-<h4>@Resources.Resource.siteandcontent</h4>
-
-<hr />
 
 <style>
     body {
         padding-top: 50px;
     }
 </style>
+<div ng-app="app" ng-controller="SearchCtrl" ng-init="init('@ViewBag.searchstring')">
 
+    <p>
+            {{model | json}}
+        </p>
 
-<div id="site-table">
-    @{ Html.RenderPartial("_SiteTable", Model.Sites);}
-</div>
-
-
-<h4>@Resources.Resource.Users</h4>
-<hr />
-
-<div id="site-table">
-    @{ Html.RenderPartial("_UsersTable", Model.Users);}
-</div>
-
-
-<h4>@Resources.Resource.comment</h4>
-<div class="users-container">
-
-    <ul class="newlist users-list">
-        <li>
-            <ul id="users-list">
-                @using Microsoft.AspNet.Identity
-                @foreach (var elem in Model.Comments)
-            {
-                    <li>
-                        <div class="user-main-level">
-                            <div class="user-avatar">
-                                <a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">
-                                    <img src="@elem.UserAvatar" />
-                                </a>
-                            </div>
-                            <div class="user-box">
-                                <div class="user-head">
-                                    <span><a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">@elem.UserId</a></span>
-                                    <i class="fa fa-clock-o"> @elem.CreationTime</i>
-                                    @if (elem.UserId == User.Identity.GetUserName() || User.IsInRole("Admin"))
-                                    {
-                                        <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#comments-list" href="@Url.Action("DeleteCommentFromSearch", "Home", new {comid = elem.CommentId })">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                    }
-                                </div>
-                                <div class="user-content fr-view">
-                                    @Html.Raw(elem.Text)
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </li>
-    </ul>
-    </div>
-    <hr />
-
-
-
-    @section scripts{
-        <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
-        <script src="~/Scripts/star-rating.js"></script>
-        <script src="~/Scripts/star-rating.min.js"></script>
-        <script src="~/Content/themes/krajee-svg/theme.js"></script>
-
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    {<div class="input-group">
+         <input type="text" class="form-control" placeholder="Search..." name="searchstring">
+         <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
+        </span>
+     </div>
     }
+    <hr/>
+
+    <h4>@Resources.Resource.siteandcontent</h4>
+
+    <hr/>
+
+
+
+
+    @*<div id="site-table">
+        @{ Html.RenderPartial("_SiteTable", Model.Sites);}
+    </div>
+
+
+    <h4>@Resources.Resource.Users</h4>
+    <hr/>
+
+    <div id="site-table">
+        @{ Html.RenderPartial("_UsersTable", Model.Users);}
+    </div>
+
+
+    <h4>@Resources.Resource.comment</h4>
+    <div class="users-container">
+        <ul class="newlist users-list">
+            <li>
+                <ul id="users-list">
+                    @using Microsoft.AspNet.Identity
+                    @foreach (var elem in Model.Comments)
+                    {
+                        <li>
+                            <div class="user-main-level">
+                                <div class="user-avatar">
+                                    <a href="@Url.Action("UserProfile", new {userid = elem.UserId})">
+                                        <img src="@elem.UserAvatar"/>
+                                    </a>
+                                </div>
+                                <div class="user-box">
+                                    <div class="user-head">
+                                        <span><a href="@Url.Action("UserProfile", new {userid = elem.UserId})">@elem.UserId</a></span>
+                                        <i class="fa fa-clock-o"> @elem.CreationTime</i>
+                                        @if (elem.UserId == User.Identity.GetUserName() || User.IsInRole("Admin"))
+                                        {
+                                            <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#comments-list" href="@Url.Action("DeleteCommentFromSearch", "Home", new {comid = elem.CommentId})">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                    <div class="user-content fr-view">
+                                        @Html.Raw(elem.Text)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <hr/>*@
+
+
+</div>
+
+
+@section scripts{
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
+    <script src="~/Scripts/star-rating.js"></script>
+    <script src="~/Scripts/star-rating.min.js"></script>
+    <script src="~/Content/themes/krajee-svg/theme.js"></script>
+
+}

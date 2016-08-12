@@ -2,7 +2,7 @@
     .controller("IndexCtrl",
     [
         "$scope", "$http", function($scope, $http) {
-            $http.get("Home/IndexVM")
+            $http.get("Home/IndexVm")
                 .success(function(data) {
                     $scope.model = data;
                     var tags = data.Tags;

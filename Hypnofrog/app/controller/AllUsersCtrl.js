@@ -2,7 +2,7 @@
     .controller("AllUsersCtrl",
     [
         "$scope", "$http", function($scope, $http) {
-            $http.get("AllUsersVM/")
+            $http.get("AllUsersVm/")
                 .success(function (data) {
                     $scope.visibility = true;
                     $scope.model = data;

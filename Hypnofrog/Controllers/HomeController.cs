@@ -1,26 +1,16 @@
-﻿using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Hypnofrog.DBModels;
-using Hypnofrog.Models;
-using Hypnofrog.ViewModels;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
-using System.Web.Script.Serialization;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
-using Lucene.Net.Analysis;
+using System.Web.Script.Serialization;
 using Hypnofrog.Filters;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Index;
-using Hypnofrog.SearchLucene;
-using System.Net.Mail;
 using Hypnofrog.Services;
+using Hypnofrog.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace Hypnofrog.Controllers
 {
@@ -28,31 +18,35 @@ namespace Hypnofrog.Controllers
     [Culture]
     public class HomeController : Controller
     {
-        private MainService main { get; set; }
-
         public HomeController()
         {
-            main = DependencyResolver.Current.GetService<MainService>();
+            Main = DependencyResolver.Current.GetService<MainService>();
         }
+
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
+        private MainService Main {  get;  set; }
 
         [AllowAnonymous]
         public ActionResult ChangeCulture(string lang)
         {
-            string returnUrl = Request.UrlReferrer.AbsolutePath;
-            List<string> cultures = new List<string>() { "ru", "en" };
+            Debug.Assert(Request.UrlReferrer != null, "Request.UrlReferrer != null");
+            var returnUrl = Request.UrlReferrer.AbsolutePath;
+            var cultures = new List<string> {"ru", "en"};
             if (!cultures.Contains(lang))
             {
                 lang = "ru";
             }
-            HttpCookie cookie = Request.Cookies["lang"];
+            var cookie = Request.Cookies["lang"];
             if (cookie != null)
                 cookie.Value = lang;
             else
             {
-                cookie = new HttpCookie("lang");
-                cookie.HttpOnly = false;
-                cookie.Value = lang;
-                cookie.Expires = DateTime.Now.AddYears(1);
+                cookie = new HttpCookie("lang")
+                {
+                    HttpOnly = false,
+                    Value = lang,
+                    Expires = DateTime.Now.AddYears(1)
+                };
             }
             Response.Cookies.Add(cookie);
             return Redirect(returnUrl);
@@ -65,11 +59,12 @@ namespace Hypnofrog.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult IndexVM()
+        public ActionResult IndexVm()
         {
-            var model = new MainPageViewModel(User.Identity.GetUserName(), User.Identity.IsAuthenticated, User.Identity.GetUserId());
+            var model = new MainPageViewModel(User.Identity.GetUserName(), User.Identity.IsAuthenticated,
+                User.Identity.GetUserId());
             var json = new JavaScriptSerializer().Serialize(model);
-            return Content(json.ToString(), "application/json");
+            return Content(json, "application/json");
         }
 
         [AllowAnonymous]
@@ -79,14 +74,7 @@ namespace Hypnofrog.Controllers
             return View(new UserProfileViewModel(userid, User.IsInRole("Admin")));
         }
 
-        [AllowAnonymous]
-        [Route("UserVM/{userid}")]
-        public ActionResult UserProfileVM(string userid)
-        {
-            var model = new UserProfileViewModel(userid);
-            var json = new JavaScriptSerializer().Serialize(model);
-            return Content(json.ToString(), "application/json");
-        }
+
 
 
         [AllowAnonymous]
@@ -99,30 +87,30 @@ namespace Hypnofrog.Controllers
         [Route("EditSite/{siteid}")]
         public ActionResult EditSite(int siteid = 0)
         {
-            if (siteid == 0) return View("Error");
-            return View(new SiteViewModel(siteid, User.Identity.GetUserName(), User.IsInRole("Admin")));
+            return siteid == 0 ? View("Error") : View(new SiteViewModel(siteid, User.Identity.GetUserName(), User.IsInRole("Admin")));
         }
 
         [ValidateInput(false)]
-        public void SavePage(PageViewModel model, List<string> HtmlContent)
+        public void SavePage(PageViewModel model, List<string> htmlContent)
         {
-            MainService.SavePageTitleAndContent((int)Session["PageId"], model.Title, HtmlContent);
+            MainService.SavePageTitleAndContent((int) Session["PageId"], model.Title, htmlContent);
         }
 
         [HttpPost]
         public ActionResult CreateSite(string inputData)
         {
-            return RedirectToAction("EditSite", new { siteid = MainService.CreateSite(inputData, User.Identity.GetUserName()) });
+            return RedirectToAction("EditSite",
+                new {siteid = MainService.CreateSite(inputData, User.Identity.GetUserName())});
         }
 
         public ActionResult Creating()
         {
-            return PartialView("_ViewConfig", new SettingsModel() { UserId = User.Identity.GetUserId() });
+            return PartialView("_ViewConfig", new SettingsModel {UserId = User.Identity.GetUserId()});
         }
 
         public ActionResult CreatingPage(int siteid = 0)
         {
-            string menutype = MainService.GetSiteMenu(siteid);
+            var menutype = MainService.GetSiteMenu(siteid);
             Session["menu"] = menutype;
             Session["siteid"] = siteid;
             return PartialView("_ViewConfigPage", new SettingsModel(menutype));
@@ -131,15 +119,16 @@ namespace Hypnofrog.Controllers
         public PartialViewResult ChangeTemplate(SettingsModel model)
         {
             ReChangeSession(model);
-            string url = SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"], (string)Session["template"]);
+            var url = SettingsModel.CreatePhoto((string) Session["color"], (string) Session["menu"],
+                (string) Session["template"]);
             return PartialView("_ColorTemplate", url);
         }
 
         private void ReChangeSession(SettingsModel model)
         {
-            Session["color"] = model.Color ?? (string)Session["color"];
-            Session["menu"] = model.Menu ?? (string)Session["menu"];
-            Session["template"] = model.Template ?? (string)Session["template"];
+            Session["color"] = model.Color ?? (string) Session["color"];
+            Session["menu"] = model.Menu ?? (string) Session["menu"];
+            Session["template"] = model.Template ?? (string) Session["template"];
         }
 
         [HttpPost]
@@ -147,7 +136,7 @@ namespace Hypnofrog.Controllers
         {
             if (Request != null && Request.IsAjaxRequest())
             {
-                System.Threading.Thread.Sleep(3000);
+                Thread.Sleep(3000);
                 return Content(bool.TrueString);
             }
             return Content(bool.FalseString);
@@ -156,10 +145,10 @@ namespace Hypnofrog.Controllers
         [HttpPost]
         public ActionResult AddPage(string inputData)
         {
-            int siteid = (int)Session["siteid"];
+            var siteid = (int) Session["siteid"];
             if (!MainService.CreatePage(inputData, siteid))
                 throw new HttpException(500, "Sorry, but smth wrong with server.");
-            return RedirectToAction("EditSite", new { siteid = siteid });
+            return RedirectToAction("EditSite", new {siteid});
         }
 
         public PartialViewResult ShowPage(int pageid = 0)
@@ -177,7 +166,7 @@ namespace Hypnofrog.Controllers
         private PartialViewResult _Show(int pageid, string templ)
         {
             var page = new PageViewModel(pageid);
-            return PartialView(String.Format("{1}{0}", page.TemplateType, templ), page);
+            return PartialView(string.Format("{1}{0}", page.TemplateType, templ), page);
         }
 
         [HttpGet]
@@ -189,7 +178,7 @@ namespace Hypnofrog.Controllers
 
         public void SettingsConf(SettingsModel site)
         {
-            if (!MainService.SiteConfirm((int)Session["currentsite"], site))
+            if (!MainService.SiteConfirm((int) Session["currentsite"], site))
                 throw new HttpException(500, "Sorry, but smth wrong with server.");
         }
 
@@ -221,11 +210,11 @@ namespace Hypnofrog.Controllers
 
         [AllowAnonymous]
         [Route("AllUsersVM")]
-        public ActionResult AllUsersVM()
+        public ActionResult AllUsersVm()
         {
             var model = MainService.GetAllUsers();
             var json = new JavaScriptSerializer().Serialize(model);
-            return Content(json.ToString(), "application/json");
+            return Content(json, "application/json");
         }
 
 
@@ -235,7 +224,7 @@ namespace Hypnofrog.Controllers
         {
             var model = MainService.GetCurrentUser(User.Identity.Name, User.IsInRole("Admin"), User.Identity.GetUserId());
             var json = new JavaScriptSerializer().Serialize(model);
-            return Content(json.ToString(), "application/json");
+            return Content(json, "application/json");
         }
 
 
@@ -254,15 +243,12 @@ namespace Hypnofrog.Controllers
 
         public ActionResult DeletePage(int pageid = 0)
         {
-            int siteid = MainService.DeletePageOrSite(pageid);
+            var siteid = MainService.DeletePageOrSite(pageid);
             if (siteid > 0)
             {
-                return RedirectToAction("EditSite", new { siteid = siteid });
+                return RedirectToAction("EditSite", new {siteid});
             }
-            else
-            {
-                return RedirectToAction("UserProfile", new { userid = User.Identity.GetUserName() });
-            }
+            return RedirectToAction("UserProfile", new {userid = User.Identity.GetUserName()});
         }
 
         [Authorize(Roles = "Admin")]
@@ -285,45 +271,62 @@ namespace Hypnofrog.Controllers
         [Route("Search")]
         public ActionResult DefSearch()
         {
-            return View("Search",new SearchViewModel());
+            return View("Search", "");
         }
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateInput(false)]
         [Route("SearchResults")]
-        public ActionResult Search(string searchstring)
+        public ActionResult Search(string searchstring = "")
         {
-            return View(new SearchViewModel(searchstring, User.Identity.GetUserName(), User.IsInRole("Admin")));
+            ViewBag.searchstring = searchstring;
+            return View();
+        }
+
+        [AllowAnonymous]
+        [Route("SearchVm/{searchstring}")]
+        public ActionResult SearchVm(string searchstring= "")
+        {
+            var model = new SearchViewModel(searchstring, User.Identity.GetUserName(), User.IsInRole("Admin"));
+            var json = new JavaScriptSerializer().Serialize(model);
+            return Content(json, "application/json");
         }
 
         public ActionResult SaveUploadedFile()
         {
-            string fName = "";
+            var fName = "";
             try
             {
                 foreach (string fileName in Request.Files)
                 {
-                    HttpPostedFileBase file = Request.Files[fileName];
+                    var file = Request.Files[fileName];
                     if (file != null && file.ContentLength > 0)
                         return SavingAvatar(out fName, file);
                 }
             }
-            catch (Exception) { return Json(new { Message = "Error in saving file" }); }
-            return Json(new { Message = fName });
+            catch (Exception)
+            {
+                return Json(new {Message = "Error in saving file"});
+            }
+            return Json(new {Message = fName});
         }
 
         private ActionResult SavingAvatar(out string fName, HttpPostedFileBase file)
         {
-            MainService.SaveAvatar(out fName, file, User.Identity.GetUserName(), new DirectoryInfo(string.Format("{0}Images\\WallImages", Server.MapPath(@"\"))));
-            return RedirectToAction("UserProfile", new { userid = User.Identity.Name });
+            MainService.SaveAvatar(out fName, file, User.Identity.GetUserName(),
+                new DirectoryInfo($"{Server.MapPath(@"\")}Images\\WallImages"));
+            return RedirectToAction("UserProfile", new {userid = User.Identity.Name});
         }
 
         [Route("Famehall")]
         public ActionResult Famehall()
         {
-            AchievmentChecker achievments = MainService.GetAchivmentsChecker(User.Identity.GetUserId(), User.Identity.GetUserName());
-            List<string> userachievments = MainService.GetUserAchivments(User.Identity.GetUserId()).Select(x => x.Name).ToList();
-            return View(MainService.GetKeyValueAchievments(achievments.GetAllAchievments(), achievments.GetAllAchievmentsDescriptionsRU(), userachievments));
+            var achievments = MainService.GetAchivmentsChecker(User.Identity.GetUserId(), User.Identity.GetUserName());
+            var userachievments = MainService.GetUserAchivments(User.Identity.GetUserId()).Select(x => x.Name).ToList();
+            return
+                View(MainService.GetKeyValueAchievments(achievments.GetAllAchievments(),
+                    achievments.GetAllAchievmentsDescriptionsRU(), userachievments));
         }
 
         public PartialViewResult UpdateRating(string userid, string siteid, string value)
@@ -332,68 +335,68 @@ namespace Hypnofrog.Controllers
         }
 
         [ValidateInput(false)]
-        public PartialViewResult CommentSite(string NewComment, int siteid)
+        public PartialViewResult CommentSite(string newComment, int siteid)
         {
-            if(!MainService.SaveNewComment(NewComment, siteid, User.Identity.GetUserName()))
+            if (!MainService.SaveNewComment(newComment, siteid, User.Identity.GetUserName()))
                 throw new HttpException(500, "Sorry, but smth wrong with server.");
             return PartialView("_Comments", MainService.GetSiteComments(siteid));
         }
 
         public PartialViewResult DeleteComment(int comid, int siteid)
         {
-            if(!MainService.DeleteComment(comid))
+            if (!MainService.DeleteComment(comid))
                 throw new HttpException(404, "This comment is removed resently.");
             return PartialView("_Comments", MainService.GetSiteComments(siteid));
         }
 
+        //        site_searcher.AddUpdateLuceneIndex(db.Users.ToList());
+        //    using (var db = new ApplicationDbContext())
+        //    site_searcher.ClearLuceneIndex();
+        //    var site_searcher = new SearchUsers();
+        //{
+
+        //private IEnumerable<UserView> SearchUsersLucene(string searchstring)
+        //}
+        //    return site_searcher.Search(searchstring);
+        //    site_searcher.AddUpdateLuceneIndex(db.Comments.ToList());
+        //    site_searcher.ClearLuceneIndex();
+        //    var site_searcher = new SearchComments();
+        //{
+
+        //private IEnumerable<Comment> SearchCommentsLucene(Context db, string searchstring)
+        //}
+        //    return db.Pages.Where(x => x.PageId == pageid).FirstOrDefault().SiteId;
+        //    var pageid = content.PageId;
+        //{
+
+        //private int? GetSiteIdThoughtContent(Content content)
+        //}
+        //    return site_searcher.Search(searchstring);
+        //    site_searcher.AddUpdateLuceneIndex(db.Contents.ToList());
+        //    site_searcher.ClearLuceneIndex();
+        //    var site_searcher = new SearchContent();
+        //{
+
+        //private IEnumerable<Content> SearchContentLucene(string searchstring)
+        //}
+        //    return converted;
+        //    }
+        //        converted.Add(db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault());
+        //        var siteid = GetSiteIdThoughtContent(content, db);
+        //    {
+        //    foreach (var content in list)
+        //    List<Site> converted = new List<Site>();
+        //{
+
+        //private List<Site> ConvertContentToSites(List<Content> list)
+        //}
+        //    ViewBag.SearchString = searchstring;
+        //    ViewBag.users = SearchUsersLucene(searchstring);
+        //    ViewBag.comments = SearchCommentsLucene(searchstring);
+        //{
 
 
         //private void SearchComponents(string searchstring)
-        //{
-        //    ViewBag.comments = SearchCommentsLucene(searchstring);
-        //    ViewBag.users = SearchUsersLucene(searchstring);
-        //    ViewBag.SearchString = searchstring;
-        //}
-
-        //private List<Site> ConvertContentToSites(List<Content> list)
-        //{
-        //    List<Site> converted = new List<Site>();
-        //    foreach (var content in list)
-        //    {
-        //        var siteid = GetSiteIdThoughtContent(content, db);
-        //        converted.Add(db.Sites.Where(x => x.SiteId == siteid).FirstOrDefault());
-        //    }
-        //    return converted;
-        //}
-
-        //private IEnumerable<Content> SearchContentLucene(string searchstring)
-        //{
-        //    var site_searcher = new SearchContent();
-        //    site_searcher.ClearLuceneIndex();
-        //    site_searcher.AddUpdateLuceneIndex(db.Contents.ToList());
-        //    return site_searcher.Search(searchstring);
-        //}
-
-        //private int? GetSiteIdThoughtContent(Content content)
-        //{
-        //    var pageid = content.PageId;
-        //    return db.Pages.Where(x => x.PageId == pageid).FirstOrDefault().SiteId;
-        //}
-
-        //private IEnumerable<Comment> SearchCommentsLucene(Context db, string searchstring)
-        //{
-        //    var site_searcher = new SearchComments();
-        //    site_searcher.ClearLuceneIndex();
-        //    site_searcher.AddUpdateLuceneIndex(db.Comments.ToList());
-        //    return site_searcher.Search(searchstring);
-        //}
-
-        //private IEnumerable<UserView> SearchUsersLucene(string searchstring)
-        //{
-        //    var site_searcher = new SearchUsers();
-        //    site_searcher.ClearLuceneIndex();
-        //    using (var db = new ApplicationDbContext())
-        //        site_searcher.AddUpdateLuceneIndex(db.Users.ToList());
         //    return site_searcher.Search(searchstring);
         //}
 
@@ -705,7 +708,6 @@ namespace Hypnofrog.Controllers
         //}
 
 
-
         //private string GetNameById(string userId)
         //{
         //    using (var db = new ApplicationDbContext())
@@ -783,7 +785,6 @@ namespace Hypnofrog.Controllers
         //{
         //    return View();
         //}
-
 
 
         //public ActionResult About()
