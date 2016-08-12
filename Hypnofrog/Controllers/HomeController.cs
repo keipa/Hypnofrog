@@ -134,12 +134,9 @@ namespace Hypnofrog.Controllers
         [HttpPost]
         public ActionResult LoadAction()
         {
-            if (Request != null && Request.IsAjaxRequest())
-            {
-                Thread.Sleep(3000);
-                return Content(bool.TrueString);
-            }
-            return Content(bool.FalseString);
+            if (Request == null || !Request.IsAjaxRequest()) return Content(bool.FalseString);
+            Thread.Sleep(1000);
+            return Content(bool.TrueString);
         }
 
         [HttpPost]
