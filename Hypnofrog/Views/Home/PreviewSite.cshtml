@@ -17,13 +17,13 @@
     <div class="comments-container">
         <h1>Комментарии</h1>
         <ul class="newlist comments-list">
-            @if (Model.UserAvatar != null)
+            @if (Model.UserAvatarPath != "")
             {
                 <li>
                     <div class="comment-main-level">
                         <div class="comment-avatar">
                             <a href="@Url.Action("UserProfile",  new { userid = User.Identity.GetUserName() })">
-                                <img src="@Model.UserAvatar.Path" />
+                                <img src="@Model.UserAvatarPath" />
                             </a>
                         </div>
                         <div class="comment-box">
@@ -32,7 +32,7 @@
 
                             </div>
                             <div class="comment-content">
-                                @using (Ajax.BeginForm("CommentSite", "Home", new { }, new AjaxOptions() { UpdateTargetId = "comments-list" }, new { @id = "ajaxform" }))
+                                @using (Ajax.BeginForm("CommentSite", "Home", new { siteid = Model.SiteId }, new AjaxOptions() { UpdateTargetId = "comments-list" }, new { @id = "ajaxform" }))
                                 {
                                     <div class="row">
                                         <div class="col-md-10 col-sm-10 col-xs-10">

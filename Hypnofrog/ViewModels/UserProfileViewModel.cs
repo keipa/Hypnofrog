@@ -15,19 +15,20 @@ namespace Hypnofrog.ViewModels
         public string Email { get; set; }
         public double Rate { get; set; }
         public int AchivmentsCount { get; set; }
-        public List<Site> Sites { get; set; }
+        public IEnumerable<SiteViewModel> Sites { get; set; }
 
         public UserProfileViewModel() { }
 
-        public UserProfileViewModel(string username)
+        public UserProfileViewModel(string username, bool isadmin)
         {
             ApplicationUser user = MainService.GetUserByName(username);
             Avatar = MainService.GetUserAvatar(user);
             Email = user.Email;
             Name = user.UserName;
             AchivmentsCount = MainService.GetUserAchivments(user).Count();
-            Sites = MainService.GetUserSites(user);
-            Rate = MainService.GetRate(Sites);
+            var sites = MainService.GetUserSites(user);
+            Sites = MainService.FromSitesToVM(sites, Name, isadmin);
+            Rate = MainService.GetRate(sites);
         }
     }
 }

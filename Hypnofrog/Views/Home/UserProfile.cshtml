@@ -35,7 +35,7 @@
                 <h3>@Model.Email // @Model.Name</h3>
                 <h6>@Resources.Resource.rating @Model.Rate</h6>
                 <h6>@Resources.Resource.Achievments @Model.AchivmentsCount / 8</h6>
-                <h6>@Resources.Resource.sitesadded @Model.Sites.Count</h6>
+                <h6>@Resources.Resource.sitesadded @Model.Sites.Count()</h6>
             </div>
             @if (Model.Name == User.Identity.Name)
             {
@@ -47,7 +47,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="@Url.Action("Famehall", "Home")"><span class="fa fa-trophy fa-3 "></span> @Resources.Resource.Famehall</a></li>
                             <li><a href="@Url.Action("Index", "Manage")"><span class="fa fa-cog fa-3 "></span> @Resources.Resource.accountsettings</a></li>
-                            <li><a href="@Url.Action("Delete", new {id = User.Identity.GetUserId()})"><span class="fa fa-trash fa-3"></span> @Resources.Resource.deleteaccount</a></li>
+                            <li><a href="@Url.Action("DeleteAccount")"><span class="fa fa-trash fa-3"></span> @Resources.Resource.deleteaccount</a></li>
                         </ul>
                     </div>
                 </div>
