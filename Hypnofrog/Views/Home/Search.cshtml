@@ -6,13 +6,16 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
 <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
-<link href="~/Content/star-rating.css" rel="stylesheet" />
-<link href="~/Content/star-rating.min.css" rel="stylesheet" />
-<link href="~/Content/userprofilestyle.css" rel="stylesheet" />
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
-<link href="~/Content/userprofilestyle.css r"el="stylesheet" />
-<link href="~/Content/comments.css" rel="stylesheet" />
+@*<link href="~/Content/star-rating.css" rel="stylesheet" />
+    <link href="~/Content/star-rating.min.css" rel="stylesheet" />
+    <link href="~/Content/userprofilestyle.css" rel="stylesheet" />*@
+@*<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>*@
+@*<link href="~/Content/userprofilestyle.css" rel="stylesheet" />*@
+@*<link href="~/Content/comments.css" rel="stylesheet" />*@
 <script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-sanitize.min.js"></script>
+<link href="~/Content/index.css" rel="stylesheet"/>
+
 <hr>
 
 <style>
@@ -23,86 +26,145 @@
 <div ng-app="app" ng-controller="SearchCtrl" ng-init="init('@ViewBag.searchstring')">
 
     <p>
-            {{model | json}}
-        </p>
+        {{model | json}}
+    </p>
 
     @using (Html.BeginForm("Search", "Home", FormMethod.Post))
     {<div class="input-group">
-         <input type="text" class="form-control" placeholder="Search..." name="searchstring">
-         <span class="input-group-btn">
+        <input type="text" class="form-control" placeholder="Search..." name="searchstring">
+        <span class="input-group-btn">
             <button class="btn btn-default" type="submit">@Resources.Resource.Search</button>
         </span>
-     </div>
+    </div>
     }
-    <hr/>
+    <hr />
 
     <h4>@Resources.Resource.siteandcontent</h4>
 
-    <hr/>
+    <hr />
 
 
 
 
-    @*<div id="site-table">
-        @{ Html.RenderPartial("_SiteTable", Model.Sites);}
+    <div class="courses cards">
+        <div class="course" ng-repeat="site in model.Sites">
+            <a href="user/{{site.Userid}}/{{site.Url}}">
+                <div class="imageratingcontainer" style="position: relative; z-index: 1000">
+                    <div id="results" style="background-color: cornflowerblue; color: white; text-align: center;"></div>
+                    <div class="blur asset">
+                        <img src="{{site.Imagepath}}">
+                    </div>
+                </div>
+            </a>
+                <div class="details">
+
+                    <div class="description">
+                        <span>@Resources.Resource.Description</span><br>
+                        <span>{{site.Description}}</span>
+                    </div>
+
+                    <div class="title">
+                        <span>@Resources.Resource.rating</span><br>
+                        <span>{{site.Rating.toFixed(2)}}</span>
+                    </div>
+
+                    <div class="tagstring">
+                        <span>@Resources.Resource.Tags</span><br>
+                        <span ng-repeat="tag in site.Tags">
+                            <span class="label label-success">{{tag}}</span><span> </span>
+                        </span>
+                    </div>
+
+                    <div class="tagstring" style="text-align: right">
+                        <span>Created by:</span><br>
+                        <a href="user/{{site.Userid}}"><span>@@{{site.Userid}}</span></a>
+                    </div>
+
+                </div>
+            
+        </div>
     </div>
 
 
     <h4>@Resources.Resource.Users</h4>
-    <hr/>
-
-    <div id="site-table">
-        @{ Html.RenderPartial("_UsersTable", Model.Users);}
-    </div>
-
-
-    <h4>@Resources.Resource.comment</h4>
+    <hr />
     <div class="users-container">
         <ul class="newlist users-list">
             <li>
                 <ul id="users-list">
-                    @using Microsoft.AspNet.Identity
-                    @foreach (var elem in Model.Comments)
-                    {
-                        <li>
-                            <div class="user-main-level">
-                                <div class="user-avatar">
-                                    <a href="@Url.Action("UserProfile", new {userid = elem.UserId})">
-                                        <img src="@elem.UserAvatar"/>
+                    <li ng-repeat="user in model.Users" ng-init="user.deleted = false" ng-show="!user.deleted">
+                        <div class="user-main-level">
+                            <div class="user-avatar">
+                                <a href="/user/{{user.UserName}}">
+                                    <img src="{{user.UserAvatar}}" />
+                                </a>
+                            </div>
+                            <div class="user-box">
+                                <div class="user-head">
+                                    <span><a href="/user/{{user.UserName}}">{{user.UserName}}</a></span>
+                                    <a ng-if="currentuser.UserName != user.UserName && currentuser.IsAdmin" ng-click="user.deleted = true" href="/Home/Delete/{{user.UserId}}" data-ajax="true" data-ajax-mode="replace">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                    <a ng-if="currentuser.IsAdmin && !user.IsAdmin" href="/Home/UpInRole/{{user.UserId}}" ng-click="user.IsAdmin=true" data-ajax="true" data-ajax-mode="replace">
+                                        <i class="fa fa-level-up"></i>
+                                    </a>
+                                    <a ng-if="currentuser.IsAdmin && user.IsAdmin && currentuser.UserName != user.UserName" ng-click="user.IsAdmin=false" href="/Home/DownInRole/{{user.UserId}}" data-ajax="true" data-ajax-mode="replace">
+                                        <i class="fa fa-level-down"></i>
                                     </a>
                                 </div>
-                                <div class="user-box">
-                                    <div class="user-head">
-                                        <span><a href="@Url.Action("UserProfile", new {userid = elem.UserId})">@elem.UserId</a></span>
-                                        <i class="fa fa-clock-o"> @elem.CreationTime</i>
-                                        @if (elem.UserId == User.Identity.GetUserName() || User.IsInRole("Admin"))
-                                        {
-                                            <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#comments-list" href="@Url.Action("DeleteCommentFromSearch", "Home", new {comid = elem.CommentId})">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        }
-                                    </div>
-                                    <div class="user-content fr-view">
-                                        @Html.Raw(elem.Text)
-                                    </div>
+                                <div class="user-content">
+                                    @Resources.Resource.rating {{user.Rating.toFixed(2)}}
                                 </div>
                             </div>
-                        </li>
-                    }
+                        </div>
+                    </li>
                 </ul>
             </li>
         </ul>
     </div>
-    <hr/>*@
+
+
+    <h4>@Resources.Resource.comment</h4>
+    <hr />
+    <div class="users-container">
+        <ul class="newlist users-list">
+            <li>
+                <ul id="users-list">
+                    <li ng-repeat="comment in model.Comments">
+                        <div class="user-main-level">
+                            <div class="user-avatar">
+                                <a href="/user/{{comment.UserId}}">
+                                    <img src="{{comment.UserAvatar}}" />
+                                </a>
+                            </div>
+                            <div class="user-box">
+                                <div class="user-head">
+                                    <span><a href="/user/{{comment.UserId}}">{{comment.UserId}}</a></span>
+
+                                </div>
+                                <div class="user-content fr-view">
+
+                                    <p ng-bind-html="comment.Text"></p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    @*}*@
+                </ul>
+            </li>
+        </ul>
+    </div>
+
 
 
 </div>
 
 
-@section scripts{
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
-    <script src="~/Scripts/star-rating.js"></script>
-    <script src="~/Scripts/star-rating.min.js"></script>
-    <script src="~/Content/themes/krajee-svg/theme.js"></script>
+@*@section scripts{
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js'></script>
+        <script src="~/Scripts/star-rating.js"></script>
+        <script src="~/Scripts/star-rating.min.js"></script>
+        <script src="~/Content/themes/krajee-svg/theme.js"></script>
 
-}
+    }*@

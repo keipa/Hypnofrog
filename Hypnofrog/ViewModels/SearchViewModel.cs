@@ -12,7 +12,6 @@ namespace Hypnofrog.ViewModels
         public List<LiteSiteViewModel> Sites { get; set; }
         public List<CommentViewModel> Comments { get; set; }
         public List<UserView> Users { get; set; }
-        //private List<Content> Contents { get; set; }
         public string searchString { get; set; }
 
         public SearchViewModel()

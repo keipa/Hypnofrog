@@ -9,6 +9,10 @@
                     .success(function(data) {
                         $scope.model = data;
                     });
+                $http.get("WhoamiVM/")
+                    .success(function(data) {
+                        $scope.currentuser = data;
+                    });
             };
 
         }

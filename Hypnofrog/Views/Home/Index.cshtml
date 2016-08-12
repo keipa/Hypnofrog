@@ -59,7 +59,7 @@
                         <img src="{{site.Imagepath}}">
                     </div>
                 </div>
-
+            </a>
                 <div class="details">
 
                     <div class="description">
@@ -69,7 +69,7 @@
 
                     <div class="title">
                         <span>@Resource.rating</span><br>
-                        <span>{{site.Rating}}</span>
+                        <span>{{site.Rating.toFixed(2)}}</span>
                     </div>
 
                     <div class="tagstring">
@@ -79,8 +79,12 @@
                         </span>
                     </div>
 
+                    <div class="tagstring" style="text-align: right">
+                        <span>Created by:</span><br>
+                        <a href="user/{{site.Userid}}"><span>@@{{site.Userid}}</span></a>
+                    </div>
                 </div>
-            </a>
+            
         </div>
     </div>
 

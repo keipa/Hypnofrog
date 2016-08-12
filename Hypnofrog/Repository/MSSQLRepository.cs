@@ -96,102 +96,79 @@ namespace Hypnofrog.Repository
 
         public bool CreateAchievement(Achievement achievement)
         {
-            if (achievement != null)
-            {
-                dbc.Achievements.Add(achievement);
-                dbc.SaveChanges();
-            }
+            if (achievement == null) return false;
+            dbc.Achievements.Add(achievement);
+            dbc.SaveChanges();
             return false;
         }
 
         public bool CreateAvatar(Avatar avatar)
         {
-            if (avatar != null)
-            {
-                dbc.Avatars.Add(avatar);
-                dbc.SaveChanges();
-                return true;
-            }
-            return false;
+            if (avatar == null) return false;
+            dbc.Avatars.Add(avatar);
+            dbc.SaveChanges();
+            return true;
         }
 
         public bool CreateComment(Comment comment)
         {
-            if (comment != null)
-            {
-                dbc.Comments.Add(comment);
-                dbc.SaveChanges();
-                return true;
-            }
-            return false;
+            if (comment == null) return false;
+            dbc.Comments.Add(comment);
+            dbc.SaveChanges();
+            return true;
         }
 
         public bool CreateContent(Content content)
         {
-            if (content != null)
-            {
-                dbc.Contents.Add(content);
-                dbc.SaveChanges();
-                return true;
-            }
-            return false;
+            if (content == null) return false;
+            dbc.Contents.Add(content);
+            dbc.SaveChanges();
+            return true;
         }
 
         public bool CreatePage(Page page)
         {
-            if (page != null)
-            {
-                dbc.Pages.Add(page);
-                dbc.SaveChanges();
-                return true;
-            }
-            return false;
+            if (page == null) return false;
+            dbc.Pages.Add(page);
+            dbc.SaveChanges();
+            return true;
         }
 
         public bool CreateRate(Rate rate)
         {
-            if (rate != null)
-            {
-                dbc.RateLog.Add(rate);
-                dbc.SaveChanges();
-                return true;
-            }
-            return false;
+            if (rate == null) return false;
+            dbc.RateLog.Add(rate);
+            dbc.SaveChanges();
+            return true;
         }
 
         public bool CreateSite(Site site)
         {
-            if (site != null)
-            {
-                dbc.Sites.Add(site);
-                dbc.SaveChanges();
-                return true;
-            }
-            return false;
+            if (site == null) return false;
+            dbc.Sites.Add(site);
+            dbc.SaveChanges();
+            return true;
         }
 
         public bool CreateTag(Tag tag)
         {
-            if (tag != null)
+            if (tag == null) return false;
+            var oldtag = dbc.Tags.FirstOrDefault(x => x.Name == tag.Name);
+            if (oldtag == null)
             {
-                Tag oldtag = dbc.Tags.Where(x => x.Name == tag.Name).FirstOrDefault();
-                if (oldtag == null)
-                {
-                    dbc.Tags.Add(tag);
-                }
-                else
-                {
-                    oldtag.Repeats += 1;
-                }
-                dbc.SaveChanges();
-                return true;
+                dbc.Tags.Add(tag);
             }
-            return false;
+            else
+            {
+                oldtag.Repeats += 1;
+            }
+            dbc.SaveChanges();
+            return true;
         }
 
         public bool RemoveComment(int commentId)
         {
-            var comment = dbc.Comments.Where(x => x.CommentId == commentId).FirstOrDefault();
+            var comment = dbc.Comments.FirstOrDefault(x => x.CommentId == commentId);
             if (comment != null)
             {
                 dbc.Comments.Remove(comment);
@@ -203,7 +180,7 @@ namespace Hypnofrog.Repository
 
         public bool RemoveContent(int contentId)
         {
-            var content = dbc.Contents.Where(x => x.ContentId == contentId).FirstOrDefault();
+            var content = dbc.Contents.FirstOrDefault(x => x.ContentId == contentId);
             if (content != null)
             {
                 dbc.Contents.Remove(content);
@@ -215,7 +192,7 @@ namespace Hypnofrog.Repository
 
         public bool RemovePage(int pageId)
         {
-            var page = dbc.Pages.Where(x => x.PageId == pageId).FirstOrDefault();
+            var page = dbc.Pages.FirstOrDefault(x => x.PageId == pageId);
             if (page != null)
             {
                 dbc.Pages.Remove(page);
@@ -227,7 +204,7 @@ namespace Hypnofrog.Repository
 
         public bool RemoveSite(int siteId)
         {
-            var site = dbc.Sites.Where(x => x.SiteId == siteId).FirstOrDefault();
+            var site = dbc.Sites.FirstOrDefault(x => x.SiteId == siteId);
             if (site != null)
             {
                 dbc.Sites.Remove(site);
@@ -239,7 +216,7 @@ namespace Hypnofrog.Repository
 
         public bool RemoveTag(int tagId)
         {
-            var tag = dbc.Tags.Where(x => x.TagId == tagId).FirstOrDefault();
+            var tag = dbc.Tags.FirstOrDefault(x => x.TagId == tagId);
             if (tag != null)
             {
                 dbc.Tags.Remove(tag);
@@ -263,7 +240,7 @@ namespace Hypnofrog.Repository
 
         public bool UpdateAvatar(Avatar avatar)
         {
-            var oldavatar = dbc.Avatars.Where(x => x.AvatarId == avatar.AvatarId).FirstOrDefault();
+            var oldavatar = dbc.Avatars.FirstOrDefault(x => x.AvatarId == avatar.AvatarId);
             if (oldavatar != null)
             {
                 oldavatar = avatar;
@@ -275,7 +252,7 @@ namespace Hypnofrog.Repository
 
         public bool UpdateContent(int contentid, string newcontent)
         {
-            var oldcontent = dbc.Contents.Where(x => x.ContentId == contentid).FirstOrDefault();
+            var oldcontent = dbc.Contents.FirstOrDefault(x => x.ContentId == contentid);
             if (oldcontent != null)
             {
                 oldcontent.HtmlContent = newcontent;
@@ -287,7 +264,7 @@ namespace Hypnofrog.Repository
 
         public bool UpdateRate(Rate rate)
         {
-            var oldrate = dbc.RateLog.Where(x => x.RateId == rate.RateId).FirstOrDefault();
+            var oldrate = dbc.RateLog.FirstOrDefault(x => x.RateId == rate.RateId);
             if (oldrate != null)
             {
                 oldrate = rate;
@@ -299,7 +276,7 @@ namespace Hypnofrog.Repository
 
         public bool UpdateSite(Site site)
         {
-            var oldsite = dbc.Sites.Where(x => x.SiteId == site.SiteId).FirstOrDefault();
+            var oldsite = dbc.Sites.FirstOrDefault(x => x.SiteId == site.SiteId);
             if (oldsite != null)
             {
                 oldsite = site;
@@ -312,26 +289,20 @@ namespace Hypnofrog.Repository
         public bool UserUpInRole(string id)
         {
             var user = dbc.Users.Where(x => x.Id == id);
-            if (user != null)
-            {
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbc));
-                UserManager.AddToRole(id, "Admin");
-                return true;
-            }
-            return false;
+            if (user == null) return false;
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbc));
+            UserManager.AddToRole(id, "Admin");
+            return true;
         }
 
         public bool UserDownInRole(string id)
         {
             var user = dbc.Users.Where(x => x.Id == id);
-            if (user != null)
-            {
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbc));
-                UserManager.RemoveFromRole(id, "Admin");
-                UserManager.AddToRole(id, "User");
-                return true;
-            }
-            return false;
+            if (user == null) return false;
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbc));
+            UserManager.RemoveFromRole(id, "Admin");
+            UserManager.AddToRole(id, "User");
+            return true;
         }
     }
 }

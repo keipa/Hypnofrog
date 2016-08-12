@@ -349,6 +349,15 @@ namespace Hypnofrog.Controllers
             return PartialView("_Comments", MainService.GetSiteComments(siteid));
         }
 
+
+        [Route("DeleteComment/{comid}")]
+        public void DeleteComment(string comid="")
+        {
+            if (!MainService.DeleteComment(Convert.ToInt32(comid)))
+                throw new HttpException(404, "This comment is removed resently.");
+
+        }
+
         //        site_searcher.AddUpdateLuceneIndex(db.Users.ToList());
         //    using (var db = new ApplicationDbContext())
         //    site_searcher.ClearLuceneIndex();

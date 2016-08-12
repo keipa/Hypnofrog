@@ -35,11 +35,12 @@ namespace Hypnofrog.ViewModels
                     foreach (var user in users)
                         try
                         {
-                            result.Add(new UserView(user, udb.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(udb, user.UserName), userManager.IsInRole(user.Id, "Admin")));
+                            user.Id = udb.Users.FirstOrDefault(x => x.UserName == user.UserName).Id;
+                            result.Add(new UserView(user, udb.Avatars.FirstOrDefault(x => x.UserId == user.UserName).Path, GetProfilerRate(udb, user.UserName), userManager.IsInRole(user.Id, "Admin")));
                         }
                         catch
                         {
-                            result.Add(new UserView(user, udb.Avatars.Where(x => x.UserId == user.UserName).FirstOrDefault().Path, GetProfilerRate(udb, user.UserName), false));
+                            result.Add(new UserView(user, udb.Avatars.FirstOrDefault(x => x.UserId == user.UserName).Path, GetProfilerRate(udb, user.UserName), false));
                         }
                 }
             return result;
