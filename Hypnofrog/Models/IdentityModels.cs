@@ -28,6 +28,7 @@ namespace Hypnofrog.Models
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<OwnTemplate> OwnTemplates { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

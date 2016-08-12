@@ -61,7 +61,7 @@
                             <label class="control-label col-md-10 " for="Template">@Resources.Resource.columns</label>
                         </div>
                         <div class="row">
-                            <div class="btn-group col-md-12" data-toggle="buttons">
+                            <div class="btn-group col-md-10" data-toggle="buttons">
                                 <label class="btn btn-primary active">
                                     @Html.RadioButtonFor(x => x.Template, "solid") @Resources.Resource.one
                                 </label>
@@ -71,6 +71,13 @@
                                 <label class="btn btn-primary">
                                     @Html.RadioButtonFor(x => x.Template, "mixed") @Resources.Resource.mixed
                                 </label>
+                            </div>
+                            <div class="col-md-1">
+                                <a class="btn btn-primary" href="@Url.Action("CreateWithTemplate", "Home")">
+                                    <label style="margin-bottom:0;">
+                                        Own Template
+                                    </label>
+                                </a>
                             </div>
                         </div>
                         <div class="row">

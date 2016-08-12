@@ -60,7 +60,7 @@ namespace Hypnofrog.ViewModels
             model.Ids = MainService.GetSiteIds(site);
             model.IsAdmin = MainService.IsAdmin(isadmin, currentuser, site.UserId);
             model.Layout = MainService.GetSiteLayout(site);
-            model.Pages = MainService.GenerateSitePages(site, isadmin, currentuser, site.UserId);
+            model.Pages = MainService.GenerateSitePages(site, isadmin, currentuser, site.UserId, model.Preview);
             var user = MainService.GetUserByName(currentuser);
             if(user!=null) model.UserAvatarPath = MainService.GetUserAvatar(user).Path;
             model.Rate = site.Rate;

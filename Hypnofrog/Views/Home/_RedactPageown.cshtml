@@ -22,13 +22,8 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6 col-xs-6 col-sm-6">
-        @Html.TextArea("HtmlContent[0]", Model.Contents.ElementAt(0).HtmlContent.ToString(), new { @class = "test" })
-    </div>
-    <div class="col-md-6  col-sm-6 col-xs-6">
-        @Html.TextArea("HtmlContent[1]", Model.Contents.ElementAt(1).HtmlContent.ToString(), new { @class = "test" })
-    </div>
+<div class="fr-view">
+    @Html.Raw(Model.Template.HtmlTable)
 </div>
 
 
@@ -97,6 +92,7 @@
             toolbarButtonsXS: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', '-', 'fontSize', 'color', 'align', '|', 'undo', 'redo'],
             theme: "@ViewBag.Style",
             heightMin: 100,
+            pluginsEnabled: [],
             charCounterMax: 50,
             toolbarVisibleWithoutSelection: true
         });
@@ -114,3 +110,4 @@
         });
     });
 </script>
+

@@ -215,6 +215,7 @@
     <Compile Include="DBModels\Avatar.cs" />
     <Compile Include="DBModels\Comment.cs" />
     <Compile Include="DBModels\Content.cs" />
+    <Compile Include="DBModels\OwnTemplate.cs" />
     <Compile Include="DBModels\Page.cs" />
     <Compile Include="DBModels\Rate.cs" />
     <Compile Include="DBModels\Site.cs" />
@@ -327,6 +328,14 @@
     <Compile Include="Migrations\201608091230234_Initial.Designer.cs">
       <DependentUpon>201608091230234_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608120830004_OwnTemplate.cs" />
+    <Compile Include="Migrations\201608120830004_OwnTemplate.Designer.cs">
+      <DependentUpon>201608120830004_OwnTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608121019499_OwnTemplateCh.cs" />
+    <Compile Include="Migrations\201608121019499_OwnTemplateCh.Designer.cs">
+      <DependentUpon>201608121019499_OwnTemplateCh.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HTMLContextClass.cs" />
@@ -354,6 +363,7 @@
     <Compile Include="ViewModels\SiteViewModel.cs" />
     <Compile Include="ViewModels\SettingsModel.cs" />
     <Compile Include="ViewModels\SettingsPage.cs" />
+    <Compile Include="ViewModels\TemplateViewModel.cs" />
     <Compile Include="ViewModels\UserProfileViewModel.cs" />
     <Compile Include="ViewModels\UserView.cs" />
   </ItemGroup>
@@ -1441,6 +1451,9 @@
     <Content Include="Views\Home\_Settings.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Error\SmthWrong.cshtml" />
+    <Content Include="Views\Home\CreateWithTemplate.cshtml" />
+    <Content Include="Views\Home\_RedactPageown.cshtml" />
+    <Content Include="Views\Home\_PreviewPageown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1531,6 +1544,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608091230234_Initial.resx">
       <DependentUpon>201608091230234_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608120830004_OwnTemplate.resx">
+      <DependentUpon>201608120830004_OwnTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608121019499_OwnTemplateCh.resx">
+      <DependentUpon>201608121019499_OwnTemplateCh.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
