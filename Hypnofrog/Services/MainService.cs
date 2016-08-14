@@ -1,14 +1,12 @@
 ﻿using Hypnofrog.Models;
 using Hypnofrog.DBModels;
 using Hypnofrog.Repository;
-using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using Hypnofrog.ViewModels;
-using System.Web.Security;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using Hypnofrog.SearchLucene;
@@ -29,30 +27,15 @@ namespace Hypnofrog.Services
 
         internal static List<CommentViewModel> SearchComments(string searchString)
         {
-            var site_searcher = new SearchComments();
-            site_searcher.ClearLuceneIndex();
-            site_searcher.AddUpdateLuceneIndex(Repository.CommentList.ToList());
-            return site_searcher.Search(searchString).ToList();
+            var siteSearcher = new SearchComments();
+            siteSearcher.ClearLuceneIndex();
+            siteSearcher.AddUpdateLuceneIndex(Repository.CommentList.ToList());
+            return siteSearcher.Search(searchString).ToList();
         }
 
-        internal static List<SiteViewModel> FromContentToSites(List<Content> contents, string currentuser, bool isadmin)
+        internal static IEnumerable<LiteSiteViewModel> FromContentToLiteSites(IEnumerable<Content> contents, string currentuser, bool isadmin)
         {
-            List<SiteViewModel> list = new List<SiteViewModel>();
-            foreach (var elem in contents)
-            {
-                list.Add(new SiteViewModel(GetSiteIdByContent(elem.ContentId), currentuser, isadmin));
-            }
-            return list;
-        }
-
-        internal static List<LiteSiteViewModel> FromContentToLiteSites(List<Content> contents, string currentuser, bool isadmin)
-        {
-            List<LiteSiteViewModel> list = new List<LiteSiteViewModel>();
-            foreach (var elem in contents)
-            {
-                list.Add(new LiteSiteViewModel(GetSiteByContent(elem.ContentId)));
-            }
-            return list;
+            return contents.Select(elem => new LiteSiteViewModel(GetSiteByContent(elem.ContentId))).ToList();
         }
 
         private static Site GetSiteByContent(int contentId)
@@ -67,57 +50,40 @@ namespace Hypnofrog.Services
             return (int)Repository.PageList.FirstOrDefault(x => x.PageId == pageid).SiteId;
         }
 
-        internal static List<Content> SearchContent(string searchString)
+        internal static IEnumerable<Content> SearchContent(string searchString)
         {
-            var site_searcher = new SearchContent();
-            site_searcher.ClearLuceneIndex();
-            site_searcher.AddUpdateLuceneIndex(Repository.ContentList.ToList());
-            return site_searcher.Search(searchString).ToList();
+            var siteSearcher = new SearchContent();
+            siteSearcher.ClearLuceneIndex();
+            siteSearcher.AddUpdateLuceneIndex(Repository.ContentList.ToList());
+            return siteSearcher.Search(searchString).ToList();
         }
 
         internal static List<UserView> SearchUsers(string searchString)
         {
-            var site_searcher = new SearchUsers();
-            site_searcher.ClearLuceneIndex();
-            site_searcher.AddUpdateLuceneIndex(Repository.UsersList.ToList());
-            return site_searcher.Search(searchString).ToList();
+            var siteSearcher = new SearchUsers();
+            siteSearcher.ClearLuceneIndex();
+            siteSearcher.AddUpdateLuceneIndex(Repository.UsersList.ToList());
+            return siteSearcher.Search(searchString).ToList();
         }
-
-        //internal static List<SiteViewModel> SearchSites(string searchString, string currentuser, bool isadmin)
-        //{
-        //    var site_searcher = new SearchSites();
-        //    site_searcher.ClearLuceneIndex();
-        //    site_searcher.AddUpdateLuceneIndex(Repository.SitesList.ToList());
-        //    return site_searcher.Search(searchString, currentuser, isadmin).ToList();
-        //}
 
         internal static List<LiteSiteViewModel> SearchLiteSites(string searchString, string currentuser, bool isadmin)
         {
-            var site_searcher = new SearchSites();
-            site_searcher.ClearLuceneIndex();
-            site_searcher.AddUpdateLuceneIndex(Repository.SitesList.ToList());
-            return site_searcher.Search(searchString, currentuser, isadmin).ToList();
+            var siteSearcher = new SearchSites();
+            siteSearcher.ClearLuceneIndex();
+            siteSearcher.AddUpdateLuceneIndex(Repository.SitesList.ToList());
+            return siteSearcher.Search(searchString, currentuser, isadmin).ToList();
         }
 
-        internal static IEnumerable<SiteViewModel> FromSitesToVM(List<Site> sites, string currentuser, bool isadmin)
+        internal static IEnumerable<SiteViewModel> FromSitesToVm(IEnumerable<Site> sites, string currentuser, bool isadmin)
         {
-            List<SiteViewModel> viewmodels = new List<SiteViewModel>();
-            foreach (var elem in sites)
-                viewmodels.Add(new SiteViewModel(elem.SiteId, currentuser, isadmin));
-            return viewmodels;
+            return sites.Select(elem => new SiteViewModel(elem.SiteId, currentuser, isadmin)).ToList();
         }
-
-        public static ApplicationUser GetTopUser()
-        {
-            return _GetTopUser();
-        }
-
 
         public static string GetTopUserAvatar()
         {
             var topuser = _GetTopUser();
             var avatar = Repository.AvatarList.FirstOrDefault(x => x.UserId == topuser.UserName);
-            return avatar.Path;
+            return avatar?.Path;
         }
 
         public static string GetPageStyle(Page page)
@@ -129,7 +95,7 @@ namespace Hypnofrog.Services
         {
             var site = Repository.SitesList.Where(x => x.Url == siteurl && x.UserId == username).Include(x => x.Comments).FirstOrDefault();
             var pages = Repository.PageList.Where(x => x.SiteId == site.SiteId).Include(x => x.Contents).ToList();
-            site.Pages = pages;
+            if (site != null) site.Pages = pages;
             return site;
         }
 
@@ -142,7 +108,7 @@ namespace Hypnofrog.Services
         {
             var site = Repository.SitesList.Where(x => x.SiteId == siteId).Include(x => x.Comments).FirstOrDefault();
             var pages = Repository.PageList.Where(x => x.SiteId == site.SiteId).Include(x => x.Contents).ToList();
-            site.Pages = pages;
+            if (site != null) site.Pages = pages;
             return site;
         }
 
@@ -159,17 +125,12 @@ namespace Hypnofrog.Services
 
         internal static Site SiteById(int siteid)
         {
-            return Repository.SitesList.Where(x => x.SiteId == siteid).FirstOrDefault();
+            return Repository.SitesList.FirstOrDefault(x => x.SiteId == siteid);
         }
 
         public static List<PageViewModel> GenerateSitePages(Site site, bool isadmin, string currentuser, string user, bool preview)
         {
-            List<PageViewModel> pageviews = new List<PageViewModel>();
-            foreach (var page in site.Pages)
-            {
-                pageviews.Add(new PageViewModel(page, IsAdmin(isadmin, currentuser, user), preview));
-            }
-            return pageviews;
+            return site.Pages.Select(page => new PageViewModel(page, IsAdmin(isadmin, currentuser, user), preview)).ToList();
         }
 
         public static bool IsAdmin(bool isadmin, string currentuser, string user)
@@ -180,43 +141,39 @@ namespace Hypnofrog.Services
         public static List<string> GetSiteTitles(Site site)
         {
             var titles = site.Pages.Select(x => x.Title).ToList();
-            List<string> valid_titles = new List<string>();
-            foreach (var elem in titles)
-                valid_titles.Add(Regex.Replace(elem ?? "Empty", "<[^>]+>", string.Empty));
-            return valid_titles;
+            return titles.Select(elem => Regex.Replace(elem ?? "Empty", "<[^>]+>", string.Empty)).ToList();
         }
 
         public static ApplicationUser GetUserByName(string username)
         {
-            return Repository.UsersList.Where(x => x.UserName == username).FirstOrDefault();
+            return Repository.UsersList.FirstOrDefault(x => x.UserName == username);
         }
 
         public static Avatar GetUserAvatar(ApplicationUser user)
         {
-            if (user == null) return null;
-            return Repository.AvatarList.Where(x => x.UserId == user.UserName).FirstOrDefault();
+            return user == null ? null : Repository.AvatarList.FirstOrDefault(x => x.UserId == user.UserName);
         }
 
-        public static Avatar GetUserAvatar(string username)
+        private static Avatar GetUserAvatar(string username)
         {
-            return Repository.AvatarList.Where(x => x.UserId == username).FirstOrDefault();
+            return Repository.AvatarList.FirstOrDefault(x => x.UserId == username);
         }
 
         internal static void SavePageTitleAndContent(int pageid, string title, List<string> htmlContent)
         {
             var page = GetPageById(pageid);
             page.Title = title;
-            var list_content = page.Contents.ToList();
-            for (int i = 0; i < page.Contents.Count(); i++)
+            var listContent = page.Contents.ToList();
+            for (var i = 0; i < page.Contents.Count; i++)
             {
-                Repository.UpdateContent(list_content[i].ContentId, htmlContent[i]);
+                Repository.UpdateContent(listContent[i].ContentId, htmlContent[i]);
             }
         }
 
         public static int CreateSite(string inputstring, string username)
         {
-            string[] param = CreateParam(inputstring);
-            Site site = CreateSite(param, username);
+            var param = CreateParam(inputstring);
+            var site = CreateSite(param, username);
             return site.SiteId;
         }
 
@@ -238,38 +195,37 @@ namespace Hypnofrog.Services
             Repository.CreateSite(site);
             UpdateSiteUrl(param[2], site);
             CreatePage(site.SiteId, param);
+            AddOrUpdateTags(param[7]);
             return site;
         }
 
         private static void UpdateSiteUrl(string url, Site site)
         {
-            if (url == "" || url != site.Url || url == null)
-            {
-                site.Url = url == "" || url == null ? site.SiteId.ToString() : url;
-                Repository.UpdateSite(site);
-            }
+            if (url != "" && url == site.Url && url != null) return;
+            site.Url = string.IsNullOrEmpty(url) ? site.SiteId.ToString() : url;
+            Repository.UpdateSite(site);
         }
 
         public static bool CreatePage(string inputData, int siteid)
         {
-            string[] values = CreatePageParam(inputData);
-            Page page = new Page() { Color = values[1], TemplateType = values[2], SiteId = siteid, Title = values[0] };
+            var values = CreatePageParam(inputData);
+            var page = new Page() { Color = values[1], TemplateType = values[2], SiteId = siteid, Title = values[0] };
             if (!Repository.CreatePage(page))
                 return false;
-            int count = page.TemplateType == "mixed" ? 3 : page.TemplateType == "solid" ? 1 : 2;
+            var count = page.TemplateType == "mixed" ? 3 : page.TemplateType == "solid" ? 1 : 2;
             return CreateContent(count, page.PageId);
         }
 
         private static string[] CreatePageParam(string inputData)
         {
-            string[] values = inputData.Split(';');
+            var values = inputData.Split(';');
             values[0] = values[0] == "" ? "Page Title" : values[0];
             return values;
         }
 
         internal static bool SiteConfirm(int siteid, SettingsModel sitevm)
         {
-            Site site = GetSite(siteid);
+            var site = GetSite(siteid);
             site.Title = sitevm.Name;
             site.Description = sitevm.Description;
             site.HasComments = sitevm.CommentsAvailable;
@@ -278,37 +234,29 @@ namespace Hypnofrog.Services
             return Repository.UpdateSite(site);
         }
 
-        internal static bool RemoveSite(Site site)
+        private static bool RemoveSite(Site site)
         {
             return _RemoveSite(site);
         }
 
         internal static bool RemoveSite(int siteid)
         {
-            Site site = GetSite(siteid);
+            var site = GetSite(siteid);
             return _RemoveSite(site);
         }
 
         internal static Dictionary<string, bool> GetKeyValueAchievments(List<string> allachievments, List<string> alldesc, List<string> userachievments)
         {
-            Dictionary<string, bool> achievments = new Dictionary<string, bool>();
-            for (int i = 0; i < allachievments.Count() - 1; i++)
-                if (userachievments.Contains(allachievments[i]))
-                    achievments.Add(allachievments[i] + ":" + alldesc[i], true);
-                else
-                    achievments.Add(allachievments[i] + ":" + alldesc[i], false);
+            var achievments = new Dictionary<string, bool>();
+            for (var i = 0; i < allachievments.Count - 1; i++)
+                achievments.Add(allachievments[i] + ":" + alldesc[i], userachievments.Contains(allachievments[i]));
             return achievments;
         }
 
         internal static List<CommentViewModel> GetSiteComments(int siteid)
         {
-            List<CommentViewModel> model = new List<CommentViewModel>();
             var site = Repository.SitesList.Where(x => x.SiteId == siteid).Include(x => x.Comments).FirstOrDefault();
-            foreach(var elem in site.Comments)
-            {
-                model.Add(new CommentViewModel(elem));
-            }
-            return model;
+            return site?.Comments.Select(elem => new CommentViewModel(elem)).ToList();
         }
 
         internal static bool DeleteComment(int comid)
@@ -320,7 +268,7 @@ namespace Hypnofrog.Services
         {
             string path;
             ConfigureAvatarSaving(out fName, file, out path, info);
-            Cloudinary cloudinary = new Cloudinary(new Account("dldmfb5fo", "568721824454478", "ZO4nwcMQwcT88lUNUK5KHJmy_fU"));
+            var cloudinary = new Cloudinary(new Account("dldmfb5fo", "568721824454478", "ZO4nwcMQwcT88lUNUK5KHJmy_fU"));
             var param = new ImageUploadParams()
             {
                 File = new FileDescription(path)
@@ -335,8 +283,8 @@ namespace Hypnofrog.Services
             {
                 CreationTime = DateTime.Now,
                 HasComments = model.CommentsAvailable,
-                Title = model.Name == null ? "My site" : model.Name,
-                Description = model.Description == null ? "My site" : model.Description,
+                Title = model.Name ?? "My site",
+                Description = model.Description ?? "My site",
                 Iscomplited = false,
                 MenuType = model.Menu,
                 UserId = username,
@@ -345,36 +293,37 @@ namespace Hypnofrog.Services
                 Url = model.SiteUrl
             };
             Repository.CreateSite(site);
-            OwnTemplate templ = new OwnTemplate() { CreationTime = DateTime.Now, HtmlRealize = model.OwnTemplate, UserName = username };
+            var templ = new OwnTemplate() { CreationTime = DateTime.Now, HtmlRealize = model.OwnTemplate, UserName = username };
             Repository.CreateTemplate(templ);
             UpdateSiteUrl(model.SiteUrl, site);
             CreatePageWithTemlate(site.SiteId, model, templ);
+            AddOrUpdateTags(model.CurrentTags);
             return site.SiteId;
         }
 
         internal static TemplateViewModel GetTemplate(int templid, List<Content> contents, bool preview)
         {
-            var template = new TemplateViewModel(Repository.OwnTemplates.Where(x => x.OwnTemplateId == templid).FirstOrDefault());
+            var template = new TemplateViewModel(Repository.OwnTemplates.FirstOrDefault(x => x.OwnTemplateId == templid));
             template.HtmlTable = preview ? ReCreateTablePreview(template.HtmlTable, contents) : ReCreateTable(template.HtmlTable, contents);
             return template;
         }
 
-        public static string ReCreateTablePreview(string ownTemplate, List<Content> contents)
+        private static string ReCreateTablePreview(string ownTemplate, List<Content> contents)
         {
             ownTemplate = ownTemplate.Replace("<br>", "");
-            int count = new Regex("{c{o{n{t}e}n}t}").Matches(ownTemplate).Count;
-            for (int i = 0; i < count; i++)
+            var count = new Regex("{c{o{n{t}e}n}t}").Matches(ownTemplate).Count;
+            for (var i = 0; i < count; i++)
             {
                 ownTemplate = new Regex("{c{o{n{t}e}n}t}").Replace(ownTemplate, contents[i].HtmlContent, 1);
             }
             return ownTemplate;
         }
 
-        public static string ReCreateTable(string ownTemplate, List<Content> contents)
+        private static string ReCreateTable(string ownTemplate, List<Content> contents)
         {
             ownTemplate = ownTemplate.Replace("<br>", "");
-            int count = new Regex("{c{o{n{t}e}n}t}").Matches(ownTemplate).Count;
-            for (int i = 0; i < count; i++)
+            var count = new Regex("{c{o{n{t}e}n}t}").Matches(ownTemplate).Count;
+            for (var i = 0; i < count; i++)
             {
                 ownTemplate = new Regex("{c{o{n{t}e}n}t}").Replace(ownTemplate, "<textarea class=\"test\" name=\"HtmlContent[" + i + "]\">"+contents[i].HtmlContent+"</textarea>", 1);
             }
@@ -383,18 +332,18 @@ namespace Hypnofrog.Services
 
         private static bool CreatePageWithTemlate(int siteId, SettingsModel model, OwnTemplate template)
         {
-            Page page = new Page() { Color = model.Color, TemplateType = template.OwnTemplateId.ToString(), SiteId = siteId, Title = model.Name == null ? "Page Title" : model.Name };
+            var page = new Page() { Color = model.Color, TemplateType = template.OwnTemplateId.ToString(), SiteId = siteId, Title = model.Name ?? "Page Title" };
             if (!Repository.CreatePage(page))
                 return false;
             template.PageId = page.PageId;
             Repository.UpdateTemplate(template);
-            int count = new Regex("</td>").Matches(template.HtmlRealize).Count;
+            var count = new Regex("</td>").Matches(template.HtmlRealize).Count;
             return CreateContent(count, page.PageId);
         }
 
         internal static bool SaveNewComment(string newComment, int siteid, string username)
         {
-            string useravatar = GetUserAvatar(username).Path;
+            var useravatar = GetUserAvatar(username).Path;
             return Repository.CreateComment(new Comment()
             {
                 CreationTime = DateTime.Now,
@@ -407,13 +356,13 @@ namespace Hypnofrog.Services
 
         private static Rate GetRateForSite(string userid, string siteid)
         {
-            return Repository.RateList.Where(x => x.User == userid && x.Site == siteid).FirstOrDefault();
+            return Repository.RateList.FirstOrDefault(x => x.User == userid && x.Site == siteid);
         }
 
         internal static string GetRateMessage(string userid, string siteid, string value)
         {
-            Rate rate = GetRateForSite(userid, siteid);
-            string result = GetResultForRate(userid, siteid, value, rate);
+            var rate = GetRateForSite(userid, siteid);
+            var result = GetResultForRate(userid, siteid, value, rate);
             SaveAndcountAverage(siteid);
             return result;
         }
@@ -425,25 +374,22 @@ namespace Hypnofrog.Services
                 Repository.CreateRate(new Rate() { Value = Convert.ToInt32(value), Site = siteid, User = userid });
                 return "Thank you";
             }
-            else if (rate.Value == Convert.ToInt32(value))
+            if (rate.Value == Convert.ToInt32(value))
             {
                 return "Updated.";
             }
-            else
-            {
-                string res = rate.Value.ToString();
-                rate.Value = Convert.ToInt32(value);
-                Repository.UpdateRate(rate);
-                return "Update. Last mark: " + res;
-            }
+            var res = rate.Value.ToString();
+            rate.Value = Convert.ToInt32(value);
+            Repository.UpdateRate(rate);
+            return "Update. Last mark: " + res;
         }
 
         private static void SaveAndcountAverage(string siteid)
         {
-            
-            double average = CountingAverage(siteid);
-            int siteidd = Convert.ToInt32(siteid);
-            var site = Repository.SitesList.Where(x => x.SiteId == siteidd).FirstOrDefault();
+            var average = CountingAverage(siteid);
+            var siteidd = Convert.ToInt32(siteid);
+            var site = Repository.SitesList.FirstOrDefault(x => x.SiteId == siteidd);
+            if (site == null) return;
             site.Rate = average;
             Repository.UpdateSite(site);
         }
@@ -451,18 +397,12 @@ namespace Hypnofrog.Services
         private static double CountingAverage(string siteid)
         {
             var sites = Repository.RateList.Where(x => x.Site == siteid).ToList();
-            double average = 0.0;
-            foreach (var item in sites)
-                average += (double)item.Value;
-            if (sites.Count() == 0)
+            var average = sites.Sum(item => (double) item.Value);
+            if (!sites.Any())
             {
                 return average;
             }
-            else
-            {
-                average = average / (double)sites.Count();
-
-            }
+            average = average / sites.Count;
             return average;
         }
 
@@ -480,13 +420,13 @@ namespace Hypnofrog.Services
             bool isExists;
             SaveAvatarToStorage(out fName, file, out pathString, out isExists, info);
             if (!isExists) Directory.CreateDirectory(pathString);
-            path = string.Format("{0}\\{1}", pathString, file.FileName);
+            path = $"{pathString}\\{file.FileName}";
             file.SaveAs(path);
         }
 
-        private static void SaveAvatarToDatabase(ImageUploadResult result, string username)
+        private static void SaveAvatarToDatabase(UploadResult result, string username)
         {
-            var useravatar = Repository.AvatarList.Where(x => x.UserId == username).FirstOrDefault();
+            var useravatar = Repository.AvatarList.FirstOrDefault(x => x.UserId == username);
             if (useravatar == null)
             {
                 Repository.CreateAvatar(new Avatar() { UserId = username, Path = result.Uri.AbsoluteUri });
@@ -503,7 +443,6 @@ namespace Hypnofrog.Services
             fName = file.FileName;
             var originalDirectory = info;
             pathString = Path.Combine(originalDirectory.ToString(), "imagepath");
-            var fileName1 = Path.GetFileName(file.FileName);
             isExists = Directory.Exists(pathString);
         }
 
@@ -513,68 +452,52 @@ namespace Hypnofrog.Services
             foreach (var page in pages)
             {
                 var contents = page.Contents.ToList();
-                foreach (var content in contents)
+                if (contents.Any(content => !Repository.RemoveContent(content.ContentId)))
                 {
-                    if (!Repository.RemoveContent(content.ContentId))
-                        return false;
+                    return false;
                 }
                 if (!Repository.RemovePage(page.PageId))
                     return false;
             }
             var comments = site.Comments.ToList();
-            foreach (var comment in comments)
-            {
-                if (!Repository.RemoveComment(comment.CommentId))
-                    return false;
-            }
-            return Repository.RemoveSite(site.SiteId);
+            return comments.All(comment => Repository.RemoveComment(comment.CommentId)) && Repository.RemoveSite(site.SiteId);
         }
 
         internal static int DeletePageOrSite(int pageid)
         {
             var page = GetPageById(pageid);
-            int count = Repository.PageList.Where(x => x.SiteId == page.SiteId).Count();
+            var count = Repository.PageList.Count(x => x.SiteId == page.SiteId);
             if (count > 1)
             {
-                int siteid = (int)page.SiteId;
+                var siteid = (int)page.SiteId;
                 RemovePage(page);
                 return siteid;
             }
-            else
-            {
-                RemoveSite((int)page.SiteId);
-                return 0;
-            }
+            RemoveSite((int)page.SiteId);
+            return 0;
         }
 
         internal static bool RemoveUser(string id)
         {
             if (!ContainsUser(id))
                 return false;
-            if (!RemoveUserSites(id))
-                return false;
-            return Repository.RemoveUsers(id);
+            return RemoveUserSites(id) && Repository.RemoveUsers(id);
         }
 
         private static bool ContainsUser(string id)
         {
-            var user = Repository.UsersList.Where(x => x.Id == id).FirstOrDefault();
-            return user == null ? false : true;
+            var user = Repository.UsersList.FirstOrDefault(x => x.Id == id);
+            return user != null;
         }
 
         private static bool RemoveUserSites(string id)
         {
-            var user = Repository.UsersList.Where(x => x.Id == id).FirstOrDefault();
+            var user = Repository.UsersList.FirstOrDefault(x => x.Id == id);
             var sites = GetUserSites(user);
-            foreach (var site in sites)
-            {
-                if (!RemoveSite(site))
-                    return false;
-            }
-            return true;
+            return sites.All(RemoveSite);
         }
 
-        internal static void RemovePage(Page page)
+        private static void RemovePage(Page page)
         {
             var contents = page.Contents.ToList();
             foreach (var content in contents)
@@ -598,8 +521,8 @@ namespace Hypnofrog.Services
 
         internal static List<UserView> GetAllUsers()
         {
-            var list_of_users = Repository.UsersList;
-            return UserView.GetUserViews(list_of_users).ToList();
+            var listOfUsers = Repository.UsersList;
+            return UserView.GetUserViews(listOfUsers).ToList();
         }
 
         internal static UserView GetCurrentUser(string username, bool isadmin, string userid)
@@ -616,7 +539,7 @@ namespace Hypnofrog.Services
             }
         }
 
-        private static void CreatePage(int siteId, string[] param)
+        private static void CreatePage(int siteId, IReadOnlyList<string> param)
         {
             var page = new Page()
             {
@@ -626,13 +549,13 @@ namespace Hypnofrog.Services
                 Title = "Page Title"
             };
             Repository.CreatePage(page);
-            int count = page.TemplateType == "mixed" ? 3 : page.TemplateType == "solid" ? 1 : 2;
+            var count = page.TemplateType == "mixed" ? 3 : page.TemplateType == "solid" ? 1 : 2;
             CreateContent(count, page.PageId);
         }
 
         private static bool CreateContent(int count, int pageId)
         {
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var content = new Content() { HtmlContent = "", PageId = pageId };
                 if (!Repository.CreateContent(content))
@@ -643,7 +566,7 @@ namespace Hypnofrog.Services
 
         private static string[] CreateParam(string inputdata)
         {
-            string[] param = inputdata.Split(';');
+            var param = inputdata.Split(';');
             param[0] = param[0] == "" ? "Мой сайт" : param[0];
             param[1] = param[1] == "" ? "Описание сайта" : param[1];
             return param;
@@ -651,53 +574,48 @@ namespace Hypnofrog.Services
 
         internal static string GetSiteMenu(int siteid)
         {
-            var site = Repository.SitesList.Where(x => x.SiteId == siteid).FirstOrDefault();
+            var site = Repository.SitesList.FirstOrDefault(x => x.SiteId == siteid);
             if (site == null) throw new HttpException(404, "Some invalid information.");
             return site.MenuType;
         }
 
-        public static List<Achievement> GetUserAchivments(ApplicationUser user)
+        public static IEnumerable<Achievement> GetUserAchivments(ApplicationUser user)
         {
             return Repository.AchievementList.Where(x => x.User == user.Id).ToList();
         }
 
-        public static List<Achievement> GetUserAchivments(string userid)
+        public static IEnumerable<Achievement> GetUserAchivments(string userid)
         {
             return Repository.AchievementList.Where(x => x.User == userid).ToList();
         }
 
         public static List<Site> GetUserSites(ApplicationUser user)
         {
-            List<Site> sites = new List<Site>();
             var lsites = Repository.SitesList.Where(x => x.UserId == user.UserName).ToList();
-            foreach (var site in lsites)
-                sites.Add(GetSite(site.SiteId));
-            return sites;
+            return lsites.Select(site => GetSite(site.SiteId)).ToList();
         }
 
         public static List<SiteViewModel> GetUserSites(int siteid)
         {
             var username = Repository.SitesList.FirstOrDefault(x => x.SiteId == siteid)?.UserId;
             var lsites = Repository.SitesList.Where(x => x.UserId == username).ToList();
-            return FromSitesToVM(lsites.Select(site => GetSite(site.SiteId)).ToList(), username, true).ToList();
+            return FromSitesToVm(lsites.Select(site => GetSite(site.SiteId)).ToList(), username, true).ToList();
         }
 
-        public static double GetRate(List<Site> sites)
+        public static double GetRate(IEnumerable<Site> sites)
         {
             double overall = 0, count = 0;
             foreach (var elem in sites)
             {
-                if (elem.Rate != 0)
-                {
-                    overall += elem.Rate;
-                    count++;
-                }
+                if (elem.Rate == 0) continue;
+                overall += elem.Rate;
+                count++;
             }
             count = count == 0 ? 1 : count;
             return overall / count;
         }
 
-        public static List<Site> GetTopThreeSites()
+        public static IEnumerable<Site> GetTopThreeSites()
         {
             var sites = Repository.SitesList.OrderByDescending(x => x.Rate).Take(3).Include(x => x.Pages).ToList();
             return sites;
@@ -705,9 +623,7 @@ namespace Hypnofrog.Services
 
         public static string GetMainTags()
         {
-            string tagstring = "";
-            foreach (var item in Repository.TagList.OrderByDescending(x => x.Repeats).ToList())
-                tagstring += item.Name + "," + item.Repeats.ToString() + ";";
+            var tagstring = Repository.TagList.OrderByDescending(x => x.Repeats).ToList().Aggregate("", (current, item) => current + (item.Name + "," + item.Repeats.ToString() + ";"));
             try
             {
                 return tagstring.Remove(tagstring.Length - 1);
@@ -720,14 +636,14 @@ namespace Hypnofrog.Services
 
         private static ApplicationUser _GetTopUser()
         {
-            string userid = "";
+            var userid = "";
             var sites = Repository.SitesList.OrderByDescending(x => x.Rate).FirstOrDefault();
             if (sites == null)
-                return Repository.UsersList.Where(x => x.UserName == "qwertyADMIN").FirstOrDefault();
+                return Repository.UsersList.FirstOrDefault(x => x.UserName == "qwertyADMIN");
             else
                 userid = sites.UserId;
-            var user = Repository.UsersList.Where(x => x.UserName == userid).FirstOrDefault();
-            return user ?? Repository.UsersList.Where(x => x.UserName == "qwertyADMIN").FirstOrDefault();
+            var user = Repository.UsersList.FirstOrDefault(x => x.UserName == userid);
+            return user ?? Repository.UsersList.FirstOrDefault(x => x.UserName == "qwertyADMIN");
         }
 
         public static string CheckAchievments(string id, string username)

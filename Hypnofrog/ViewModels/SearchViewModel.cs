@@ -28,7 +28,7 @@ namespace Hypnofrog.ViewModels
             Comments = MainService.SearchComments(SearchString);
             Users = MainService.SearchUsers(SearchString);
             var Contents = MainService.SearchContent(SearchString);
-            List<LiteSiteViewModel> newsites = MainService.FromContentToLiteSites(Contents, currentuser, isadmin);
+            IEnumerable<LiteSiteViewModel> newsites = MainService.FromContentToLiteSites(Contents, currentuser, isadmin);
             foreach(var elem in newsites)
             {
                 if (!Sites.Select(x=>x.Siteid).Contains(elem.Siteid))

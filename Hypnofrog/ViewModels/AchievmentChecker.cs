@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Hypnofrog;
 using Hypnofrog.DBModels;
 using Hypnofrog.Filters;
 
@@ -12,11 +10,11 @@ namespace Hypnofrog.ViewModels
     [Culture]
     public class AchievmentChecker
     {
-        public string Result { get; set; }
+        public string Result { get; private set; }
 
-        public List<DBModels.Achievement> NewAchievments { get; set; }
+        public List<Achievement> NewAchievments { get; }
 
-        public AchievmentChecker(List<DBModels.Site> sites, List<DBModels.Rate> rates, List<DBModels.Achievement> log, string userid)
+        public AchievmentChecker(List<Site> sites, List<Rate> rates, List<Achievement> log, string userid)
         {
             var achievmentmask = RunChekers(sites, rates);
             var allachievments = GetAllAchievments();
@@ -25,9 +23,9 @@ namespace Hypnofrog.ViewModels
         }
 
 
-        private string CheckCoincidences(List<bool> achievmentmask, List<string> allachievments, List<string> log, string userid)
+        private string CheckCoincidences(IReadOnlyList<bool> achievmentmask, IReadOnlyList<string> allachievments, ICollection<string> log, string userid)
         {
-            for (var i = 0; i< achievmentmask.Count()-1; i++)
+            for (var i = 0; i< achievmentmask.Count-1; i++)
             {
                 if (!achievmentmask[i]) continue;
                 if (log.Contains(allachievments[i])) continue;
@@ -38,142 +36,128 @@ namespace Hypnofrog.ViewModels
             return "";
 
         }
+        
+        private readonly string _descRuHasThreeSites = Resources.Resource.descRUHasThreeSites;
+        private readonly string _descRuHasFiveRatingWithOnes = Resources.Resource.descRUHasFiveRatingWithOnes;
+        private readonly string _descRuHasOneSite = Resources.Resource.descRUHasOneSite;
+        private readonly string _descRuHasTenTags = Resources.Resource.descRUHasTenTags;
+        private readonly string _descRuHasThreeSitesWithRatesGreaterThanThree = Resources.Resource.descRUHasThreeSitesWithRatesGreaterThanThree;
+        private readonly string _descRuHasOneRating = Resources.Resource.descRUHasOneRating;
+        private readonly string _descRuHasTenSites = Resources.Resource.descRUHasTenSites;
+        private readonly string _descRuHas100Sites = Resources.Resource.descRUHas100Sites;
+        private readonly string _descRuHasTenRatingsWith5Stars = Resources.Resource.descRUHasTenRatingsWith5Stars;
 
-        //иметь три сайта - В некотором государстве
-        //иметь 5 рейтингов с единицами - Я Дартаньян
-        //один  сайт - В некотором царстве...
-        //иметь не менее десяти тегов - Архивариус
-        //три сайта с рейтингом не менее 3 - Три богатыря
-        // иметь рейтинг - Держи печеньку
-        //иметь 10 сайтов - Кочегар
-        //иметь 100 сайтов - Воу Воу Палехче
-        //10 рейтингов с 5 - Беспринциптный
+        private readonly string _nameHasThreeSites = Resources.Resource.nameHasThreeSites;
+        private readonly string _nameHasFiveRatingWithOnes = Resources.Resource.nameHasFiveRatingWithOnes;
+        private readonly string _nameHasOneSite = Resources.Resource.nameHasOneSite;
+        private readonly string _nameHasTenTags = Resources.Resource.nameHasTenTags;
+        private readonly string _nameHasThreeSitesWithRatesGreaterThanThree = Resources.Resource.nameHasThreeSitesWithRatesGreaterThanThree;
+        private readonly string _nameHasOneRating = Resources.Resource.nameHasOneRating;
+        private readonly string _nameHasTenSites = Resources.Resource.nameHasTenSites;
+        private readonly string _nameHas100Sites = Resources.Resource.nameHas100Sites;
+        private readonly string _nameHasTenRatingsWith5Stars = Resources.Resource.nameHasTenRatingsWith5Stars;
 
-
-        private string descRUHasThreeSites = Resources.Resource.descRUHasThreeSites;
-        private string descRUHasFiveRatingWithOnes = Resources.Resource.descRUHasFiveRatingWithOnes;
-        private string descRUHasOneSite = Resources.Resource.descRUHasOneSite;
-        private string descRUHasTenTags = Resources.Resource.descRUHasTenTags;
-        private string descRUHasThreeSitesWithRatesGreaterThanThree = Resources.Resource.descRUHasThreeSitesWithRatesGreaterThanThree;
-        private string descRUHasOneRating = Resources.Resource.descRUHasOneRating;
-        private string descRUHasTenSites = Resources.Resource.descRUHasTenSites;
-        private string descRUHas100Sites = Resources.Resource.descRUHas100Sites;
-        private string descRUHasTenRatingsWith5Stars = Resources.Resource.descRUHasTenRatingsWith5Stars;
-
-        private string nameHasThreeSites = Resources.Resource.nameHasThreeSites;
-        private string nameHasFiveRatingWithOnes = Resources.Resource.nameHasFiveRatingWithOnes;
-        private string nameHasOneSite = Resources.Resource.nameHasOneSite;
-        private string nameHasTenTags = Resources.Resource.nameHasTenTags;
-        private string nameHasThreeSitesWithRatesGreaterThanThree = Resources.Resource.nameHasThreeSitesWithRatesGreaterThanThree;
-        private string nameHasOneRating = Resources.Resource.nameHasOneRating;
-        private string nameHasTenSites = Resources.Resource.nameHasTenSites;
-        private string nameHas100Sites = Resources.Resource.nameHas100Sites;
-        private string nameHasTenRatingsWith5Stars = Resources.Resource.nameHasTenRatingsWith5Stars;
-
-        public List<string> GetAllAchievmentsDescriptionsRU()
+        public List<string> GetAllAchievmentsDescriptionsRu()
         {
-            List<string> allachievments = new List<string>();
-            allachievments.Add(descRUHasThreeSites);
-            allachievments.Add(descRUHasFiveRatingWithOnes);
-            allachievments.Add(descRUHasOneSite);
-            allachievments.Add(descRUHasTenTags);
-            allachievments.Add(descRUHasThreeSitesWithRatesGreaterThanThree);
-            allachievments.Add(descRUHasOneRating);
-            allachievments.Add(descRUHasTenSites);
-            allachievments.Add(descRUHas100Sites);
-            allachievments.Add(descRUHasTenRatingsWith5Stars);
+            var allachievments = new List<string>
+            {
+                _descRuHasThreeSites,
+                _descRuHasFiveRatingWithOnes,
+                _descRuHasOneSite,
+                _descRuHasTenTags,
+                _descRuHasThreeSitesWithRatesGreaterThanThree,
+                _descRuHasOneRating,
+                _descRuHasTenSites,
+                _descRuHas100Sites,
+                _descRuHasTenRatingsWith5Stars
+            };
             return allachievments;
         }
 
         public List<string> GetAllAchievments()
         {
-            List<string> allachievments = new List<string>();
-            allachievments.Add(nameHasThreeSites);
-            allachievments.Add(nameHasFiveRatingWithOnes);
-            allachievments.Add(nameHasOneSite);
-            allachievments.Add(nameHasTenTags);
-            allachievments.Add(nameHasThreeSitesWithRatesGreaterThanThree);
-            allachievments.Add(nameHasOneRating);
-            allachievments.Add(nameHasTenSites);
-            allachievments.Add(nameHas100Sites);
-            allachievments.Add(nameHasTenRatingsWith5Stars);
+            var allachievments = new List<string>
+            {
+                _nameHasThreeSites,
+                _nameHasFiveRatingWithOnes,
+                _nameHasOneSite,
+                _nameHasTenTags,
+                _nameHasThreeSitesWithRatesGreaterThanThree,
+                _nameHasOneRating,
+                _nameHasTenSites,
+                _nameHas100Sites,
+                _nameHasTenRatingsWith5Stars
+            };
             return allachievments;
         }
 
-        private List<bool> RunChekers(List<DBModels.Site> sites, List<DBModels.Rate> rates)
+        private static List<bool> RunChekers(List<Site> sites, List<Rate> rates)
         {
-            List<bool> checker = new List<bool>();
-            checker.Add(HasThreeSites(sites));
-            checker.Add(HasFiveRatingWithOnes(rates));
-            checker.Add(HasOneSite(sites));
-            checker.Add(HasTenTags(sites));
-            checker.Add(HasThreeSitesWithRatesGreaterThanThree(sites));
-            checker.Add(HasOneRating(rates));
-            checker.Add(HasTenSites(sites));
-            checker.Add(Has100Sites(sites));
-            checker.Add(HasTenRatingsWith5Stars(rates));
+            var checker = new List<bool>
+            {
+                HasThreeSites(sites),
+                HasFiveRatingWithOnes(rates),
+                HasOneSite(sites),
+                HasTenTags(sites),
+                HasThreeSitesWithRatesGreaterThanThree(sites),
+                HasOneRating(rates),
+                HasTenSites(sites),
+                Has100Sites(sites),
+                HasTenRatingsWith5Stars(rates)
+            };
             return checker;
         }
 
-        public List<string> GetUserAchievments(List<DBModels.Achievement> log)
+        private static List<string> GetUserAchievments(IEnumerable<Achievement> log)
         {
-            List<string> userachievments = new List<string>();
-            foreach (var item in log)
-            {
-                userachievments.Add(item.Name);
-            }
-            return userachievments;
+            return log.Select(item => item.Name).ToList();
         }
 
-        private bool HasThreeSites(List<DBModels.Site> sites)
+        private static bool HasThreeSites(IEnumerable<Site> sites)
         {
-            return sites.Count() == 3;
+            return sites.Count() >= 3;
         }
 
-        private bool HasFiveRatingWithOnes(List<DBModels.Rate> rates)
+        private static bool HasFiveRatingWithOnes(IEnumerable<Rate> rates)
         {
-            return rates.Where(x => x.Value == 1).Count() == 5;
+            return rates.Count(x => x.Value == 1) == 5;
         }
 
-        private bool HasOneSite(List<DBModels.Site> sites)
+        private static bool HasOneSite(IEnumerable<Site> sites)
         {
             return sites.Count() == 1;
         }
 
-        private bool HasTenTags(List<DBModels.Site> sites)
+        private static bool HasTenTags(IEnumerable<Site> sites)
         {
-            List<string> tags = new List<string>();
-            foreach (var item in sites)
-                if (item.Tags != null && item.Tags.Split(',').Count()>0)
-                    foreach (var tag in item.Tags.Split(','))
-                        tags.Add(tag);
-            return tags.Count() == 10;
+            var tags = sites.Where(item => item.Tags != null && item.Tags.Split(',').Any()).SelectMany(item => item.Tags.Split(',')).ToList();
+            return tags.Count == 10;
         }
 
-        private bool HasThreeSitesWithRatesGreaterThanThree(List<DBModels.Site> sites)
+        private static bool HasThreeSitesWithRatesGreaterThanThree(IEnumerable<Site> sites)
         {
-            return sites.Where(x => x.Rate > 3.0).Count() > 3;
+            return sites.Count(x => x.Rate > 3.0) > 3;
         }
 
-        private bool HasOneRating(List<DBModels.Rate> rates)
+        private static bool HasOneRating(IEnumerable<Rate> rates)
         {
-            return rates.Count() == 1;
+            return rates.Any();
         }
 
-        private bool HasTenSites(List<DBModels.Site> sites)
+        private static bool HasTenSites(IEnumerable<Site> sites)
         {
             return sites.Count() == 10;
         }
 
-        private bool Has100Sites(List<DBModels.Site> sites)
+        private static bool Has100Sites(IEnumerable<Site> sites)
         {
             return sites.Count() == 10;
 
         }
 
-        private bool HasTenRatingsWith5Stars(List<DBModels.Rate> rates)
+        private static bool HasTenRatingsWith5Stars(IEnumerable<Rate> rates)
         {
-            return rates.Where(x => x.Value == 5).Count() == 10;
+            return rates.Count(x => x.Value == 5) == 10;
         }
     }
 }
