@@ -144,7 +144,7 @@ namespace Hypnofrog.ViewModels
         {
             List<string> tags = new List<string>();
             foreach (var item in sites)
-                if (item.Tags.Split(',').Count()>0)
+                if (item.Tags != null && item.Tags.Split(',').Count()>0)
                     foreach (var tag in item.Tags.Split(','))
                         tags.Add(tag);
             return tags.Count() == 10;

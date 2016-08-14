@@ -75,7 +75,7 @@ namespace Hypnofrog.Controllers
         {
 
             using (var db = new ApplicationDbContext())
-                ViewBag.Achievment = CheckAchievments(db);
+                ViewBag.Achievment = MainService.CheckAchievments(User.Identity.GetUserId(), User.Identity.GetUserName());
             return View(new UserProfileViewModel(userid, User.IsInRole("Admin")));
         }
 
@@ -501,25 +501,7 @@ namespace Hypnofrog.Controllers
         //    return site_searcher.Search(searchstring);
         //}
 
-        public string CheckAchievments(ApplicationDbContext db)
-        {
-            var id = User.Identity.GetUserId();
-            var username = User.Identity.GetUserName();
-            var achievments = new AchievmentChecker(db.Sites.Where(x => x.UserId == username).ToList(),
-                                                                                                              db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList(),
-                                                                                                              db.Achievements.Where(x => x.User == id).ToList(),
-                                                                                                              id);
-            SaveAchievments(db, achievments.NewAchievments);
-            return achievments.Result;
-        }
-
-        private void SaveAchievments(ApplicationDbContext db, List<Achievement> log)
-        {
-            if (!log.Any()) return;
-            foreach (var item in log)
-                db.Achievements.Add(item);
-            db.SaveChanges();
-        }
+        
 
         //private string GetTopUsersAvatar(Context db, string username)
         //{

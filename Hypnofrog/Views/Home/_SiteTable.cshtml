@@ -63,13 +63,18 @@
                             <span>@Model.ElementAt(j).Description</span>
                         </div>
                         <div class='language'>
-                            @if (Model.ElementAt(j).Tags.Split(',').Count() != 1 || Model.ElementAt(j).Tags.Split(',')[0] != "")
+                            @if (Model.ElementAt(j).Tags != null && (Model.ElementAt(j).Tags.Split(',').Count() != 1  || Model.ElementAt(j).Tags.Split(',')[0] != ""))
                             {
                                 <span>@Resources.Resource.Tags</span><br>
                             }
-                            @foreach (var item in Model.ElementAt(j).Tags.Split(','))
-                            {<span class="label label-success">@item</span><span> </span>}
-
+                            @if (Model.ElementAt(j).Tags != null)
+                            {
+                                foreach (var item in Model.ElementAt(j).Tags.Split(','))
+                                 {
+                                     <span class="label label-success">@item</span>
+                                     <span> </span>
+                                 }
+                            }
                         </div>
                         <span class='actions'>
                             <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserName, siteurl = Model.ElementAt(j).Url }) ">
@@ -85,7 +90,7 @@
                                 </a>
                                 <script>
                                     $("#delete-@j").click(function() {
-                                        $("card-@j").remove();
+                                        $("#card-@j").remove();
                                     })
                                 </script>
                             }

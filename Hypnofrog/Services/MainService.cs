@@ -675,11 +675,11 @@ namespace Hypnofrog.Services
             return sites;
         }
 
-        public static List<Site> GetUserSites(int siteid)
+        public static List<SiteViewModel> GetUserSites(int siteid)
         {
-            var username = Repository.SitesList.Where(x => x.SiteId == siteid).FirstOrDefault().UserId;
+            var username = Repository.SitesList.FirstOrDefault(x => x.SiteId == siteid)?.UserId;
             var lsites = Repository.SitesList.Where(x => x.UserId == username).ToList();
-            return lsites.Select(site => GetSite(site.SiteId)).ToList();
+            return FromSitesToVM(lsites.Select(site => GetSite(site.SiteId)).ToList(), username, true).ToList();
         }
 
         public static double GetRate(List<Site> sites)
@@ -728,6 +728,23 @@ namespace Hypnofrog.Services
                 userid = sites.UserId;
             var user = Repository.UsersList.Where(x => x.UserName == userid).FirstOrDefault();
             return user ?? Repository.UsersList.Where(x => x.UserName == "qwertyADMIN").FirstOrDefault();
+        }
+
+        public static string CheckAchievments(string id, string username)
+        {
+            var achievments = new AchievmentChecker(Repository.SitesList.Where(x => x.UserId == username).ToList(),
+                                                                                                              Repository.RateList.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList(),
+                                                                                                              Repository.AchievementList.Where(x => x.User == id).ToList(),
+                                                                                                              id);
+            SaveAchievments(achievments.NewAchievments);
+            return achievments.Result;
+        }
+
+        private static void SaveAchievments(List<Achievement> log)
+        {
+            if (!log.Any()) return;
+            foreach (var item in log)
+                Repository.CreateAchievement(item);
         }
     }
 }
