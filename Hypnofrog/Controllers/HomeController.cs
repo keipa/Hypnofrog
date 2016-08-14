@@ -7,7 +7,9 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using Hypnofrog.DBModels;
 using Hypnofrog.Filters;
+using Hypnofrog.Models;
 using Hypnofrog.Services;
 using Hypnofrog.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -24,14 +26,14 @@ namespace Hypnofrog.Controllers
         }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        private MainService Main {  get;  set; }
+        private MainService Main { get; set; }
 
         [AllowAnonymous]
         public ActionResult ChangeCulture(string lang)
         {
             Debug.Assert(Request.UrlReferrer != null, "Request.UrlReferrer != null");
             var returnUrl = Request.UrlReferrer.AbsolutePath;
-            var cultures = new List<string> {"ru", "en"};
+            var cultures = new List<string> { "ru", "en" };
             if (!cultures.Contains(lang))
             {
                 lang = "ru";
@@ -71,10 +73,11 @@ namespace Hypnofrog.Controllers
         [Route("User/{userid}")]
         public ActionResult UserProfile(string userid)
         {
+
+            using (var db = new ApplicationDbContext())
+                ViewBag.Achievment = CheckAchievments(db);
             return View(new UserProfileViewModel(userid, User.IsInRole("Admin")));
         }
-
-
 
 
         [AllowAnonymous]
@@ -87,25 +90,27 @@ namespace Hypnofrog.Controllers
         [Route("EditSite/{siteid}")]
         public ActionResult EditSite(int siteid = 0)
         {
-            return siteid == 0 ? View("Error") : View(new SiteViewModel(siteid, User.Identity.GetUserName(), User.IsInRole("Admin")));
+            return siteid == 0
+                ? View($"Error")
+                : View(new SiteViewModel(siteid, User.Identity.GetUserName(), User.IsInRole("Admin")));
         }
 
         [ValidateInput(false)]
         public void SavePage(PageViewModel model, List<string> htmlContent)
         {
-            MainService.SavePageTitleAndContent((int) Session["PageId"], model.Title, htmlContent);
+            MainService.SavePageTitleAndContent((int)Session["PageId"], model.Title, htmlContent);
         }
 
         [HttpPost]
         public ActionResult CreateSite(string inputData)
         {
-            return RedirectToAction("EditSite",
-                new {siteid = MainService.CreateSite(inputData, User.Identity.GetUserName())});
+            return RedirectToAction($"EditSite",
+                new { siteid = MainService.CreateSite(inputData, User.Identity.GetUserName()) });
         }
 
         public ActionResult Creating()
         {
-            return PartialView("_ViewConfig", new SettingsModel {UserId = User.Identity.GetUserId()});
+            return PartialView($"_ViewConfig", new SettingsModel { UserId = User.Identity.GetUserId() });
         }
 
         public ActionResult CreatingPage(int siteid = 0)
@@ -113,22 +118,22 @@ namespace Hypnofrog.Controllers
             var menutype = MainService.GetSiteMenu(siteid);
             Session["menu"] = menutype;
             Session["siteid"] = siteid;
-            return PartialView("_ViewConfigPage", new SettingsModel(menutype));
+            return PartialView($"_ViewConfigPage", new SettingsModel(menutype));
         }
 
         public PartialViewResult ChangeTemplate(SettingsModel model)
         {
             ReChangeSession(model);
-            var url = SettingsModel.CreatePhoto((string) Session["color"], (string) Session["menu"],
-                (string) Session["template"]);
-            return PartialView("_ColorTemplate", url);
+            var url = SettingsModel.CreatePhoto((string)Session["color"], (string)Session["menu"],
+                (string)Session["template"]);
+            return PartialView($"_ColorTemplate", url);
         }
 
         private void ReChangeSession(SettingsModel model)
         {
-            Session["color"] = model.Color ?? (string) Session["color"];
-            Session["menu"] = model.Menu ?? (string) Session["menu"];
-            Session["template"] = model.Template ?? (string) Session["template"];
+            Session["color"] = model.Color ?? (string)Session["color"];
+            Session["menu"] = model.Menu ?? (string)Session["menu"];
+            Session["template"] = model.Template ?? (string)Session["template"];
         }
 
         [HttpPost]
@@ -142,10 +147,10 @@ namespace Hypnofrog.Controllers
         [HttpPost]
         public ActionResult AddPage(string inputData)
         {
-            var siteid = (int) Session["siteid"];
+            var siteid = (int)Session["siteid"];
             if (!MainService.CreatePage(inputData, siteid))
                 throw new HttpException(500, "Sorry, but smth wrong with server.");
-            return RedirectToAction("EditSite", new {siteid});
+            return RedirectToAction($"EditSite", new { siteid });
         }
 
         public PartialViewResult ShowPage(int pageid = 0)
@@ -170,12 +175,12 @@ namespace Hypnofrog.Controllers
         public PartialViewResult Settings(int siteid)
         {
             Session["currentsite"] = siteid;
-            return PartialView("_Settings", new SettingsModel(siteid));
+            return PartialView($"_Settings", new SettingsModel(siteid));
         }
 
         public void SettingsConf(SettingsModel site)
         {
-            if (!MainService.SiteConfirm((int) Session["currentsite"], site))
+            if (!MainService.SiteConfirm((int)Session["currentsite"], site))
                 throw new HttpException(500, "Sorry, but smth wrong with server.");
         }
 
@@ -188,13 +193,13 @@ namespace Hypnofrog.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Admin()
         {
-            return RedirectToAction("AllUsers");
+            return RedirectToAction($"AllUsers");
         }
 
         [AllowAnonymous]
         public ActionResult Users()
         {
-            return RedirectToAction("AllUsers");
+            return RedirectToAction($"AllUsers");
         }
 
         [AllowAnonymous]
@@ -243,9 +248,9 @@ namespace Hypnofrog.Controllers
             var siteid = MainService.DeletePageOrSite(pageid);
             if (siteid > 0)
             {
-                return RedirectToAction("EditSite", new {siteid});
+                return RedirectToAction($"EditSite", new { siteid });
             }
-            return RedirectToAction("UserProfile", new {userid = User.Identity.GetUserName()});
+            return RedirectToAction($"UserProfile", new { userid = User.Identity.GetUserName() });
         }
 
         [Authorize(Roles = "Admin")]
@@ -260,7 +265,7 @@ namespace Hypnofrog.Controllers
             if (!MainService.RemoveUser(User.Identity.GetUserId()))
                 throw new HttpException(404, "This user is removed resently.");
             HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction($"Index", $"Home");
         }
 
         [HttpGet]
@@ -268,7 +273,7 @@ namespace Hypnofrog.Controllers
         [Route("Search")]
         public ActionResult DefSearch()
         {
-            return View("Search", "");
+            return View($"Search", "");
         }
 
         [HttpPost]
@@ -283,7 +288,7 @@ namespace Hypnofrog.Controllers
 
         [AllowAnonymous]
         [Route("SearchVm/{searchstring}")]
-        public ActionResult SearchVm(string searchstring= "")
+        public ActionResult SearchVm(string searchstring = "")
         {
             var model = new SearchViewModel(searchstring, User.Identity.GetUserName(), User.IsInRole("Admin"));
             var json = new JavaScriptSerializer().Serialize(model);
@@ -304,16 +309,16 @@ namespace Hypnofrog.Controllers
             }
             catch (Exception)
             {
-                return Json(new {Message = "Error in saving file"});
+                return Json(new { Message = "Error in saving file" });
             }
-            return Json(new {Message = fName});
+            return Json(new { Message = fName });
         }
 
         private ActionResult SavingAvatar(out string fName, HttpPostedFileBase file)
         {
             MainService.SaveAvatar(out fName, file, User.Identity.GetUserName(),
                 new DirectoryInfo($"{Server.MapPath(@"\")}Images\\WallImages"));
-            return RedirectToAction("UserProfile", new {userid = User.Identity.Name});
+            return RedirectToAction($"UserProfile", new { userid = User.Identity.Name });
         }
 
         [Route("Famehall")]
@@ -328,7 +333,7 @@ namespace Hypnofrog.Controllers
 
         public PartialViewResult UpdateRating(string userid, string siteid, string value)
         {
-            return PartialView("_UpdateRatingResult", MainService.GetRateMessage(userid, siteid, value));
+            return PartialView($"_UpdateRatingResult", MainService.GetRateMessage(userid, siteid, value));
         }
 
         [ValidateInput(false)]
@@ -336,23 +341,22 @@ namespace Hypnofrog.Controllers
         {
             if (!MainService.SaveNewComment(newComment, siteid, User.Identity.GetUserName()))
                 throw new HttpException(500, "Sorry, but smth wrong with server.");
-            return PartialView("_Comments", MainService.GetSiteComments(siteid));
+            return PartialView($"_Comments", MainService.GetSiteComments(siteid));
         }
 
         public PartialViewResult DeleteComment(int comid, int siteid)
         {
             if (!MainService.DeleteComment(comid))
                 throw new HttpException(404, "This comment is removed resently.");
-            return PartialView("_Comments", MainService.GetSiteComments(siteid));
+            return PartialView($"_Comments", MainService.GetSiteComments(siteid));
         }
 
 
         [Route("DeleteComment/{comid}")]
-        public void DeleteComment(string comid="")
+        public void DeleteComment(string comid = "")
         {
             if (!MainService.DeleteComment(Convert.ToInt32(comid)))
                 throw new HttpException(404, "This comment is removed resently.");
-
         }
 
         //        site_searcher.AddUpdateLuceneIndex(db.Users.ToList());
@@ -482,23 +486,24 @@ namespace Hypnofrog.Controllers
         //    return site_searcher.Search(searchstring);
         //}
 
-        //public string CheckAchievments(Context db)
-        //{
-        //    var id = User.Identity.GetUserId();
-        //    AchievmentChecker achievments = new AchievmentChecker(db.Sites.Where(x => x.UserId == id).ToList(),
-        //                                                                                                      db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList(),
-        //                                                                                                      db.Achievements.Where(x => x.User == id).ToList(),
-        //                                                                                                      id);
-        //    SaveAchievments(db, achievments.NewAchievments);
-        //    return achievments.Result;
-        //}
+        public string CheckAchievments(ApplicationDbContext db)
+        {
+            var id = User.Identity.GetUserId();
+            var achievments = new AchievmentChecker(db.Sites.Where(x => x.UserId == id).ToList(),
+                                                                                                              db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList(),
+                                                                                                              db.Achievements.Where(x => x.User == id).ToList(),
+                                                                                                              id);
+            SaveAchievments(db, achievments.NewAchievments);
+            return achievments.Result;
+        }
 
-        //private void SaveAchievments(Context db, List<Achievement> log)
-        //{
-        //    if (log.Count() != 0)
-        //        foreach (var item in log)
-        //            db.Achievements.Add(item);
-        //}
+        private void SaveAchievments(ApplicationDbContext db, List<Achievement> log)
+        {
+            if (!log.Any()) return;
+            foreach (var item in log)
+                db.Achievements.Add(item);
+            db.SaveChanges();
+        }
 
         //private string GetTopUsersAvatar(Context db, string username)
         //{

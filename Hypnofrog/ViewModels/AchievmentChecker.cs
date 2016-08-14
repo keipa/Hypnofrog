@@ -18,8 +18,8 @@ namespace Hypnofrog.ViewModels
 
         public AchievmentChecker(List<DBModels.Site> sites, List<DBModels.Rate> rates, List<DBModels.Achievement> log, string userid)
         {
-            List<bool> achievmentmask = RunChekers(sites, rates);
-            List<string> allachievments = GetAllAchievments();
+            var achievmentmask = RunChekers(sites, rates);
+            var allachievments = GetAllAchievments();
             NewAchievments = new List<Achievement>();
             Result = CheckCoincidences(achievmentmask, allachievments, GetUserAchievments(log), userid);
         }
@@ -27,17 +27,13 @@ namespace Hypnofrog.ViewModels
 
         private string CheckCoincidences(List<bool> achievmentmask, List<string> allachievments, List<string> log, string userid)
         {
-            for (int i = 0; i< achievmentmask.Count()-1; i++)
+            for (var i = 0; i< achievmentmask.Count()-1; i++)
             {
-                if (achievmentmask[i])
-                {
-                    if (!log.Contains(allachievments[i]))
-                    {
-                        DBModels.Achievement achievment = new Achievement() {Name = allachievments[i], Time=DateTime.Now, User = userid};
-                        NewAchievments.Add(achievment);
-                        return allachievments[i];
-                    }
-                }
+                if (!achievmentmask[i]) continue;
+                if (log.Contains(allachievments[i])) continue;
+                var achievment = new Achievement() {Name = allachievments[i], Time=DateTime.Now, User = userid};
+                NewAchievments.Add(achievment);
+                return allachievments[i];
             }
             return "";
 
