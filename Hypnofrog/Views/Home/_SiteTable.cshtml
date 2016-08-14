@@ -49,7 +49,7 @@
                                 <span>@Resources.Resource.Name</span><br>
                                 <span>@Model.ElementAt(j).Title</span>
                             </div>
-                            @if (Model.ElementAt(j).IsAdmin || User.IsInRole("Admin"))
+                            @if (Model.ElementAt(j).UserName == User.Identity.GetUserName() || User.IsInRole("Admin"))
                             {
                                 <div class="col-md-2">
                                     <a class="modal-link" href="@Url.Action("Settings", "Home", new { siteid = Model.ElementAt(j).SiteId })" style="cursor:pointer;">
@@ -75,7 +75,7 @@
                             <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserName, siteurl = Model.ElementAt(j).Url }) ">
                                 <i class='fa fa-eye'></i>
                             </a>
-                            @if (Model.ElementAt(j).IsAdmin || User.IsInRole("Admin"))
+                            @if (Model.ElementAt(j).UserName == User.Identity.GetUserName() || User.IsInRole("Admin"))
                             {
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>

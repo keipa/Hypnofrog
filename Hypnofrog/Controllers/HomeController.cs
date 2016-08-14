@@ -104,6 +104,7 @@ namespace Hypnofrog.Controllers
 
         public ActionResult CreatingPage(int siteid = 0)
         {
+            //Здесь баг со своими темплэйтами(siteid == 0) вроде как решил
             string menutype = MainService.GetSiteMenu(siteid);
             Session["menu"] = menutype;
             Session["siteid"] = siteid;
