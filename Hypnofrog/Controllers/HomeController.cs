@@ -178,10 +178,11 @@ namespace Hypnofrog.Controllers
             return PartialView($"_Settings", new SettingsModel(siteid));
         }
 
-        public void SettingsConf(SettingsModel site)
+        public PartialViewResult SettingsConf(SettingsModel site)
         {
             if (!MainService.SiteConfirm((int)Session["currentsite"], site))
                 throw new HttpException(500, "Sorry, but smth wrong with server.");
+            return PartialView("_SiteTable", MainService.GetUserSites((int)Session["currentsite"]));
         }
 
         public void DeleteSite(int siteid)
@@ -489,7 +490,8 @@ namespace Hypnofrog.Controllers
         public string CheckAchievments(ApplicationDbContext db)
         {
             var id = User.Identity.GetUserId();
-            var achievments = new AchievmentChecker(db.Sites.Where(x => x.UserId == id).ToList(),
+            var username = User.Identity.GetUserName();
+            var achievments = new AchievmentChecker(db.Sites.Where(x => x.UserId == username).ToList(),
                                                                                                               db.RateLog.Where(x => x.User == id).OrderByDescending(x => x.Value).ToList(),
                                                                                                               db.Achievements.Where(x => x.User == id).ToList(),
                                                                                                               id);

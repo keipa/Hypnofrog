@@ -21,7 +21,7 @@
     <div class="confirm">
         <h3>@Resources.Resource.sitesettings</h3>
         <p></p>
-        @using (Ajax.BeginForm("SettingsConf", "Home", new { }, new AjaxOptions() { }, new { @style = "margin: 25px 10px 40px 30px;" }))
+        @using (Ajax.BeginForm("SettingsConf", "Home", new { }, new AjaxOptions() { UpdateTargetId = "site-table" }, new { @style = "margin: 25px 10px 40px 30px;" }))
         {
             <div class="form-group">
                 <div class="row">

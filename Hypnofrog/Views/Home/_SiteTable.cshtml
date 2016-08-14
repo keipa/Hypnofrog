@@ -16,7 +16,7 @@
         <div class='courses cards'>
             @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
             {
-                <div class='course'>
+                <div class='course' id="card-@j">
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
                         @if (User.Identity.IsAuthenticated && Model.ElementAt(j).UserName != User.Identity.GetUserName())
                         {
@@ -80,9 +80,14 @@
                                 <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
                                     <i class='fa fa-pencil'></i>
                                 </a>
-                                <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("DeleteSite", "Home",new { siteid = Model.ElementAt(j).SiteId })">
+                                <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("DeleteSite", "Home", new {siteid = Model.ElementAt(j).SiteId})" id="delete-@j">
                                     <i class='fa fa-trash'></i>
                                 </a>
+                                <script>
+                                    $("#delete-@j").click(function() {
+                                        $("card-@j").remove();
+                                    })
+                                </script>
                             }
                         </span>
                     </div>

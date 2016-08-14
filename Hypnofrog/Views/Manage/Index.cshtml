@@ -3,14 +3,13 @@
     ViewBag.Title = "Manage";
 }
 
-<h2>Управление</h2>
-
+<hr/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <head>
     <script>
 
         var button_beg = '<button id="button" class="btn btn-primary" onclick="showhide()">', button_end = '</button>';
-    var show_button = 'Загрузить аватар', hide_button = 'Назад';
+    var show_button = 'Upload Image', hide_button = 'Cancel';
     function showhide() {
         var div = document.getElementById("content");
         var showhide = document.getElementById( "showhide" );
@@ -35,7 +34,7 @@
     }
     window.onload = function () {
         setup_button( 'hide' );
-        showhide(); // if setup_button is set to 'show' comment this line
+        showhide(); 
     }
     </script>
 </head>
@@ -66,12 +65,12 @@
            
             
             </dd>
-        <dt>Пароль:</dt>
+        <dt>Password:</dt>
         <dd>
             [
             @if (Model.HasPassword)
             {
-                @Html.ActionLink("Сменить пароль", "ChangePassword")
+                @Html.ActionLink("Change password", "ChangePassword")
             }
             else
             {
@@ -79,10 +78,10 @@
             }
             ]
         </dd>
-        <dt>Дополнительная авторизация:</dt>
+        <dt>Additional auth</dt>
         <dd>
             @Model.Logins.Count [
-            @Html.ActionLink("Добавить", "ManageLogins") ]
+            @Html.ActionLink("Add", "ManageLogins") ]
         </dd>
    
         
@@ -92,9 +91,6 @@
 
 
 <script type="text/javascript">
-
-
-
     Dropzone.options.dropzoneForm = {
         maxFiles: 1,
         init: function () {

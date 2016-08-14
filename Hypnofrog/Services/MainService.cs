@@ -610,6 +610,13 @@ namespace Hypnofrog.Services
             return sites;
         }
 
+        public static List<Site> GetUserSites(int siteid)
+        {
+            var username = Repository.SitesList.Where(x => x.SiteId == siteid).FirstOrDefault().UserId;
+            var lsites = Repository.SitesList.Where(x => x.UserId == username).ToList();
+            return lsites.Select(site => GetSite(site.SiteId)).ToList();
+        }
+
         public static double GetRate(List<Site> sites)
         {
             double overall = 0, count = 0;
