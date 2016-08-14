@@ -24,7 +24,7 @@
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        @Html.TextArea("HtmlContent[0]", Model.Contents.ElementAt(0).HtmlContent.ToString(), new { @id = "edit1" })
+        @Html.TextArea("HtmlContent[0]", Model.Contents.ElementAt(0).HtmlContent.ToString(), new { @class = "test" })
     </div>
 </div>
 
@@ -96,31 +96,7 @@
             charCounterMax: 50,
             toolbarVisibleWithoutSelection: true
         });
-        $('#edit1').froalaEditor({
-            toolbarInline: true,
-            dragInline: false,
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            toolbarButtonsSM: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '-', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', '-', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', '-', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '-', 'clearFormatting', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            toolbarButtonsMD: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '-', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '-', 'clearFormatting', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            toolbarButtonsXS: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', '-', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', '-', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', '-', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '-', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', '-', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            pluginsEnabled: null,
-            theme: "@ViewBag.Style",
-            heightMin: 200,
-            toolbarVisibleWithoutSelection: true
-        });
-        $('#edit2').froalaEditor({
-            toolbarInline: true,
-            dragInline: false,
-            toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            toolbarButtonsSM: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '-', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', '-', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', '-', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '-', 'clearFormatting', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            toolbarButtonsMD: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', '-', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '-', 'clearFormatting', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            toolbarButtonsXS: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', '-', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', '-', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', '-', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '-', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', '-', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],
-            pluginsEnabled: null,
-            theme: "@ViewBag.Style",
-            heightMin: 200,
-            toolbarVisibleWithoutSelection: true
-        });
-        $('#edit3').froalaEditor({
+        $('.test').froalaEditor({
             toolbarInline: true,
             dragInline: false,
             toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'quote', 'insertHR', '|', 'undo', 'redo', '|', 'clearFormatting', 'selectAll', 'html', 'insertlin', 'insertpie', 'insertbar'],

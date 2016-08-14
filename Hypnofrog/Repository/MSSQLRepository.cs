@@ -92,6 +92,14 @@ namespace Hypnofrog.Repository
             }
         }
 
+        public IQueryable<OwnTemplate> OwnTemplates
+        {
+            get
+            {
+                return dbc.OwnTemplates;
+            }
+        }
+
         #endregion
 
         public bool CreateAchievement(Achievement achievement)
@@ -303,6 +311,43 @@ namespace Hypnofrog.Repository
             UserManager.RemoveFromRole(id, "Admin");
             UserManager.AddToRole(id, "User");
             return true;
+        }
+
+        public bool CreateTemplate(OwnTemplate template)
+        {
+            if (template != null)
+            {
+                template.HtmlRealize = template.HtmlRealize.Replace("</td>", "{c{o{n{t}e}n}t}</td>");
+                template.HtmlRealize = template.HtmlRealize.Replace("<td style=\"", "<td style=\"border:0;");
+                dbc.OwnTemplates.Add(template);
+                dbc.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdateTemplate(OwnTemplate template)
+        {
+            var oldtemplate = dbc.OwnTemplates.Where(x => x.OwnTemplateId == template.OwnTemplateId).FirstOrDefault();
+            if (oldtemplate != null)
+            {
+                oldtemplate = template;
+                dbc.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveTemplate(OwnTemplate template)
+        {
+            var oldtemplate = dbc.OwnTemplates.Where(x => x.OwnTemplateId == template.OwnTemplateId).FirstOrDefault();
+            if (oldtemplate != null)
+            {
+                dbc.OwnTemplates.Remove(oldtemplate);
+                dbc.SaveChanges();
+                return true;
+            }
+            return false;
         }
     }
 }

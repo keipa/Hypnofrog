@@ -20,6 +20,8 @@ namespace Hypnofrog.ViewModels
         public bool CommentsAvailable { get; set; }
         public string Tags { get; set; }
         public string CurrentTags { get; set; }
+        public string OwnTemplate { get; set; }
+        public string SiteUrl { get; set; }
 
         public SettingsModel()
         {

@@ -162,12 +162,12 @@ namespace Hypnofrog.Services
             return Repository.SitesList.Where(x => x.SiteId == siteid).FirstOrDefault();
         }
 
-        public static List<PageViewModel> GenerateSitePages(Site site, bool isadmin, string currentuser, string user)
+        public static List<PageViewModel> GenerateSitePages(Site site, bool isadmin, string currentuser, string user, bool preview)
         {
             List<PageViewModel> pageviews = new List<PageViewModel>();
             foreach (var page in site.Pages)
             {
-                pageviews.Add(new PageViewModel(page, IsAdmin(isadmin, currentuser, user)));
+                pageviews.Add(new PageViewModel(page, IsAdmin(isadmin, currentuser, user), preview));
             }
             return pageviews;
         }
@@ -226,8 +226,8 @@ namespace Hypnofrog.Services
             {
                 CreationTime = DateTime.Now,
                 HasComments = param[3] == "true",
-                Title = param[0],
-                Description = param[1],
+                Title = param[0] == "" ? "My site" : param[0],
+                Description = param[1] == "" ? "Description" : param[1],
                 Iscomplited = false,
                 MenuType = param[5],
                 UserId = username,
@@ -243,9 +243,9 @@ namespace Hypnofrog.Services
 
         private static void UpdateSiteUrl(string url, Site site)
         {
-            if (url == "" || url != site.Url)
+            if (url == "" || url != site.Url || url == null)
             {
-                site.Url = url == "" ? site.SiteId.ToString() : url;
+                site.Url = url == "" || url == null ? site.SiteId.ToString() : url;
                 Repository.UpdateSite(site);
             }
         }
@@ -327,6 +327,69 @@ namespace Hypnofrog.Services
             };
             var result = cloudinary.Upload(param);
             SaveAvatarToDatabase(result, username);
+        }
+
+        internal static int CreateSiteWithTemplate(SettingsModel model, string username)
+        {
+            var site = new Site
+            {
+                CreationTime = DateTime.Now,
+                HasComments = model.CommentsAvailable,
+                Title = model.Name == null ? "My site" : model.Name,
+                Description = model.Description == null ? "My site" : model.Description,
+                Iscomplited = false,
+                MenuType = model.Menu,
+                UserId = username,
+                Rate = 0.0,
+                Tags = model.CurrentTags,
+                Url = model.SiteUrl
+            };
+            Repository.CreateSite(site);
+            OwnTemplate templ = new OwnTemplate() { CreationTime = DateTime.Now, HtmlRealize = model.OwnTemplate, UserName = username };
+            Repository.CreateTemplate(templ);
+            UpdateSiteUrl(model.SiteUrl, site);
+            CreatePageWithTemlate(site.SiteId, model, templ);
+            return site.SiteId;
+        }
+
+        internal static TemplateViewModel GetTemplate(int templid, List<Content> contents, bool preview)
+        {
+            var template = new TemplateViewModel(Repository.OwnTemplates.Where(x => x.OwnTemplateId == templid).FirstOrDefault());
+            template.HtmlTable = preview ? ReCreateTablePreview(template.HtmlTable, contents) : ReCreateTable(template.HtmlTable, contents);
+            return template;
+        }
+
+        public static string ReCreateTablePreview(string ownTemplate, List<Content> contents)
+        {
+            ownTemplate = ownTemplate.Replace("<br>", "");
+            int count = new Regex("{c{o{n{t}e}n}t}").Matches(ownTemplate).Count;
+            for (int i = 0; i < count; i++)
+            {
+                ownTemplate = new Regex("{c{o{n{t}e}n}t}").Replace(ownTemplate, contents[i].HtmlContent, 1);
+            }
+            return ownTemplate;
+        }
+
+        public static string ReCreateTable(string ownTemplate, List<Content> contents)
+        {
+            ownTemplate = ownTemplate.Replace("<br>", "");
+            int count = new Regex("{c{o{n{t}e}n}t}").Matches(ownTemplate).Count;
+            for (int i = 0; i < count; i++)
+            {
+                ownTemplate = new Regex("{c{o{n{t}e}n}t}").Replace(ownTemplate, "<textarea class=\"test\" name=\"HtmlContent[" + i + "]\">"+contents[i].HtmlContent+"</textarea>", 1);
+            }
+            return ownTemplate;
+        }
+
+        private static bool CreatePageWithTemlate(int siteId, SettingsModel model, OwnTemplate template)
+        {
+            Page page = new Page() { Color = model.Color, TemplateType = template.OwnTemplateId.ToString(), SiteId = siteId, Title = model.Name == null ? "Page Title" : model.Name };
+            if (!Repository.CreatePage(page))
+                return false;
+            template.PageId = page.PageId;
+            Repository.UpdateTemplate(template);
+            int count = new Regex("</td>").Matches(template.HtmlRealize).Count;
+            return CreateContent(count, page.PageId);
         }
 
         internal static bool SaveNewComment(string newComment, int siteid, string username)
@@ -518,6 +581,8 @@ namespace Hypnofrog.Services
             {
                 Repository.RemoveContent(content.ContentId);
             }
+            var model = Repository.OwnTemplates.FirstOrDefault(x => (int)x.PageId == page.PageId);
+            if (model != null) Repository.RemoveTemplate(model);
             Repository.RemovePage(page.PageId);
         }
 

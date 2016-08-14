@@ -167,8 +167,9 @@ namespace Hypnofrog.Controllers
         [AllowAnonymous]
         private PartialViewResult _Show(int pageid, string templ)
         {
-            var page = new PageViewModel(pageid);
-            return PartialView(string.Format("{1}{0}", page.TemplateType, templ), page);
+            var page = new PageViewModel(pageid, templ == "_PreviewPage");
+            page.IsAdmin = User.IsInRole("Admin") || User.Identity.GetUserName() == page.UserName;
+            return PartialView(String.Format("{1}{0}", page.TemplateType, templ), page);
         }
 
         [HttpGet]
@@ -350,6 +351,19 @@ namespace Hypnofrog.Controllers
             if (!MainService.DeleteComment(comid))
                 throw new HttpException(404, "This comment is removed resently.");
             return PartialView($"_Comments", MainService.GetSiteComments(siteid));
+        }
+
+        [HttpGet]
+        public ActionResult CreateWithTemplate()
+        {
+            return View(new SettingsModel());
+        }
+        
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult CreateWithTemplate(SettingsModel model)
+        {
+            return RedirectToAction("EditSite", new { siteid = MainService.CreateSiteWithTemplate(model, User.Identity.GetUserName()) });
         }
 
 

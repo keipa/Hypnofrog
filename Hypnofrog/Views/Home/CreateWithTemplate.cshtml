@@ -1,0 +1,130 @@
+﻿@model Hypnofrog.ViewModels.SettingsModel
+@{
+    ViewBag.Title = "Create Own Template";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
+<style>
+    .autocomplete {
+        position: absolute;
+        cursor: default;
+        z-index: 999999999999;
+    }
+
+    .ui-front {
+        z-index: 999999999;
+    }
+</style>
+
+<div style="margin:60px">
+    <h3>@Resources.Resource.sitesettings</h3>
+    <p>
+        @Resources.Resource.sitesettingsdesc
+    </p>
+
+    @using (Html.BeginForm("CreateWithTemplate", "Home", FormMethod.Post))
+    {
+        Html.AntiForgeryToken();
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.TextBoxFor(x=>x.Name, new { @class="form-control", @placeholder=@Resources.Resource.Name, @id="sitename"})
+                    <br />
+                    @Html.TextBoxFor(x => x.Description, new { @class = "form-control", @placeholder = @Resources.Resource.Description, @id = "sitedescription" })
+                    <br />
+                    <div class="row">
+                        <label class="control-label col-md-10" for="Template">@Resources.Resource.Color:</label>
+                    </div>
+                    <div class="row">
+                        <div class="btn-group col-md-12" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                @Html.RadioButtonFor(x => x.Color, "dark") @Resources.Resource.dark
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Color, "white") @Resources.Resource.white
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Color, "orange") @Resources.Resource.red
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label col-md-10 " for="Template">@Resources.Resource.Menuplacing</label>
+                    </div>
+                    <div class="row">
+                        <div class="btn-group col-md-12" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                @Html.RadioButtonFor(x => x.Menu, "without") @Resources.Resource.nomenu
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Menu, "horizontal") @Resources.Resource.horizontal
+                            </label>
+                            <label class="btn btn-primary">
+                                @Html.RadioButtonFor(x => x.Menu, "vertical") @Resources.Resource.vertivcal
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="control-label col-md-10 " for="Template">@Resources.Resource.columns</label>
+                    </div>
+                    <div class="row" style="border:1px solid black;">
+                        @Html.TextAreaFor(model => model.OwnTemplate, new { @id = "template" })
+                    </div>
+                    <div class="row">
+                        <div class="btn-group col-md-12 checkbox col-lg-offset-1">
+                            <label>@Html.CheckBoxFor(x => x.CommentsAvailable, new { @id = "chbox" }) @Resources.Resource.comments</label>
+                        </div>
+                    </div>
+                    <label for="basic-url">@Resources.Resource.Tags</label>
+                    @Html.TextAreaFor(x => x.CurrentTags, new { @class = "tag-editor-hidden-src", @id = "tagsarea" })
+                    <label for="basic-url">URL для доступа к сайту</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">/users/@User.Identity.Name</span>
+                        @Html.TextBoxFor(x => x.SiteUrl, new { @class = "form-control", @id = "basic-url", @aria_describedby = "basic-addon3" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input id="confirm-btn" type="submit" class="btn btn-success" value="@Resources.Resource.confirm" />
+    }
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
+    <script type="text/javascript">
+        var tags = '@Model.Tags';
+        tags = tags.split(';')
+        for (i = 0; i < tags.length; i++) {
+            tags[i] = tags[i].split(',')[0];
+        }
+        $('#tagsarea').tagEditor({
+            initialTags: ['Hello', 'World'],
+            autocomplete: {
+                delay: 0,
+                source: tags
+            },
+            forceLowercase: false,
+            placeholder: '@Resources.Resource.Tags'
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#template').froalaEditor({
+                toolbarInline: true,
+                dragInline: false,
+                toolbarButtons: ['insertTable'],
+                toolbarButtonsSM: ['insertTable'],
+                toolbarButtonsMD: ['insertTable'],
+                toolbarButtonsXS: ['insertTable'],
+                heightMin: 100,
+                toolbarVisibleWithoutSelection: true,
+                pluginsEnabled: ['table']
+            });
+        });
+    </script>
+}
+
+
+

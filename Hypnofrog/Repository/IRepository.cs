@@ -47,5 +47,10 @@ namespace Hypnofrog.Repository
 
         IQueryable<Achievement> AchievementList { get; }
         bool CreateAchievement(Achievement achievement);
+
+        IQueryable<OwnTemplate> OwnTemplates { get; }
+        bool CreateTemplate(OwnTemplate template);
+        bool UpdateTemplate(OwnTemplate template);
+        bool RemoveTemplate(OwnTemplate template);
     }
 }
