@@ -1457,7 +1457,6 @@
     <Content Include="Views\Home\PreviewSite.cshtml" />
     <Content Include="Views\Home\_PreviewPagemixed.cshtml" />
     <Content Include="Views\Home\_Comments.cshtml" />
-    <Content Include="Views\Home\_HomePageTopSiteTable.cshtml" />
     <Content Include="Views\Home\Famehall.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Home\_PreviewPagesolid.cshtml" />

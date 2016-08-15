@@ -14,7 +14,7 @@
     for (var i = 0; i < Model.Count(); i += 3)
     {
         <div class='courses cards'>
-            @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
+            @for (var j = i; (j < i + 3) && (j < Model.Count()); j++)
             {
                 <div class='course' id="card-@j">
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
@@ -35,20 +35,11 @@
                             </script>
                             @{
                                 var elem = Model.ElementAt(j);
-                                Hypnofrog.ViewModels.PageViewModel backgroundcolor;
-                                try
-                                {
-                                    backgroundcolor = elem.Pages.ElementAt(0);
-                                }
-                                catch
-                                {
-                                    backgroundcolor = null;
-                                }
-                                var style = backgroundcolor == null? "red": backgroundcolor.Style;
-                                string newbcolor = style == "red" ? "FF7C00" : style == "dark" ? "0C0114" : "9AC6BC";
-                                string newfcolor = style == "red" ? "A63400" : style == "dark" ? "BDAECD" : "37474f";
+                                var backgroundcolor = elem.Pages.ElementAt(0).Style;
+                                var newbcolor = backgroundcolor == "red" ? "FF7C00" : backgroundcolor == "dark" ? "0C0114" : "9AC6BC";
+                                var newfcolor = backgroundcolor == "red" ? "A63400" : backgroundcolor == "dark" ? "BDAECD" : "37474f";
                             }
-                            <img src="http://dummyimage.com/400x150/@newbcolor/@newfcolor&text=@Model.ElementAt(j).Title.Replace(' ', '+')">
+                            <img src="http://dummyimage.com/400x150/@newbcolor/@newfcolor&text=@Model.ElementAt(j).Title.Replace(' ', '+')" alt="">
                         </div>
                     </div>
 
