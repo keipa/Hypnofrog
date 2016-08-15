@@ -7,7 +7,7 @@
 <script src="~/Scripts/star-rating.js"></script>
 <script src="~/Scripts/star-rating.min.js"></script>
 <script src="~/Content/themes/krajee-svg/theme.js"></script>
-
+<script src="~/Scripts/commonJS.js"></script>
 
 @if (Model.Any())
 {
@@ -30,14 +30,23 @@
                         <div class='blur asset'>
                             <script type="text/javascript">
                                 $('#input-@j').on('rating.change', function (event, value, caption) {
-                                    $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
+                                    $('#results-@j').load(getPhotoUrl("@User.Identity.GetUserId()", "@Model.ElementAt(j).SiteId", value));
                                 });
                             </script>
                             @{
                                 var elem = Model.ElementAt(j);
-                                var backgroundcolor = elem.Pages.ElementAt(0).Style;
-                                string newbcolor = backgroundcolor == "red" ? "FF7C00" : backgroundcolor == "dark" ? "0C0114" : "9AC6BC";
-                                string newfcolor = backgroundcolor == "red" ? "A63400" : backgroundcolor == "dark" ? "BDAECD" : "37474f";
+                                Hypnofrog.ViewModels.PageViewModel backgroundcolor;
+                                try
+                                {
+                                    backgroundcolor = elem.Pages.ElementAt(0);
+                                }
+                                catch
+                                {
+                                    backgroundcolor = null;
+                                }
+                                var style = backgroundcolor == null? "red": backgroundcolor.Style;
+                                string newbcolor = style == "red" ? "FF7C00" : style == "dark" ? "0C0114" : "9AC6BC";
+                                string newfcolor = style == "red" ? "A63400" : style == "dark" ? "BDAECD" : "37474f";
                             }
                             <img src="http://dummyimage.com/400x150/@newbcolor/@newfcolor&text=@Model.ElementAt(j).Title.Replace(' ', '+')">
                         </div>

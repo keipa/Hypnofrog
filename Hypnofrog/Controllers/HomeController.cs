@@ -339,7 +339,7 @@ namespace Hypnofrog.Controllers
             return PartialView("_Comments", MainService.GetSiteComments(siteid));
         }
 
-        public PartialViewResult DeleteComment(int comid, int siteid)
+        public PartialViewResult DeleteCommentPV(int comid, int siteid)
         {
             if (!MainService.DeleteComment(comid))
                 throw new HttpException(404, "This comment is removed resently.");

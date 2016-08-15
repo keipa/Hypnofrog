@@ -30,7 +30,7 @@
                         <div class='blur asset'>
                             <script type="text/javascript">
                                 $('#input-@j').on('rating.change', function (event, value, caption) {
-                                    $('#results-@j').load("http://localhost:61065/Home/UpdateRating?userid=@User.Identity.GetUserId()&siteid=@Model.ElementAt(j).SiteId" + "&value=" + value);
+                                    $('#results-@j').load(getPhotoUrl("@User.Identity.GetUserId()", "@Model.ElementAt(j).SiteId", value));
                                 });
                             </script>
                             @{

@@ -1,5 +1,4 @@
-﻿
-@model Dictionary<string, bool>
+﻿@model Dictionary<string, bool>
 
 <hr />
 <h2>Зал славы</h2>
@@ -20,7 +19,7 @@
                 if (Model.ElementAt(j).Value)
                 {
                     <div class="card card-inverse">
-                        <img class="card-img" src="http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif" alt="Card image" style="width: 100%;">
+                        <img class="card-img" src="" alt="Card image" style="width: 100%;">
                         <div class="card-img-overlay">
                             <h4 class="card-title">@Model.ElementAt(j).Key.Split(':')[0]</h4>
                             <h6 class="card-title">@Model.ElementAt(j).Key.Split(':')[1]</h6>
@@ -30,7 +29,7 @@
                 else
                 {
                     <div class="card card-inverse notgot">
-                        <img class="card-img" src="http://i493.photobucket.com/albums/rr299/0khi/Futurama/hypnofrog.gif" alt="Card image" style="width: 100%;">
+                        <img class="card-img" src="@Strings.Creditals.HypnoPhoto" alt="Card image" style="width: 100%;">
                         <div class="card-img-overlay">
                             <h4 class="card-title">@Model.ElementAt(j).Key.Split(':')[0]</h4>
                             <h6 class="card-title">@Model.ElementAt(j).Key.Split(':')[1]</h6>

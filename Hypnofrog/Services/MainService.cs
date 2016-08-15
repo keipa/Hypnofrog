@@ -119,8 +119,8 @@ namespace Hypnofrog.Services
 
         public static string GetSiteLayout(Site site)
         {
-            return site.MenuType == "without" ? "~/Views/Shared/_LayoutWM.cshtml" :
-        site.MenuType == "vertical" ? "~/Views/Shared/_LayoutVM.cshtml" : "~/Views/Shared/_Layout.cshtml";
+            return site.MenuType == "without" ? Strings.Creditals.LayoutWM :
+        site.MenuType == "vertical" ? Strings.Creditals.LayoutVM : Strings.Creditals.LayoutHM;
         }
 
         internal static Site SiteById(int siteid)
@@ -256,7 +256,7 @@ namespace Hypnofrog.Services
         internal static List<CommentViewModel> GetSiteComments(int siteid)
         {
             var site = Repository.SitesList.Where(x => x.SiteId == siteid).Include(x => x.Comments).FirstOrDefault();
-            return site?.Comments.Select(elem => new CommentViewModel(elem)).ToList();
+            return site?.Comments.Select(elem => new CommentViewModel(elem)).OrderByDescending(x => x.CreationTime).ToList();
         }
 
         internal static bool DeleteComment(int comid)
@@ -268,7 +268,7 @@ namespace Hypnofrog.Services
         {
             string path;
             ConfigureAvatarSaving(out fName, file, out path, info);
-            var cloudinary = new Cloudinary(new Account("dldmfb5fo", "568721824454478", "ZO4nwcMQwcT88lUNUK5KHJmy_fU"));
+            var cloudinary = new Cloudinary(new Account(Strings.Creditals.CloudinaryAccount, Strings.Creditals.CloudinaryPassword, Strings.Creditals.CloudinaryHash));
             var param = new ImageUploadParams()
             {
                 File = new FileDescription(path)

@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<Hypnofrog.ViewModels.CommentViewModel>
 @using Microsoft.AspNet.Identity
+
 @foreach (var elem in Model)
 {
-    <li>
+    var j = Model.ToList().IndexOf(elem);
+    <li id="li-@j">
         <div class="comment-main-level">
             <div class="comment-avatar">
                 <a href="@Url.Action("UserProfile",  new { userid = elem.UserId })">
@@ -15,9 +17,14 @@
                     <i class="fa fa-clock-o"> @elem.CreationTime</i>
                     @if (elem.UserId == User.Identity.GetUserName() || User.IsInRole("Admin"))
                     {
-                        <a data-ajax="true" data-ajax-mode="replace" data-ajax-update="#comments-list" href="@Url.Action("DeleteComment", "Home", new { comid = elem.CommentId, siteid = elem.SiteId})">
+                        <a data-ajax="true" data-ajax-mode="replace" id="delete-@j" href="@Url.Action("DeleteComment", "Home", new { comid = elem.CommentId})">
                             <i class="fa fa-trash-o"></i>
                         </a>
+                        <script>
+                            $("#delete-@j").click(function () {
+                                $("#li-@j").remove();
+                            })
+                        </script>
                     }
                 </div>
                 <div class="comment-content fr-view">

@@ -45,6 +45,7 @@ namespace Hypnofrog.ViewModels
                     Comments.Add(new CommentViewModel(elem));
                 }
             }
+            Comments = Comments.OrderByDescending(x => x.CreationTime).ToList();
             GetSiteSettings(this, site, isadmin, currentuser);
         }
 
