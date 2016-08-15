@@ -11,10 +11,11 @@
 
 @if (Model.Any())
 {
-    for (var i = 0; i < Model.Count(); i += 3)
+    for (var i = 0; i < Model.Count(); i += Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["SitesOnTable"]))
+    for (var i = 0; i < Model.Count(); i += Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["SitesOnTable"]))
     {
         <div class='courses cards'>
-            @for (int j = i; (j < i + 3) && (j < Model.Count()); j++)
+            @for (var j = i; (j < i + Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["SitesOnTable"])) && (j < Model.Count()); j++)
             {
                 <div class='course' id="card-@j">
                     <div class="imageratingcontainer" style="position: relative; z-index: 1000">
