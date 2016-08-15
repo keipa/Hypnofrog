@@ -1,9 +1,7 @@
 ﻿using Hypnofrog.DBModels;
 using Hypnofrog.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Hypnofrog.ViewModels
 {
@@ -43,15 +41,15 @@ namespace Hypnofrog.ViewModels
             vmodel.Title = page.Title;
             vmodel.SiteId = page.SiteId;
             vmodel.Contents = page.Contents.ToList();
-            int templid = 0;
-            if (Int32.TryParse(page.TemplateType, out templid))
+            int templid;
+            if (int.TryParse(page.TemplateType, out templid))
             {
                 vmodel.TemplateType = "own";
                 vmodel.Template = MainService.GetTemplate(templid, vmodel.Contents, preview);
             }
             else vmodel.TemplateType = page.TemplateType;
             vmodel.Style = MainService.GetPageStyle(page);
-            Site site = MainService.GetSite(page.SiteId);
+            var site = MainService.GetSite(page.SiteId);
             vmodel.UserName = site.UserId;
             vmodel.SiteUrl = site.Url;
         }

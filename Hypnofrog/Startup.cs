@@ -13,44 +13,43 @@ namespace Hypnofrog
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            createRolesandUsers();
+            CreateRolesandUsers();
             app.MapSignalR();
 
         }
 
-        private void createRolesandUsers()
+        private void CreateRolesandUsers()
         {
-            ApplicationDbContext context = new ApplicationDbContext();
+            var context = new ApplicationDbContext();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             if (!roleManager.RoleExists("Admin"))
             {
-                var role = new IdentityRole();
-                role.Name = "Admin";
+                var role = new IdentityRole {Name = "Admin"};
                 roleManager.Create(role);
-                var user = new ApplicationUser();
-                user.UserName = "qwertyADMIN";
-                user.Email = "qwerty@gmail.com";
-                user.EmailConfirmed = true;
+                var user = new ApplicationUser
+                {
+                    UserName = "qwertyADMIN",
+                    Email = "qwerty@gmail.com",
+                    EmailConfirmed = true
+                };
                 string userPWD = "102938kek";
-                var chkUser = UserManager.Create(user, userPWD);
+                var chkUser = userManager.Create(user, userPWD);
                 if (chkUser.Succeeded)
                 {
-                    var result1 = UserManager.AddToRole(user.Id, "Admin");
+                    userManager.AddToRole(user.Id, "Admin");
                     context.Avatars.Add(new Avatar() { Path = "https://pp.vk.me/c637127/v637127185/26b3/d6xhDAEYvW8.jpg", UserId = user.UserName });
                     context.SaveChanges();
                 }
             }
             if (!roleManager.RoleExists("Anonymous"))
             {
-                var role = new IdentityRole();
-                role.Name = "Anonymous";
+                var role = new IdentityRole {Name = "Anonymous"};
                 roleManager.Create(role);
             }
             if (!roleManager.RoleExists("User"))
             {
-                var role = new IdentityRole();
-                role.Name = "User";
+                var role = new IdentityRole {Name = "User"};
                 roleManager.Create(role);
             }
         }

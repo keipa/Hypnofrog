@@ -1,5 +1,4 @@
-﻿using Hypnofrog.DBModels;
-using Hypnofrog.Models;
+﻿using Hypnofrog.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
@@ -17,16 +16,16 @@ namespace Hypnofrog.ViewModels
 
         public UserView() { }
 
-        public UserView(Models.ApplicationUser user, string avatarpath, double rating, bool isadmin)
+        public UserView(ApplicationUser user, string avatarpath, double rating, bool isadmin)
         {
-            this.UserName = user.UserName;
-            this.UserId = user.Id;
-            this.UserAvatar = avatarpath;
-            this.Rating = rating;
-            this.IsAdmin = isadmin;
+            UserName = user.UserName;
+            UserId = user.Id;
+            UserAvatar = avatarpath;
+            Rating = rating;
+            IsAdmin = isadmin;
         }
 
-        public static IEnumerable<UserView> GetUserViews(IEnumerable<Models.ApplicationUser> users)
+        public static IEnumerable<UserView> GetUserViews(IEnumerable<ApplicationUser> users)
         {
             var result = new List<UserView>();
                 using (var udb = new ApplicationDbContext())
@@ -35,12 +34,12 @@ namespace Hypnofrog.ViewModels
                     foreach (var user in users)
                         try
                         {
-                            user.Id = udb.Users.FirstOrDefault(x => x.UserName == user.UserName).Id;
-                            result.Add(new UserView(user, udb.Avatars.FirstOrDefault(x => x.UserId == user.UserName).Path, GetProfilerRate(udb, user.UserName), userManager.IsInRole(user.Id, "Admin")));
+                            user.Id = udb.Users.FirstOrDefault(x => x.UserName == user.UserName)?.Id;
+                            result.Add(new UserView(user, udb.Avatars.FirstOrDefault(x => x.UserId == user.UserName)?.Path, GetProfilerRate(udb, user.UserName), userManager.IsInRole(user.Id, "Admin")));
                         }
                         catch
                         {
-                            result.Add(new UserView(user, udb.Avatars.FirstOrDefault(x => x.UserId == user.UserName).Path, GetProfilerRate(udb, user.UserName), false));
+                            result.Add(new UserView(user, udb.Avatars.FirstOrDefault(x => x.UserId == user.UserName)?.Path, GetProfilerRate(udb, user.UserName), false));
                         }
                 }
             return result;
@@ -48,11 +47,10 @@ namespace Hypnofrog.ViewModels
 
         private static double GetProfilerRate(ApplicationDbContext db, string username)
         {
-            var sites = new List<Site>();
-            sites = db.Sites.Where(x => x.UserId == username).ToList();
+            var sites = db.Sites.Where(x => x.UserId == username).ToList();
             var average = sites.Sum(item => item.Rate);
             if (!sites.Any()) return 0.0;
-            average = average / sites.Count();
+            average = average / sites.Count;
             return average;
         }
     }

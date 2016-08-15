@@ -138,4 +138,52 @@
   <data name="LayoutWM" xml:space="preserve">
     <value>~/Views/Shared/_LayoutWM.cshtml</value>
   </data>
+  <data name="AccountController_Login_This_email_is_not_valid_" xml:space="preserve">
+    <value>This email is not valid.</value>
+  </data>
+  <data name="Email_not_confirmed" xml:space="preserve">
+    <value>Email не подтверждён.</value>
+  </data>
+  <data name="Login_Not_valid_login" xml:space="preserve">
+    <value>Неверный логин или пароль.</value>
+  </data>
+  <data name="Login_Enter_login_or_password" xml:space="preserve">
+    <value>Введите логин и пароль.</value>
+  </data>
+  <data name="VerifyCode_Invalid_code" xml:space="preserve">
+    <value>Invalid code.</value>
+  </data>
+  <data name="Register_Not_valid_user_name_rules" xml:space="preserve">
+    <value>Not valid user name(it should contains only letters and numbers).</value>
+  </data>
+  <data name="HomeController_CreateWithTemplate" xml:space="preserve">
+    <value>Your own template can`t be null!</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="Remember_this_browser" xml:space="preserve">
+    <value>Remember this browser?</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Remember_me" xml:space="preserve">
+    <value>Remember me?</value>
+  </data>
+  <data name="RegisterViewModel_Name_rules" xml:space="preserve">
+    <value>The {0} must be at least {2} characters long.</value>
+  </data>
+  <data name="Confirm_password" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Do_not_match" xml:space="preserve">
+    <value>The password and confirmation password do not match.</value>
+  </data>
 </root>

@@ -72,7 +72,7 @@
                             <span>@Model.ElementAt(j).Description</span>
                         </div>
                         <div class='language'>
-                            @if (Model.ElementAt(j).Tags != null && (Model.ElementAt(j).Tags.Split(',').Count() != 1  || Model.ElementAt(j).Tags.Split(',')[0] != ""))
+                            @if (Model.ElementAt(j).Tags != null && (Model.ElementAt(j).Tags.Split(',').Length != 1  || Model.ElementAt(j).Tags.Split(',')[0] != ""))
                             {
                                 <span>@Resources.Resource.Tags</span><br>
                             }
@@ -86,12 +86,12 @@
                             }
                         </div>
                         <span class='actions'>
-                            <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserName, siteurl = Model.ElementAt(j).Url }) ">
+                            <a href="@Url.Action("PreviewSite", "Home", new { username = Model.ElementAt(j).UserName, siteurl = Model.ElementAt(j).Url })">
                                 <i class='fa fa-eye'></i>
                             </a>
                             @if (Model.ElementAt(j).UserName == User.Identity.GetUserName() || User.IsInRole("Admin"))
                             {
-                                <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId }) ">
+                                <a href="@Url.Action("EditSite", "Home", new { siteid = Model.ElementAt(j).SiteId })">
                                     <i class='fa fa-pencil'></i>
                                 </a>
                                 <a data-ajax="true" data-ajax-mode="replace" href="@Url.Action("DeleteSite", "Home", new {siteid = Model.ElementAt(j).SiteId})" id="delete-@j">

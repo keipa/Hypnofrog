@@ -61,6 +61,15 @@ namespace Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This email is not valid..
+        /// </summary>
+        public static string AccountController_Login_This_email_is_not_valid_ {
+            get {
+                return ResourceManager.GetString("AccountController_Login_This_email_is_not_valid_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to dldmfb5fo.
         /// </summary>
         public static string CloudinaryAccount {
@@ -84,6 +93,60 @@ namespace Strings {
         public static string CloudinaryPassword {
             get {
                 return ResourceManager.GetString("CloudinaryPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string Code {
+            get {
+                return ResourceManager.GetString("Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string Confirm_password {
+            get {
+                return ResourceManager.GetString("Confirm_password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password and confirmation password do not match..
+        /// </summary>
+        public static string Do_not_match {
+            get {
+                return ResourceManager.GetString("Do_not_match", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email не подтверждён..
+        /// </summary>
+        public static string Email_not_confirmed {
+            get {
+                return ResourceManager.GetString("Email_not_confirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your own template can`t be null!.
+        /// </summary>
+        public static string HomeController_CreateWithTemplate {
+            get {
+                return ResourceManager.GetString("HomeController_CreateWithTemplate", resourceCulture);
             }
         }
         
@@ -120,6 +183,87 @@ namespace Strings {
         public static string LayoutWM {
             get {
                 return ResourceManager.GetString("LayoutWM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Введите логин и пароль..
+        /// </summary>
+        public static string Login_Enter_login_or_password {
+            get {
+                return ResourceManager.GetString("Login_Enter_login_or_password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Неверный логин или пароль..
+        /// </summary>
+        public static string Login_Not_valid_login {
+            get {
+                return ResourceManager.GetString("Login_Not_valid_login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not valid user name(it should contains only letters and numbers)..
+        /// </summary>
+        public static string Register_Not_valid_user_name_rules {
+            get {
+                return ResourceManager.GetString("Register_Not_valid_user_name_rules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} must be at least {2} characters long..
+        /// </summary>
+        public static string RegisterViewModel_Name_rules {
+            get {
+                return ResourceManager.GetString("RegisterViewModel_Name_rules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember me?.
+        /// </summary>
+        public static string Remember_me {
+            get {
+                return ResourceManager.GetString("Remember_me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember this browser?.
+        /// </summary>
+        public static string Remember_this_browser {
+            get {
+                return ResourceManager.GetString("Remember_this_browser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid code..
+        /// </summary>
+        public static string VerifyCode_Invalid_code {
+            get {
+                return ResourceManager.GetString("VerifyCode_Invalid_code", resourceCulture);
             }
         }
     }

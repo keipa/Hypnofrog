@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Hypnofrog.Models;
 using Hypnofrog.DBModels;
 using Hypnofrog.Services;
 using Lucene.Net.Support;
@@ -32,7 +29,6 @@ namespace Hypnofrog.ViewModels
 
         public SiteViewModel(string username, string siteurl, string currentuser, bool isadmin)
         {
-
             var site = MainService.SiteByUrlAndName(siteurl, username);
             Preview = true;
             Comments =new EquatableList<CommentViewModel>();

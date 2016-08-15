@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Strings;
 
 namespace Hypnofrog.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(Creditals), Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [Display(Name = "Name")]
+        [Display(ResourceType = typeof(Creditals), Name = "Name")]
         public string Name { get; set; }
     }
 
@@ -33,11 +34,11 @@ namespace Hypnofrog.Models
         public string Provider { get; set; }
 
         [Required]
-        [Display(Name = "Code")]
+        [Display(ResourceType = typeof(Creditals), Name = "Code")]
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "Remember this browser?")]
+        [Display(ResourceType = typeof(Creditals), Name = "Remember_this_browser")]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
@@ -46,23 +47,23 @@ namespace Hypnofrog.Models
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(Creditals), Name = "Email")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(Creditals), Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(ResourceType = typeof(Creditals), Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(ResourceType = typeof(Creditals), Name = "Remember_me")]
         public bool RememberMe { get; set; }
     }
 
@@ -70,23 +71,23 @@ namespace Hypnofrog.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(Creditals), Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(20, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
-        [Display(Name = "Name")]
+        [StringLength(20, ErrorMessageResourceType = typeof(Creditals), ErrorMessageResourceName = "RegisterViewModel_Name_rules", MinimumLength = 5)]
+        [Display(ResourceType = typeof(Creditals), Name = "Name")]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessageResourceType = typeof(Creditals), ErrorMessageResourceName = "RegisterViewModel_Name_rules", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(ResourceType = typeof(Creditals), Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(ResourceType = typeof(Creditals), Name = "Confirm_password")]
+        [Compare("Password", ErrorMessageResourceType = typeof(Creditals), ErrorMessageResourceName = "Do_not_match")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -94,18 +95,18 @@ namespace Hypnofrog.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(Creditals), Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessageResourceType = typeof(Creditals), ErrorMessageResourceName = "RegisterViewModel_Name_rules", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(ResourceType = typeof(Creditals), Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(ResourceType = typeof(Creditals), Name = "Confirm_password")]
+        [Compare("Password", ErrorMessageResourceType = typeof(Creditals), ErrorMessageResourceName = "Do_not_match")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
@@ -115,7 +116,7 @@ namespace Hypnofrog.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(ResourceType = typeof(Creditals), Name = "Email")]
         public string Email { get; set; }
     }
 }

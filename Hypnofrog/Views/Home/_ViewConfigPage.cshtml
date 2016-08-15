@@ -5,47 +5,46 @@
 
 <div class="modal-body" style="color:black;">
     <div class="confirm">
-        <h3>Настройки новой страницы</h3>
+        <h3>@Resources.Resource.sitesettings</h3>
         <p>
-            Настройки цвета и названия новой страницы
-            <em>Последующие страницы будут создаваться по мере необходимости.</em>
+            @Resources.Resource.sitesettingsdesc
         </p>
         @using (Ajax.BeginForm("ChangeTemplate", "Home", new AjaxOptions() { UpdateTargetId = "tutu" }, new { id = "aform", style = "margin: 25px 10px 40px 30px" }))
             {
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-7">
-                        <input type="text" class="form-control" placeholder="Название" id="sitename">
+                        <input type="text" class="form-control" placeholder="@Resources.Resource.Name" id="sitename">
                         <br />
                         <div class="row">
-                            <label class="control-label col-md-10" for="Template">Цветовая гамма:</label>
+                            <label class="control-label col-md-10">@Resources.Resource.Color:</label>
                         </div>
                         <div class="row">
                             <div class="btn-group col-md-12" data-toggle="buttons">
                                 <label class="btn btn-primary active">
-                                    @Html.RadioButtonFor(x => x.Color, "dark") Темный
+                                    @Html.RadioButtonFor(x => x.Color, "dark") @Resources.Resource.dark
                                 </label>
                                 <label class="btn btn-primary">
-                                    @Html.RadioButtonFor(x => x.Color, "white") Светлый
+                                    @Html.RadioButtonFor(x => x.Color, "white") @Resources.Resource.white
                                 </label>
                                 <label class="btn btn-primary">
-                                    @Html.RadioButtonFor(x => x.Color, "orange") Рыжий
+                                    @Html.RadioButtonFor(x => x.Color, "orange") @Resources.Resource.red
                                 </label>
                             </div>
                         </div>
                         <div class="row">
-                            <label class="control-label col-md-10 " for="Template">Колонки:</label>
+                            <label class="control-label col-md-10 ">@Resources.Resource.columns:</label>
                         </div>
                         <div class="row">
                             <div class="btn-group col-md-12" data-toggle="buttons">
                                 <label class="btn btn-primary active">
-                                    @Html.RadioButtonFor(x => x.Template, "solid") Одна
+                                    @Html.RadioButtonFor(x => x.Template, "solid") @Resources.Resource.one
                                 </label>
                                 <label class="btn btn-primary">
-                                    @Html.RadioButtonFor(x => x.Template, "dsolid") Две
+                                    @Html.RadioButtonFor(x => x.Template, "dsolid") @Resources.Resource.two
                                 </label>
                                 <label class="btn btn-primary">
-                                    @Html.RadioButtonFor(x => x.Template, "mixed") Смешанное
+                                    @Html.RadioButtonFor(x => x.Template, "mixed") @Resources.Resource.mixed
                                 </label>
                             </div>
                         </div>
@@ -62,7 +61,7 @@
         <button id="confirm-btn" type="submit">Confirm</button>
         @using (Html.BeginForm("AddPage", "Home", FormMethod.Post, new { id = "bform", style = "margin-bottom:40px;" }))
         {
-            Html.AntiForgeryToken();
+            @Html.AntiForgeryToken()
             <input type="hidden" id="inputData" name="inputData" />
         }
     </div>
@@ -88,7 +87,7 @@
     $('#confirm-btn').click(function () {
         document.getElementById('inputData').value += document.getElementById("sitename").value+ ";";
         var colors = document.getElementsByClassName('active');
-        for (i = 0; i < colors.length; i++)
+        for (var i = 0; i < colors.length; i++)
             document.getElementById('inputData').value += colors[i].getElementsByTagName('input')[0].value + ';';
         $('#bform').submit();
     });

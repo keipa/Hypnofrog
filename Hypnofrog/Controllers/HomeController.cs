@@ -11,6 +11,7 @@ using Hypnofrog.Filters;
 using Hypnofrog.Services;
 using Hypnofrog.ViewModels;
 using Microsoft.AspNet.Identity;
+using Strings;
 
 namespace Hypnofrog.Controllers
 {
@@ -162,7 +163,7 @@ namespace Hypnofrog.Controllers
         {
             var page = new PageViewModel(pageid, templ == "_PreviewPage");
             page.IsAdmin = User.IsInRole("Admin") || User.Identity.GetUserName() == page.UserName;
-            return PartialView(String.Format("{1}{0}", page.TemplateType, templ), page);
+            return PartialView(string.Format("{1}{0}", page.TemplateType, templ), page);
         }
 
         [HttpGet]
@@ -339,7 +340,7 @@ namespace Hypnofrog.Controllers
             return PartialView("_Comments", MainService.GetSiteComments(siteid));
         }
 
-        public PartialViewResult DeleteCommentPV(int comid, int siteid)
+        public PartialViewResult DeleteCommentPv(int comid, int siteid)
         {
             if (!MainService.DeleteComment(comid))
                 throw new HttpException(404, "This comment is removed resently.");
@@ -356,6 +357,11 @@ namespace Hypnofrog.Controllers
         [ValidateInput(false)]
         public ActionResult CreateWithTemplate(SettingsModel model)
         {
+            if (model.OwnTemplate == null || !model.OwnTemplate.Contains("<table"))
+            {
+                ModelState.AddModelError("", Creditals.HomeController_CreateWithTemplate);
+                return View(new SettingsModel());
+            }
             return RedirectToAction("EditSite", new { siteid = MainService.CreateSiteWithTemplate(model, User.Identity.GetUserName()) });
         }
 

@@ -19,7 +19,7 @@ namespace Hypnofrog.ViewModels
             CommentId = comment.CommentId;
             CreationTime = comment.CreationTime;
             Text = comment.Text;
-            SiteId = (int)comment.SiteId;
+            if (comment.SiteId != null) SiteId = (int)comment.SiteId;
         }
     }
 }

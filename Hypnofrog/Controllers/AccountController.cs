@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Hypnofrog.Filters;
 using System.Net.Mail;
 using System;
+using Strings;
 
 namespace Hypnofrog.Controllers
 {
@@ -76,30 +77,30 @@ namespace Hypnofrog.Controllers
                 var userc = UserManager.FindByEmail(model.Email);
                 if (userc == null)
                 {
-                    ModelState.AddModelError("", "This email is not valid.");
+                    ModelState.AddModelError("", Creditals.AccountController_Login_This_email_is_not_valid_);
                     return View(model);
                 }
                 var user = await UserManager.FindAsync(userc.UserName, model.Password);
                 if (user != null)
                 {
-                    if (user.EmailConfirmed == true)
+                    if (user.EmailConfirmed)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await SignInManager.SignInAsync(user, false, false);
                         return RedirectToAction("UserProfile", "Home", new { userid = user.UserName });
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Email не подтверждён.");
+                        ModelState.AddModelError("", Creditals.Email_not_confirmed);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неверный логин или пароль.");
+                    ModelState.AddModelError("", Creditals.Login_Not_valid_login);
                 }
             }
             else
             {
-                ModelState.AddModelError("", "Введите логин и пароль.");
+                ModelState.AddModelError("", Creditals.Login_Enter_login_or_password);
             }
             return View(model);
         }
@@ -137,9 +138,8 @@ namespace Hypnofrog.Controllers
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid code.");
+                    ModelState.AddModelError("", Creditals.VerifyCode_Invalid_code);
                     return View(model);
             }
         }
@@ -163,7 +163,7 @@ namespace Hypnofrog.Controllers
             {
                 if (!Regex.IsMatch(model.Name, @"^[a-zA-Z][a-zA-Z0-9]{1,20}$"))
                 {
-                    ModelState.AddModelError("", "Not valid user name(it should contains only letters and numbers).");
+                    ModelState.AddModelError("", Creditals.Register_Not_valid_user_name_rules);
                     return View(model);
                 }
                 var user = new ApplicationUser { UserName = model.Name, Email = model.Email };
@@ -180,22 +180,22 @@ namespace Hypnofrog.Controllers
                 {
                     await UserManager.AddToRoleAsync(user.Id, "User");
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackURL = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    ViewBag.CallBack = callbackURL;
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, Request.Url?.Scheme);
+                    ViewBag.CallBack = callbackUrl;
                     ViewBag.uid = user.Id;
                     ViewBag.email = user.Email;
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение Email", "Для завершения регистрации перейдите по адресу:" +
-                        "<a href=\"" + callbackURL + "\">Подвердить Email</a>");
+                        "<a href=\"" + callbackUrl + "\">Подвердить Email</a>");
                     return View("DisplayConfirmMessage");
                 }
                 AddErrors(result);
             }
             return View(model);
         }
-        public  async Task<ActionResult> ResendEmail(string callbackURL, string uid)
+        public  async Task<ActionResult> ResendEmail(string callbackUrl, string uid)
         {
             await UserManager.SendEmailAsync(uid, "Подтверждение Email", "Для завершения регистрации перейдите по адресу:" +
-                        "<a href=\"" + callbackURL + "\">Подвердить Email</a>");
+                        "<a href=\"" + callbackUrl + "\">Подвердить Email</a>");
             return View("DisplayConfirmMessage");
         }
         //
@@ -251,16 +251,18 @@ namespace Hypnofrog.Controllers
             return View();
         }
 
-        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
+/*
+        private async Task<string> SendEmailConfirmationTokenAsync(string userId, string subject)
         {
-            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userId);
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
-               new { userId = userID, code = code }, protocol: Request.Url.Scheme);
-            await UserManager.SendEmailAsync(userID, subject,
+               new {userId, code }, Request.Url?.Scheme);
+            await UserManager.SendEmailAsync(userId, subject,
                "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
             return callbackUrl;
         }
+*/
 
         //
         // GET: /Account/ResetPassword
@@ -347,7 +349,7 @@ namespace Hypnofrog.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
         }
 
         //
@@ -371,7 +373,6 @@ namespace Hypnofrog.Controllers
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
@@ -410,7 +411,7 @@ namespace Hypnofrog.Controllers
                 }
                 if (!Regex.IsMatch(model.Name, @"^[a-zA-Z][a-zA-Z0-9]{1,20}$"))
                 {
-                    ModelState.AddModelError("", "Not valid user name(it should contains only letters and numbers).");
+                    ModelState.AddModelError("", Creditals.Register_Not_valid_user_name_rules);
                     return View(model);
                 }
                 var user = new ApplicationUser { UserName = model.Name, Email = model.Email };
@@ -470,21 +471,23 @@ namespace Hypnofrog.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Resend(string callbackURL, string uid, string to)
+        public ActionResult Resend(string callbackUrl, string uid, string to)
         {
             try
             {
-                var from = "tumanov.97.dima@mail.ru";
-                var password = "102938usugen";
-                MailMessage mail = new MailMessage(from, to);
-                SmtpClient client = new SmtpClient("smtp.mail.ru", Convert.ToInt32(587));
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.Credentials = new System.Net.NetworkCredential(from, password);
-                client.EnableSsl = true;
+                const string from = "tumanov.97.dima@mail.ru";
+                const string password = "102938usugen";
+                var mail = new MailMessage(from, to);
+                var client = new SmtpClient("smtp.mail.ru", Convert.ToInt32(587))
+                {
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new System.Net.NetworkCredential(from, password),
+                    EnableSsl = true
+                };
                 mail.Subject = "Confirm Email";
-                mail.Body = "To complite registration, please, follow that link:" + callbackURL;
+                mail.Body = "To complite registration, please, follow that link:" + callbackUrl;
                 client.Send(mail);
-                ConfigureResendEmailOptions(callbackURL, uid, to);
+                ConfigureResendEmailOptions(callbackUrl, uid, to);
                 return View("DisplayConfirmMessage");
             }
             catch (Exception)
@@ -493,9 +496,9 @@ namespace Hypnofrog.Controllers
             }
         }
 
-        private void ConfigureResendEmailOptions(string callbackURL, string uid, string to)
+        private void ConfigureResendEmailOptions(string callbackUrl, string uid, string to)
         {
-            ViewBag.CallBack = callbackURL;
+            ViewBag.CallBack = callbackUrl;
             ViewBag.uid = uid;
             ViewBag.email = to;
         }
@@ -504,13 +507,7 @@ namespace Hypnofrog.Controllers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
+        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
         private void AddErrors(IdentityResult result)
         {

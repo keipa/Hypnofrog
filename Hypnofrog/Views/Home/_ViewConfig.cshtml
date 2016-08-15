@@ -26,7 +26,7 @@
                         <input type="text" class="form-control " placeholder="@Resources.Resource.Description" id="sitedescription">
                         <br />
                         <div class="row">
-                            <label class="control-label col-md-10" for="Template">@Resources.Resource.Color:</label>
+                            <label class="control-label col-md-10">@Resources.Resource.Color</label>
                         </div>
                         <div class="row">
                             <div class="btn-group col-md-12" data-toggle="buttons">
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="control-label col-md-10 " for="Template">@Resources.Resource.Menuplacing</label>
+                            <label class="control-label col-md-10 ">@Resources.Resource.Menuplacing</label>
                         </div>
                         <div class="row">
                             <div class="btn-group col-md-12" data-toggle="buttons">
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="control-label col-md-10 " for="Template">@Resources.Resource.columns</label>
+                            <label class="control-label col-md-10 ">@Resources.Resource.columns:</label>
                         </div>
                         <div class="row">
                             <div class="btn-group col-md-10" data-toggle="buttons">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="row">
                             <div class="btn-group col-md-12 checkbox col-lg-offset-1">
-                                <label>@Html.CheckBoxFor(x => x.CommentsAvailable, new { @id = "chbox" }) @Resources.Resource.comments</label>
+                                <label>@Html.CheckBoxFor(x => x.CommentsAvailable, new { id = "chbox" }) @Resources.Resource.comments</label>
                             </div>
                         </div>
                         <label for="basic-url">@Resources.Resource.Tags</label>
@@ -106,7 +106,7 @@
         <button id="confirm-btn" type="submit">@Resources.Resource.confirm</button>
         @using (Html.BeginForm("CreateSite", "Home", FormMethod.Post, new { id = "bform", style = "margin-bottom:40px;" }))
         {
-            Html.AntiForgeryToken();
+            @Html.AntiForgeryToken()
             <input type="hidden" id="inputData" name="inputData" />
         }
     </div>
@@ -116,7 +116,7 @@
 
 <script type="text/javascript">
     var tags = '@Model.Tags';
-    tags = tags.split(';')
+    tags = tags.split(';');
     for (i = 0; i < tags.length; i++) {
         tags[i] = tags[i].split(',')[0];
     }
@@ -153,7 +153,7 @@
         document.getElementById('inputData').value += document.getElementById("basic-url").value + ";";
         document.getElementById('inputData').value += document.getElementById("chbox").checked + ";";
         var colors = document.getElementsByClassName('active');
-        for (i = 0; i < colors.length; i++) 
+        for (var i = 0; i < colors.length; i++) 
             document.getElementById('inputData').value += colors[i].getElementsByTagName('input')[0].value + ';';
         document.getElementById('inputData').value += $('#tagsarea').tagEditor('getTags')[0].tags + ";";
         $('#bform').submit();

@@ -20,7 +20,11 @@ svg > rect{
 }
 
 .fr-element {
-    background-color: #FF9D40;
+    background-color: transparent;
+}
+
+.red-theme .fr-wrapper .fr-placeholder {
+    color: transparent;
 }
 
 .fr-box {

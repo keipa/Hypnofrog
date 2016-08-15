@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Hypnofrog.Filters
@@ -11,16 +9,10 @@ namespace Hypnofrog.Filters
     {
         public void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            string cultureName = null;
-            // Получаем куки из контекста, которые могут содержать установленную культуру
-            HttpCookie cultureCookie = filterContext.HttpContext.Request.Cookies["lang"];
-            if (cultureCookie != null)
-                cultureName = cultureCookie.Value;
-            else
-                cultureName = "ru";
-
-            // Список культур
-            List<string> cultures = new List<string>() { "ru", "en"};
+            var cultureCookie = filterContext.HttpContext.Request.Cookies["lang"];
+            var cultureName = cultureCookie != null ? cultureCookie.Value : "ru";
+            
+            var cultures = new List<string>() { "ru", "en"};
             if (!cultures.Contains(cultureName))
             {
                 cultureName = "ru";
@@ -31,7 +23,6 @@ namespace Hypnofrog.Filters
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //не реализован
         }
     }
 }

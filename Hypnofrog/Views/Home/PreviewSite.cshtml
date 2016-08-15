@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
 
 <div id="page-redactor" class="fr-view">
-    @{Html.RenderPartial(String.Format("_PreviewPage{0}", Model.Pages.ElementAt(0).TemplateType), Model.Pages.FirstOrDefault());}
+    @{Html.RenderPartial($"_PreviewPage{Model.Pages.ElementAt(0).TemplateType}", Model.Pages.FirstOrDefault());}
 </div>
 @if (Model.HasComments)
 {
@@ -23,7 +23,7 @@
                     <div class="comment-main-level">
                         <div class="comment-avatar">
                             <a href="@Url.Action("UserProfile",  new { userid = User.Identity.GetUserName() })">
-                                <img src="@Model.UserAvatarPath" />
+                                <img src="@Model.UserAvatarPath" alt=""/>
                             </a>
                         </div>
                         <div class="comment-box">
@@ -32,12 +32,12 @@
 
                             </div>
                             <div class="comment-content">
-                                @using (Ajax.BeginForm("CommentSite", "Home", new { siteid = Model.SiteId }, new AjaxOptions() { UpdateTargetId = "comments-list" }, new { @id = "ajaxform" }))
+                                @using (Ajax.BeginForm("CommentSite", "Home", new { siteid = Model.SiteId }, new AjaxOptions() { UpdateTargetId = "comments-list" }, new { id = "ajaxform" }))
                                 {
                                     <div class="row">
                                         <div class="col-md-10 col-sm-10 col-xs-10">
                                             @Html.AntiForgeryToken()
-                                            @Html.TextArea("NewComment", "", new { @id = "newcomid" })
+                                            @Html.TextArea("NewComment", "", new { id = "newcomid" })
                                         </div>
                                         <div class="col-md-2 col-sm-2 col-xs-2">
                                             <i class="fa fa-paper-plane icons" id="sendbtn"></i>
