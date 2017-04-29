@@ -211,15 +211,6 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="DBModels\AchievementLog.cs" />
-    <Compile Include="DBModels\Avatar.cs" />
-    <Compile Include="DBModels\Comment.cs" />
-    <Compile Include="DBModels\Content.cs" />
-    <Compile Include="DBModels\OwnTemplate.cs" />
-    <Compile Include="DBModels\Page.cs" />
-    <Compile Include="DBModels\Rate.cs" />
-    <Compile Include="DBModels\Site.cs" />
-    <Compile Include="DBModels\Tag.cs" />
     <Compile Include="Filters\CultureAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -343,11 +334,8 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HTMLContextClass.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\IRepository.cs" />
-    <Compile Include="Repository\MSSQLRepository.cs" />
     <Compile Include="Strings\Creditals.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1582,6 +1570,12 @@
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.ru.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessFunctions\BusinessFunctions.csproj">
+      <Project>{5b73ad3a-d19d-431a-b88e-be2315a20b2a}</Project>
+      <Name>BusinessFunctions</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

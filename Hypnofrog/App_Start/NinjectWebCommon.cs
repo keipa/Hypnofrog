@@ -50,8 +50,8 @@ namespace Hypnofrog.App_Start
         
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<MainService>().ToMethod(x => new MainService());
-            kernel.Bind<ApplicationDbContext>().ToMethod(x => new ApplicationDbContext());
+            kernel.Bind<MainService>().To<MainService>();
+            kernel.Bind<ApplicationDbContext>().To<ApplicationDbContext>();
             kernel.Bind<IRepository>().To<MSSQLRepository>();
         }        
     }

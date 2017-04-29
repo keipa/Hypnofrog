@@ -20,9 +20,9 @@ namespace Hypnofrog.Services
     {
         private static IRepository Repository;
 
-        public MainService()
+        public MainService(IRepository repository)
         {
-            Repository = DependencyResolver.Current.GetService<IRepository>();
+            Repository = repository;
         }
 
         internal static List<CommentViewModel> SearchComments(string searchString)

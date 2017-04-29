@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hypnofrog", "Hypnofrog\Hypn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hypnofrog.Tests", "Hypnofrog.Tests\Hypnofrog.Tests.csproj", "{D076C8A8-6822-4A60-BDE7-71051F0D8ABB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessFunctions", "BusinessFunctions\BusinessFunctions.csproj", "{5B73AD3A-D19D-431A-B88E-BE2315A20B2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D076C8A8-6822-4A60-BDE7-71051F0D8ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D076C8A8-6822-4A60-BDE7-71051F0D8ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D076C8A8-6822-4A60-BDE7-71051F0D8ABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B73AD3A-D19D-431A-B88E-BE2315A20B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B73AD3A-D19D-431A-B88E-BE2315A20B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B73AD3A-D19D-431A-B88E-BE2315A20B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B73AD3A-D19D-431A-B88E-BE2315A20B2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
